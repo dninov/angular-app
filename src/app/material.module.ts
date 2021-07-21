@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
 @NgModule({
     imports: [
         MatButtonModule, 
@@ -21,7 +21,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
         MatSelectModule,
         MatSidenavModule,
         MatTabsModule,
-        MatToolbarModule
+        MatToolbarModule,
+        MatTooltipModule
     ],
     exports: [
         MatButtonModule,
@@ -33,7 +34,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
         MatSelectModule,
         MatSidenavModule,
         MatTabsModule,
-        MatToolbarModule
+        MatToolbarModule,
+        MatTooltipModule
     ]
 })
 
