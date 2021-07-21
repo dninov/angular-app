@@ -1,0 +1,28 @@
+<!-- <button (click) = "showProfile()">Layout1</button>
+<button (click) = "showSchedule()">Layout2</button> -->
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav role="navigation">
+        <p>I am the sidenav</p>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <div>
+                <button mat-icon-button (click)="sidenav.toggle()">
+                    <mat-icon>menu</mat-icon>
+                </button>
+            </div>
+            <div>LOGO</div>
+            <div fxFlex fxLayout  fxLayoutAlign="flex-end">
+                <ul fxLayout fxLayoutGap="10px" class="navigation-items">
+                    <mat-icon>person</mat-icon>
+                    <mat-icon>logout</mat-icon>
+                </ul>
+            </div>
+        </mat-toolbar>
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+

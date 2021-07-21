@@ -1,0 +1,40 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.mat-tab-body {
+  padding: 20px;
+  animation: fade-out 0.7s;
+  animation-timing-function: ease-out;
+}
+
+.mat-tab-body.mat-tab-body-active {
+  animation: fade 0.7s;
+  animation-timing-function: ease-out;
+}
+
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    transform: translateX(-20px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+}
+@keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}

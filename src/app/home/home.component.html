@@ -1,0 +1,18 @@
+<div   fxLayoutAlign="center center">
+    <mat-tab-group mat-align-tabs="center"  [@.disabled]="true"> 
+        <mat-tab> 
+            <ng-template mat-tab-label>
+                Вход
+                <mat-icon  class = "icon">login</mat-icon>
+            </ng-template>
+            <app-login></app-login>
+        </mat-tab>
+        <mat-tab label="Регистрация">
+            <app-signup></app-signup>
+            <ng-template mat-tab-label>
+                Регистрация
+                <mat-icon  class = "icon">fact_check_outline</mat-icon>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+</div>
