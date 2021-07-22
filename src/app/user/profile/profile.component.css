@@ -1,6 +1,6 @@
 .mat-form-field {
     margin: 40px 0;
-    width: 500px !important;
+    width: 200px !important;
 }
 
 .mat-toolbar-single-row {
@@ -26,3 +26,4 @@
     cursor: pointer;
     position: absolute;
 }
+ 

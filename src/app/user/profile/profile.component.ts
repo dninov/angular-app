@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
 import Validation from '../../utils/validation';
 import { AuthService } from '../../auth/auth.service';
 @Component({
@@ -10,7 +10,7 @@ import { AuthService } from '../../auth/auth.service';
 export class ProfileComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput!: ElementRef;
-  fileAttr = 'Choose File';
+  fileAttr = 'Изберете снимка';
   form!: FormGroup;
   submitted = false;
   imgPath: string = "";
@@ -21,16 +21,22 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService) { }
 
   ngOnInit(): void {
+    console.log(this.imgSize);
     this.form = this.formBuilder.group(
       {
         nickName: ['', [Validators.required]],
         fullName: ['', [Validators.required]],
         phone: ['', [Validators.required]],
-        imgPath: ['', [Validators.required]],
+        imgPath: ['', [Validators.required, this.imgFileBig()]],
       },
-      { validator: this.imgFileBig }
     );
   }
+
+  imgFileBig(): ValidatorFn {  
+      return (control: AbstractControl):{ [key: string]: any } | null =>  
+      !(this.imgSize < 999999) ? null : {fileTooBig: control.value};
+  }
+  
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;  
   }
@@ -38,9 +44,9 @@ export class ProfileComponent implements OnInit {
     if (imgFile.target.files && imgFile.target.files[0]) {
       this.fileAttr = imgFile.target.files[0].name ;
       this.imgPath = imgFile.target.files[0];
-      this.imgSize = imgFile.target.files[0].size;
+      this.imgSize = Number(imgFile.target.files[0].size);
       console.log(imgFile.target.files[0].size);
-      
+      this.form.updateValueAndValidity();
     } else {
       this.fileAttr = 'Choose File';
     }
@@ -53,10 +59,6 @@ export class ProfileComponent implements OnInit {
     }
     const data = this.form.value;    
   }
-  imgFileBig(g: FormGroup) {
-    console.log(g.get('imgPath')?.value.size);
-    
-    
-   // return this.imgSize < 999999;
-  }
+
+
 }

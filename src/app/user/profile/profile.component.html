@@ -30,14 +30,16 @@
          <mat-form-field>
             <div>
               <mat-toolbar>
-                <input matInput [(ngModel)]="fileAttr" [ngModelOptions]="{standalone: true}" readonly name="name" />
-                <button mat-flat-button color="primary">
-                  Browse File
-                </button>
-              </mat-toolbar>
-              <input type="file" #fileInput id="uploadFile" formControlName="imgPath" (change)="uploadFileEvt($event)" name="uploadFile" accept="image/png, image/jpeg" />
-              <mat-error *ngIf="f.imgPath.errors?.required">Моля изберете снимка до 1МБ</mat-error>
+                <input matInput [(ngModel)]="fileAttr" [ngModelOptions]="{standalone: true}" class = "fileAttr" readonly name="name" />
+
+              <input type="file" #fileInput id="uploadFile" formControlName="imgPath" (change)="uploadFileEvt($event)" name="uploadFile" accept="image/png, image/jpeg">
+              <mat-error *ngIf="f.imgPath.errors?.fileTooBig">Моля изберете снимка до 1МБ</mat-error>
+             
+            </mat-toolbar>
             </div>
+            <button mat-flat-button color="primary" class = "chooseFile"> 
+              Browse File
+            </button>
           </mat-form-field>
          
          <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Вход</button>
