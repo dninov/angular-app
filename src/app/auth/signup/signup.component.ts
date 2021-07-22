@@ -46,11 +46,9 @@ export class SignupComponent implements OnInit {
 
   onSubmit(): void {
     this.submitted = true;
-
     if (this.form.invalid) {
       return;
     }
-
     const data = this.form.value;    
     this.authService.emailSignup(data.email, data.password, data.roles);
   }

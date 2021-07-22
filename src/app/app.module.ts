@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FlexLayoutModule } from '@angular/flex-layout'
-import { MaterialModue } from './material.module'
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MaterialModue } from './material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,7 +16,6 @@ import { AngularFireAuthModule} from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
-import { DashboardComponent } from './user/dashboard/dashboard.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
@@ -25,7 +24,6 @@ import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard
     SignupComponent,
     LoginComponent,
     HomeComponent,
-    DashboardComponent,
     AdminDashboardComponent,
   ],
   imports: [

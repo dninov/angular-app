@@ -10,6 +10,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 @NgModule({
     imports: [
         MatButtonModule, 
@@ -22,7 +23,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         MatSidenavModule,
         MatTabsModule,
         MatToolbarModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatProgressBarModule
     ],
     exports: [
         MatButtonModule,
@@ -35,7 +37,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         MatSidenavModule,
         MatTabsModule,
         MatToolbarModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatProgressBarModule
     ]
 })
 

@@ -1,1 +1,45 @@
-<p>profile works!</p>
+<section class="signup-form"  fxLayoutAlign="center center">
+    <form  [formGroup]="form" fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+           <input 
+            type="text" 
+            matInput 
+            name="nickName" 
+            formControlName="nickName"
+            placeholder="Псевдоним">
+            <mat-error *ngIf="f.nickName.errors?.required">Полето е задължително</mat-error>
+        </mat-form-field>
+        <mat-form-field >
+            <input 
+                type="text" 
+                matInput
+                name = "fullName" 
+                placeholder="Имена"
+                formControlName="fullName"> 
+                <mat-error *ngIf="f.fullName.errors?.required">Полето е задължително</mat-error>
+         </mat-form-field >
+         <mat-form-field>
+            <input 
+                type="text" 
+                matInput 
+                name="phone" 
+                placeholder="Телефон"
+                formControlName="phone"> 
+                <mat-error *ngIf="f.phone.errors?.required">Полето е задължително</mat-error>
+         </mat-form-field >
+         <mat-form-field>
+            <div>
+              <mat-toolbar>
+                <input matInput [(ngModel)]="fileAttr" [ngModelOptions]="{standalone: true}" readonly name="name" />
+                <button mat-flat-button color="primary">
+                  Browse File
+                </button>
+              </mat-toolbar>
+              <input type="file" #fileInput id="uploadFile" formControlName="imgPath" (change)="uploadFileEvt($event)" name="uploadFile" accept="image/png, image/jpeg" />
+              <mat-error *ngIf="f.imgPath.errors?.required">Моля изберете снимка до 1МБ</mat-error>
+            </div>
+          </mat-form-field>
+         
+         <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Вход</button>
+    </form>
+</section>
