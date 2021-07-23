@@ -11,8 +11,7 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AuthService {
    userData: any;
-   uploadPercent!: Observable<number>;
-   downloadURL!: Observable<string>;
+   imgUrl: string = "";
   constructor(
     private afst: AngularFireStorage,
     private afs: AngularFirestore,
@@ -43,21 +42,26 @@ export class AuthService {
         merge: true
       })
     }
-    async uploadImg(image: File){
-        const filePath = 'users/' + this.userData.uid +'/' + image.name;
+     uploadImg(image: File){
+        const filePath = 'users/' + this.userData.uid +'/profileImg' +(image.name.substr(image.name.length - 4));
         const fileRef = this.afst.ref(filePath);
         const task = this.afst.upload(filePath, image);
+       
         task.snapshotChanges().pipe(
-        finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+           finalize(async () =>{
+            this.imgUrl = await fileRef.getDownloadURL().toPromise();
+            console.log(this.imgUrl);
+            
+        })
      )
-    .subscribe()
-    const url = await this.downloadURL.toPromise();
-    console.log(url);
+    .subscribe(d=>{
+      return this.imgUrl;
+    })
     
     }
 
     async UpdateProfile(nickName: string, fullName: string, phone: string, imgPath: string) {
-      
+     
     }
 
     emailSignup(email: string, password: string, role: string) {
@@ -103,6 +107,6 @@ export class AuthService {
       return this.afAuth.signOut().then(() => {
         localStorage.removeItem('user');
         this.router.navigate(['']);
-      })
+      }) 
     }
 }

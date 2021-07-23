@@ -66,14 +66,14 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
     if (this.form.invalid) {
       return;
     }
     const data = this.form.value;   
-    console.log(data);
-    const imageUp = this.as.uploadImg(this.imgFile);
+    const f = this.as.uploadImg(this.imgFile)
+    console.log( f);
   }
   imgFileBig(): ValidatorFn {  
       return (control: AbstractControl): ValidationErrors | null =>  {
