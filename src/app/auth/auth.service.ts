@@ -4,17 +4,21 @@ import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/storage'
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 @Injectable()
 export class AuthService {
    userData: any;
+   uploadPercent!: Observable<number>;
+   downloadURL!: Observable<string>;
   constructor(
-    public afs: AngularFirestore,
+    private afst: AngularFireStorage,
+    private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
     private router: Router,
-    public ngZone: NgZone,
+    private ngZone: NgZone,
     private fns: AngularFireFunctions) 
     {
       this.afAuth.authState.subscribe(user => {
@@ -39,16 +43,23 @@ export class AuthService {
         merge: true
       })
     }
+    async uploadImg(image: File){
+        const filePath = 'users/' + this.userData.uid +'/' + image.name;
+        const fileRef = this.afst.ref(filePath);
+        const task = this.afst.upload(filePath, image);
+        task.snapshotChanges().pipe(
+        finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+     )
+    .subscribe()
+    const url = await this.downloadURL.toPromise();
+    console.log(url);
+    
+    }
 
     async UpdateProfile(nickName: string, fullName: string, phone: string, imgPath: string) {
-     console.log(imgPath);
-     
-      // const profile = {
-      //     displayName: displayName,
-      //     photoURL: "https://example.com/jane-q-user/profile.jpg"
-      // }
-      // return (await this.afAuth.currentUser)!.updateProfile(profile);
-  }
+      
+    }
+
     emailSignup(email: string, password: string, role: string) {
       const userRole = role;
       const userEmail = email;

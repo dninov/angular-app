@@ -1,5 +1,14 @@
+.signup-form{
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.chooseFile{
+    margin-left: 50px;
+}
 .mat-form-field {
-    margin: 40px 0;
+    margin: 0;
     width: 200px !important;
 }
 
@@ -12,18 +21,17 @@
     width: 200px;
 }
 
-.mat-form-field {
-    width: 100%;
-}
-
 #uploadFile {
-    top: 0px;
-    left: 0px;
+    top: 40px;
+    left: -20px;
     width: 100%;    
     z-index: 9;
     opacity: 0;
     height: 100%;
-    cursor: pointer;
+    cursor:pointer;
     position: absolute;
 }
- 
+.imgPreview{
+    width: 200px;
+    height: 200px;
+}

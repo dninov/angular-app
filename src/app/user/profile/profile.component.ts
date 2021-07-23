@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
-import Validation from '../../utils/validation';
 import { AuthService } from '../../auth/auth.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -11,19 +12,23 @@ export class ProfileComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput!: ElementRef;
   fileAttr = 'Изберете снимка';
+  imageSrc: string = "";
   form!: FormGroup;
   submitted = false;
-  imgPath: string = "";
+  imgPath!: any;
+  imgFile!: File;
   imgSize: number = 0;
-
+  imgIsValid: boolean = false;
   constructor( 
     private formBuilder: FormBuilder, 
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private sanitizer: DomSanitizer,
+    private as: AuthService) { }
 
   ngOnInit(): void {
-    console.log(this.imgSize);
     this.form = this.formBuilder.group(
       {
+        img: [null],
         nickName: ['', [Validators.required]],
         fullName: ['', [Validators.required]],
         phone: ['', [Validators.required]],
@@ -32,33 +37,48 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  imgFileBig(): ValidatorFn {  
-      return (control: AbstractControl):{ [key: string]: any } | null =>  
-      !(this.imgSize < 999999) ? null : {fileTooBig: control.value};
-  }
-  
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;  
   }
-  uploadFileEvt(imgFile: any) {
-    if (imgFile.target.files && imgFile.target.files[0]) {
-      this.fileAttr = imgFile.target.files[0].name ;
-      this.imgPath = imgFile.target.files[0];
-      this.imgSize = Number(imgFile.target.files[0].size);
-      console.log(imgFile.target.files[0].size);
-      this.form.updateValueAndValidity();
+  uploadFileEvt(e: any) {
+    if (e.target.files && e.target.files[0]) {
+      
+      this.imgPath = e.target.files[0];
+      this.imgFile =  e.target.files[0];
+      this.imgSize = Number(e.target.files[0].size);
+      this.form.get('imgPath')!.updateValueAndValidity();
+      this.imgIsValid = false;
+      
+      if(this.form.get('imgPath')!.valid){
+        this.imgIsValid = true;
+        const file = e.target.files[0];
+        this.form.patchValue({
+          img: file
+        });
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imgPath = reader.result as string;
+        }
+        reader.readAsDataURL(file)
+      }
     } else {
       this.fileAttr = 'Choose File';
     }
   }
 
-  onSubmit(): void {
+  onSubmit() {
     this.submitted = true;
     if (this.form.invalid) {
       return;
     }
-    const data = this.form.value;    
+    const data = this.form.value;   
+    console.log(data);
+    const imageUp = this.as.uploadImg(this.imgFile);
   }
-
+  imgFileBig(): ValidatorFn {  
+      return (control: AbstractControl): ValidationErrors | null =>  {
+        return !(this.imgSize < 999999) ? {fileTooBig: control.value} : null;
+      }
+  }
 
 }
