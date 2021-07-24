@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { AuthService } from '../../auth/auth.service';
+import { UserService } from '../user.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -21,11 +20,12 @@ export class ProfileComponent implements OnInit {
   imgIsValid: boolean = false;
   constructor( 
     private formBuilder: FormBuilder, 
-    private authService: AuthService,
     private sanitizer: DomSanitizer,
-    private as: AuthService) { }
+    private us: UserService
+    ) { }
 
   ngOnInit(): void {
+
     this.form = this.formBuilder.group(
       {
         img: [null],
@@ -72,8 +72,7 @@ export class ProfileComponent implements OnInit {
       return;
     }
     const data = this.form.value;   
-    const f = this.as.uploadImg(this.imgFile)
-    console.log( f);
+    this.us.UpdateProfile(this.imgFile, data);
   }
   imgFileBig(): ValidatorFn {  
       return (control: AbstractControl): ValidationErrors | null =>  {

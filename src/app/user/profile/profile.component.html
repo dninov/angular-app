@@ -5,7 +5,7 @@
       <mat-form-field >
         <div>
           <mat-toolbar fxLayoutAlign="center center" >
-            <div *ngIf="imgIsValid">
+            <div *ngIf="imgIsValid" class ="round">
               <img [src]="imgPath" [alt]="form.value.name" class = "imgPreview">
             </div>
             <input matInput [(ngModel)]="fileAttr" [ngModelOptions]="{standalone: true}" class = "fileAttr" readonly name="name" />

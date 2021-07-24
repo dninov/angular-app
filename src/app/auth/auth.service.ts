@@ -4,16 +4,12 @@ import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { AngularFireStorage } from '@angular/fire/storage'
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 @Injectable()
 export class AuthService {
    userData: any;
-   imgUrl: string = "";
   constructor(
-    private afst: AngularFireStorage,
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
     private router: Router,
@@ -34,34 +30,13 @@ export class AuthService {
 
     SetUserData(user: any) {
       const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-      const userData: User = {
+      const userD: User = {
         uid: user.uid,
         email: user.email,
       }
-      return userRef.set(userData, {
+      return userRef.set(userD, {
         merge: true
       })
-    }
-     uploadImg(image: File){
-        const filePath = 'users/' + this.userData.uid +'/profileImg' +(image.name.substr(image.name.length - 4));
-        const fileRef = this.afst.ref(filePath);
-        const task = this.afst.upload(filePath, image);
-       
-        task.snapshotChanges().pipe(
-           finalize(async () =>{
-            this.imgUrl = await fileRef.getDownloadURL().toPromise();
-            console.log(this.imgUrl);
-            
-        })
-     )
-    .subscribe(d=>{
-      return this.imgUrl;
-    })
-    
-    }
-
-    async UpdateProfile(nickName: string, fullName: string, phone: string, imgPath: string) {
-     
     }
 
     emailSignup(email: string, password: string, role: string) {
@@ -109,4 +84,11 @@ export class AuthService {
         this.router.navigate(['']);
       }) 
     }
+    get isAuthenticated(): boolean {
+      return this.userData !== null;
+  }
+    get currentUserId(): string {
+      return this.isAuthenticated ? this.userData.uid : null;
+    }
+    
 }

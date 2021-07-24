@@ -3,12 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './user/dashboard/dashboard.component';
+import { GuardService} from './guard.service'
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {
     path:'',
     component: DashboardComponent,
+    canActivate: [GuardService],
     children: [
       {
         path: '',
@@ -25,6 +27,7 @@ const routes: Routes = [
   {
     path:'',
     component: AdminDashboardComponent,
+    canActivate: [GuardService],
     children: [
       {
         path: '',
