@@ -32,7 +32,7 @@ export class UserService {
             displayName: data.fullName,
             photoURL: this.imgUrl
             }); 
-
+            this.as.SetUserData(this.as.userData)
          }catch(error){
            console.log(error);
          }

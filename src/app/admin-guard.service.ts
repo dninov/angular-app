@@ -3,7 +3,8 @@ import { ActivatedRoute, Router, ActivatedRouteSnapshot, RouterStateSnapshot } f
 import { of, Observable } from 'rxjs';  
 import { tap, map } from "rxjs/operators";
 import { first } from 'rxjs/operators';
-import { AuthService } from '../app/auth/auth.service'
+import { AuthService } from './auth/auth.service';
+
 @Injectable()
 export class AdminGuardService {
     constructor(
@@ -11,17 +12,16 @@ export class AdminGuardService {
         private router: Router,
         private as: AuthService) { }
 
-      canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-       //console.log(this.as.isAdmin());
-       
-       return true;
-      // const isAdmin =  await this.as.isAdmin();
-      
-      // if(isAdmin === true){
-      //   return true;
-      // }else{
-      //   this.router.navigate(['/dashboard']);
-      //   return false;
-  //     }
+       canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>  {           
+        return new Observable<boolean>(obs => {
+            this.as.isAdmin().then( t => {
+                if(t?.claims.admin){
+                    obs.next(true) 
+                }else{
+                    this.router.navigate(['/dashboard']);
+                    obs.next(false) 
+                }
+            })
+        })
  }
 }

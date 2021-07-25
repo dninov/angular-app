@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { switchMap , first} from 'rxjs/operators';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
+
 @Injectable()
 export class AuthService {
    userData: any;
@@ -65,10 +66,8 @@ export class AuthService {
         this.SetUserData(result.user);
         if(token?.claims.admin === true){
           this.router.navigateByUrl('/admin-dashboard');
-          this.userData.admin = true;
-        }else{
+        }else{ 
           this.router.navigateByUrl('/dashboard');
-          this.userData.admin = false;
         }
       }catch(error){
         console.log(error.message);
@@ -91,28 +90,14 @@ export class AuthService {
     get isAuthenticated(): boolean {
       return this.userData !== null;
   }
-      isAdmin(){
-     
-      //const token = await this.userData.getIdTokenResult();
-      console.log(this.userData.admin);
-      return this.userData.admin;
-      //  return   this.afAuth.user.pipe(switchMap(async (user) => {
-      //   if (user) {
-      //    const result = await user?.getIdTokenResult().then(token => {
-      //       if(token.claims.admin===true){
-      //         return true
-      //       }else{
-      //         return false
-      //       }           
-      //      })
-      //      return result
-      //     }else{
-      //       return false
-      //     }
-      // })).toPromise();
+    isAdmin(){
+        return this.afAuth.authState.pipe(first()).toPromise().then(u=> { 
+          return u?.getIdTokenResult();
+         });
   }
-    get currentUserId(): string {
-      return this.isAuthenticated ? this.userData.uid : null;
-    }
+
+  get currentUserId(): string {
+    return this.isAuthenticated ? this.userData.uid : null;
+  }
      
 }
