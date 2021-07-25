@@ -88,16 +88,17 @@ export class AuthService {
       }) 
     }
     get isAuthenticated(): boolean {
-      return this.userData !== null;
+      return this.userData;
   }
-    isAdmin(){
-        return this.afAuth.authState.pipe(first()).toPromise().then(u=> { 
-          return u?.getIdTokenResult();
+       async isAdmin(){
+        return this.afAuth.authState.pipe(first()).toPromise().then(u=> { return u?.getIdTokenResult();
          });
   }
 
-  get currentUserId(): string {
-    return this.isAuthenticated ? this.userData.uid : null;
-  }
+
+
+    get currentUserId(): string {
+      return this.isAuthenticated ? this.userData.uid : null;
+    }
      
 }

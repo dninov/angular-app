@@ -12,8 +12,8 @@ export class GuardService {
         private as: AuthService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-      if (this.as.isAuthenticated === null) {
-          this.router.navigate(['']); //Redirect if not authenticated
+      if (this.as.isAuthenticated === null || this.as.isAuthenticated === undefined) {
+          this.router.navigate(['']); 
           return false;
       } else {
             return true;

@@ -15,13 +15,17 @@ export class AdminGuardService {
        canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>  {           
         return new Observable<boolean>(obs => {
             this.as.isAdmin().then( t => {
-                if(t?.claims.admin){
-                    obs.next(true) 
-                }else{
+                if(t === undefined || t === null){
+                    this.router.navigate(['']);
+                     obs.next(false) 
+                }else if(!t?.claims.admin){
                     this.router.navigate(['/dashboard']);
                     obs.next(false) 
+                }else{
+                    obs.next(true) 
                 }
             })
         })
+
  }
 }
