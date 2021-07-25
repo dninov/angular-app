@@ -11,12 +11,17 @@ export class AdminGuardService {
         private router: Router,
         private as: AuthService) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-      if(this.as.isAdmin === true){
-        return true;
-      }else{
-        this.router.navigate(['/dashboard']);
-        return false;
-      }
-  }
+      canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+       //console.log(this.as.isAdmin());
+       
+       return true;
+      // const isAdmin =  await this.as.isAdmin();
+      
+      // if(isAdmin === true){
+      //   return true;
+      // }else{
+      //   this.router.navigate(['/dashboard']);
+      //   return false;
+  //     }
+ }
 }
