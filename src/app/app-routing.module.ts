@@ -4,6 +4,7 @@ import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './user/dashboard/dashboard.component';
 import { GuardService} from './guard.service'
+import { AdminGuardService} from './admin-guard.service'
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -27,7 +28,7 @@ const routes: Routes = [
   {
     path:'',
     component: AdminDashboardComponent,
-    canActivate: [GuardService],
+    canActivate: [AdminGuardService],
     children: [
       {
         path: '',

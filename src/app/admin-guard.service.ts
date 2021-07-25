@@ -5,20 +5,18 @@ import { tap, map } from "rxjs/operators";
 import { first } from 'rxjs/operators';
 import { AuthService } from '../app/auth/auth.service'
 @Injectable()
-export class GuardService {
+export class AdminGuardService {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private as: AuthService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-      console.log(this.as.userData); 
-      if (this.as.hasUser === false) {
-          this.router.navigate(['']); //Redirect if not authenticated
-          return false;
-      } else {
-            return true;
-           }
-      
+      if(this.as.isAdmin === true){
+        return true;
+      }else{
+        this.router.navigate(['/dashboard']);
+        return false;
+      }
   }
 }

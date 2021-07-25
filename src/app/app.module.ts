@@ -18,6 +18,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { GuardService } from './guard.service'
+import { AdminGuardService } from './admin-guard.service'
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,7 @@ import { GuardService } from './guard.service'
     AngularFireStorageModule ,
     AngularFireFunctionsModule
   ],
-  providers: [AuthService, GuardService],
+  providers: [AuthService, GuardService, AdminGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
