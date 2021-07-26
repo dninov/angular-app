@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/storage'
+import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { finalize } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -10,33 +11,52 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class UserService {
   imgUrl: string = "";
   constructor(
-    private afAuth: AngularFireAuth,
     private afst: AngularFireStorage,
+    private afs: AngularFirestore,
     private as: AuthService,
-  ) {
+  ) {}
 
-   }
-  
-  UpdateProfile(image: File, data:{fullName: string, phone: string, nickName: string} ) {
-    console.log(this.as.currentUserId);
-    
-    const filePath = 'users/' + this.as.currentUserId +'/profileImg' +(image.name.substr(image.name.length - 4));
-    const fileRef = this.afst.ref(filePath);
+  async  uploadImg(image: File, filePath: string){
     const task = this.afst.upload(filePath, image);
+    await task.snapshotChanges().pipe().toPromise() 
+  }
+
+  async UpdateProfile(image: any, data:{fullName: string, phone: string, nickName: string} ){
+    const user = JSON.parse(localStorage.getItem('user')!);
+    console.log("Update Profile ID ", user.uid);
+    const id = user.uid;
+    
+    if(image === ""){
+      
+      this.imgUrl = user.photoURL;
+    }else{
+    const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
+    const fileRef = this.afst.ref(filePath);
+    await this.uploadImg(image, filePath).then(async ()=>{
+      this.imgUrl = await fileRef.getDownloadURL().toPromise();
+    })
+    }
+    
+    
+    this.as.userData.updateProfile({
+        displayName: data.fullName,
+        photoURL: this.imgUrl
+        }); 
    
-    task.snapshotChanges().pipe(
-       finalize(async () =>{
-         try{
-           this.imgUrl = await fileRef.getDownloadURL().toPromise();
-            this.as.userData.updateProfile({
-            displayName: data.fullName,
-            photoURL: this.imgUrl
-            }); 
-            this.as.SetUserData(this.as.userData)
-         }catch(error){
-           console.log(error);
-         }
-          })
-      ).toPromise()
+    const userInfo: object = {
+        phoneNumber: data.phone,
+        nickName: data.nickName
+      }
+
+    this.afs.collection('users').doc(id).update(userInfo).then(()=>{
+        this.as.SetUserData(this.as.userData);   
+      })
+    }
+      userInfo(){
+      const user =  ( JSON.parse(localStorage.getItem('user')!));
+      console.log(user);
+      
+      return  this.afs.collection('users').doc(user.uid!).get().toPromise();
+      
     }
 }

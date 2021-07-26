@@ -63,7 +63,7 @@ export class AuthService {
       try{
         const result = await this.afAuth.signInWithEmailAndPassword(email, password);
         const token = await result.user?.getIdTokenResult();
-        this.SetUserData(result.user);
+        await this.SetUserData(result.user);
         if(token?.claims.admin === true){
           this.router.navigateByUrl('/admin-dashboard');
         }else{ 
@@ -85,20 +85,19 @@ export class AuthService {
       return this.afAuth.signOut().then(() => {
         localStorage.removeItem('user');
         this.router.navigate(['']);
-      }) 
+      })
     }
-    get isAuthenticated(): boolean {
-      return this.userData;
+    get isAuthenticated() {     
+      return localStorage.getItem('user');
   }
-       async isAdmin(){
-        return this.afAuth.authState.pipe(first()).toPromise().then(u=> { return u?.getIdTokenResult();
-         });
+    async isAdmin(){
+      return this.afAuth.authState.pipe(first()).toPromise().then(u=> { return u?.getIdTokenResult();
+    });
   }
-
-
-
-    get currentUserId(): string {
-      return this.isAuthenticated ? this.userData.uid : null;
+    get currentUserId() {
+      const user = JSON.parse(localStorage.getItem('user')!);
+      return user.uid;
+     
     }
      
 }
