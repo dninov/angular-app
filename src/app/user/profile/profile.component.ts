@@ -64,6 +64,12 @@ export class ProfileComponent implements OnInit {
             nickName: data.nickName
           });
         }
+        if(data.phoneNumber !== undefined){
+          this.form.patchValue({
+            phone: data.phoneNumber
+          });
+        }
+        
       })
     }
   
@@ -98,12 +104,14 @@ export class ProfileComponent implements OnInit {
   }
 
   async onSubmit() {
+    
     this.submitted = true;
     if (this.form.invalid) {
       return;
     }
     const data = this.form.value;   
     if(this.imgPath === undefined){
+      console.log('UNDEFINED LOADING TRUE');
       this.loading = true;
       await this.us.UpdateProfile("", data).then(()=>{
         this.loading = false;
@@ -111,6 +119,8 @@ export class ProfileComponent implements OnInit {
       });
     }else{
       this.loading = true;
+      console.log('DEFINED LOADING TRUE');
+
       await this.us.UpdateProfile(this.imgPath, data).then(()=>{
         this.loading = false;
         console.log('finished');

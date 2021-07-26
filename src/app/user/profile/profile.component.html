@@ -1,7 +1,9 @@
-
+<div fxLayoutAlign="center center" class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
   <div class="signup-form">
   
-    <form   [formGroup]="form" fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
+    <form  [formGroup]="form" fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
       <mat-form-field  [ngClass]="['form-field-read']" >
         <div>
           <mat-toolbar fxLayoutAlign="center center" >
@@ -16,7 +18,7 @@
         </mat-toolbar>
         </div>
         <button   mat-flat-button color="primary" class = "chooseFile"> 
-          Browse File
+          Избери
         </button>
       </mat-form-field>
         <mat-form-field>
@@ -46,12 +48,7 @@
                 formControlName="phone"> 
                 <mat-error *ngIf="f.phone.errors?.required">Полето е задължително</mat-error>
          </mat-form-field >
-
-         
          <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Вход</button>
     </form>
   </div>
 
-  <div fxLayoutAlign="center center" class="loading" *ngIf="loading">
-    <mat-spinner></mat-spinner>
-  </div>
