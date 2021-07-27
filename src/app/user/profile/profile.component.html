@@ -43,12 +43,28 @@
             <input 
                 type="text" 
                 matInput 
-                name="phone" 
+                name="phoneNumber" 
                 placeholder="Телефон"
-                formControlName="phone"> 
-                <mat-error *ngIf="f.phone.errors?.required">Полето е задължително</mat-error>
+                formControlName="phoneNumber"> 
+                <mat-error *ngIf="f.phoneNumber.errors?.required">Полето е задължително</mat-error>
          </mat-form-field >
-         <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Вход</button>
+         <mat-form-field appearance="fill">
+          <mat-label>Дата на започване на работа</mat-label>
+          <input formControlName="startDate" matInput [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+          <section fxLayout= "column"  fxLayoutGap="10px">
+            <div  fxLayoutAlign="center center">
+              <p>Игри които владеете</p>
+            </div>
+            <mat-checkbox  formControlName="ar">AR</mat-checkbox>
+            <mat-checkbox  formControlName="poker">Poker</mat-checkbox>
+            <mat-checkbox  formControlName="blackjack">Black Jack</mat-checkbox>
+            <mat-checkbox  formControlName="baccart">Baccart</mat-checkbox>
+          </section>
+
+         <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Запази</button>
     </form>
   </div>
 

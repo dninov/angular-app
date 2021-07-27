@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, ActivatedRouteSnapshot, RouterStateSnapshot } f
 import { of, Observable } from 'rxjs';  
 import { tap, map } from "rxjs/operators";
 import { first } from 'rxjs/operators';
-import { AuthService } from '../app/auth/auth.service'
+import { AuthService } from '../../app/auth/auth.service'
 @Injectable()
 export class GuardService {
     constructor(
@@ -13,7 +13,9 @@ export class GuardService {
 
      canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const user  = this.as.isAuthenticated;
-      if (user === null || user === undefined) {
+      if (user === null || user === undefined || !user) {
+        console.log('guard is active');
+        
           this.router.navigate(['']); 
           return false;
       } else {

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AuthService {
    userData: any;
+   pass: string = '';
   constructor(
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
@@ -25,7 +26,7 @@ export class AuthService {
           JSON.parse(localStorage.getItem('user')!);
         } else {
           this.userData = false;
-          localStorage.setItem('user', null!);
+          localStorage.removeItem('user');
           JSON.parse(localStorage.getItem('user')!);
         }
       })
@@ -42,20 +43,19 @@ export class AuthService {
       })
     }
 
-    emailSignup(email: string, password: string, role: string) {
+     emailSignup(email: string, password: string, role: string) {
       const userRole = role;
-      const userEmail = email;
       this.afAuth.createUserWithEmailAndPassword(email, password)
-      .then(value => {
-        this.SetUserData(value.user);
+      .then(async value => {
+        await this.SetUserData(value.user);
         if(userRole === "Администратор"){
-          this.makeAdmin(userEmail);
+          this.makeAdmin(email, password);
         }else{
           this.router.navigateByUrl('/dashboard');
         }
       })
       .catch(error => {
-        console.log('Something went wrong: ', error);
+        console.log( error);
       });
     }
 
@@ -74,9 +74,11 @@ export class AuthService {
       }
     }
 
-    makeAdmin(userEmail: string){
-        const callable = this.fns.httpsCallable('addAdminRole');
-        callable({ email: userEmail }).toPromise().then(value =>{
+     makeAdmin(userEmail: string, password: string){
+        const callable =  this.fns.httpsCallable('addAdminRole');
+        callable({ email: userEmail }).toPromise().then( value =>{
+        this.logout();
+        this.login(userEmail, password);
         this.router.navigateByUrl('/admin-dashboard');
       })
     }
@@ -91,7 +93,7 @@ export class AuthService {
       return localStorage.getItem('user');
   }
     async isAdmin(){
-      return this.afAuth.authState.pipe(first()).toPromise().then(u=> { return u?.getIdTokenResult();
+      return await this.afAuth.authState.pipe(first()).toPromise().then(u=> { return u?.getIdTokenResult();
     });
   }
     get currentUserId() {

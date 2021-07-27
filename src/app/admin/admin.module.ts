@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { UsersListComponent } from './users-list/users-list.component';
-
+import { MaterialModue } from './../material.module'
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,9 @@ import { UsersListComponent } from './users-list/users-list.component';
   ],
   imports: [
     CommonModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    MaterialModue,
+    FlexLayoutModule
   ]
 })
 export class AdminModule { }

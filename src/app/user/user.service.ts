@@ -21,13 +21,21 @@ export class UserService {
     await task.snapshotChanges().pipe().toPromise() 
   }
 
-  async UpdateProfile(image: any, data:{fullName: string, phone: string, nickName: string} ){
+  async UpdateProfile(
+    image: any, 
+    data:{
+      fullName: string, 
+      phoneNumber: string, 
+      nickName: string, 
+      ar:string, 
+      poker:string, 
+      blackjack:string, 
+      baccart:string, 
+      startDate:Date} ){
     const user = JSON.parse(localStorage.getItem('user')!);
-    console.log("Update Profile ID ", user.uid);
     const id = user.uid;
     
     if(image === ""){
-      
       this.imgUrl = user.photoURL;
     }else{
     const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
@@ -44,19 +52,22 @@ export class UserService {
         }); 
    
     const userInfo: object = {
-        phoneNumber: data.phone,
-        nickName: data.nickName
+        phoneNumber: data.phoneNumber,
+        nickName: data.nickName,
+        ar: data.ar,
+        poker: data.poker,
+        blackjack: data.blackjack,
+        baccart: data.baccart,
+        startDate: data.startDate,
+        imgUrl: this.imgUrl
       }
 
     this.afs.collection('users').doc(id).update(userInfo).then(()=>{
         this.as.SetUserData(this.as.userData);   
       })
     }
-      userInfo(){
-      const user =  ( JSON.parse(localStorage.getItem('user')!));
-      console.log(user);
-      
-      return  this.afs.collection('users').doc(user.uid!).get().toPromise();
-      
-    }
+    userInfo(){
+    const user =  (JSON.parse(localStorage.getItem('user')!));    
+    return  this.afs.collection('users').doc(user.uid!).get().toPromise(); 
+  }
 }

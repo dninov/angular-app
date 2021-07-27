@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, ActivatedRouteSnapshot, RouterStateSnapshot } f
 import { of, Observable } from 'rxjs';  
 import { tap, map } from "rxjs/operators";
 import { first } from 'rxjs/operators';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './../auth/auth.service';
 
 @Injectable()
 export class AdminGuardService {
@@ -19,6 +19,8 @@ export class AdminGuardService {
                     this.router.navigate(['']);
                      obs.next(false) 
                 }else if(!t?.claims.admin){
+                    console.log('no admin claims');
+                    
                     this.router.navigate(['/dashboard']);
                     obs.next(false) 
                 }else{

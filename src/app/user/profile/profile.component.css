@@ -40,6 +40,7 @@
 	overflow: hidden;
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
     margin-bottom: 30px;
+    object-fit: cover;
 }
 ::ng-deep .form-field-read .mat-form-field-underline {
     display: none;

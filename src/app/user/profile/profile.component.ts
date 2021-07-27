@@ -27,8 +27,13 @@ export class ProfileComponent implements OnInit {
         img: [null],
         nickName: ['', [Validators.required]],
         fullName: ['', [Validators.required]],
-        phone: ['', [Validators.required]],
+        phoneNumber: ['', [Validators.required]],
         imageSrc: ['', [ this.imgFileBig()]],
+        ar:[false],
+        poker:[false],
+        blackjack:[false],
+        baccart:[false],
+        startDate:['']
       },
     );
     this.fillForm();
@@ -42,8 +47,6 @@ export class ProfileComponent implements OnInit {
   async fillForm(){
     const user = JSON.parse(localStorage.getItem('user')!);
     if(user){  
-      console.log(user.photoURL);
-      
         if(user.photoURL){
           this.imageSrc = user.photoURL;
           this.imgIsValid = true;
@@ -59,17 +62,19 @@ export class ProfileComponent implements OnInit {
       } 
       await this.us.userInfo().then(result => {
         const data:any =  result.data();
-        if(data.nickName !== undefined){
-          this.form.patchValue({
-            nickName: data.nickName
-          });
+        for(const key in data){
+          if((this.form.get(key)!) !== null){
+            if(key === "startDate"){
+              this.form.patchValue({
+                [key] : data[key].toDate()
+              });
+            }else{
+              this.form.patchValue({
+                [key] : data[key]
+              });
+            }
+          }
         }
-        if(data.phoneNumber !== undefined){
-          this.form.patchValue({
-            phone: data.phoneNumber
-          });
-        }
-        
       })
     }
   
@@ -85,7 +90,6 @@ export class ProfileComponent implements OnInit {
       
       
       if(this.form.get('imageSrc')!.valid){
-        console.log(this.imgPath);
         this.imgIsValid = true;
         const file = e.target.files[0];
         this.form.patchValue({
@@ -110,20 +114,16 @@ export class ProfileComponent implements OnInit {
       return;
     }
     const data = this.form.value;   
+    
     if(this.imgPath === undefined){
-      console.log('UNDEFINED LOADING TRUE');
       this.loading = true;
       await this.us.UpdateProfile("", data).then(()=>{
         this.loading = false;
-        console.log('finished');
       });
     }else{
       this.loading = true;
-      console.log('DEFINED LOADING TRUE');
-
       await this.us.UpdateProfile(this.imgPath, data).then(()=>{
         this.loading = false;
-        console.log('finished');
       });
     }
    
