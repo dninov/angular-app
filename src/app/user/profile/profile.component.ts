@@ -1,20 +1,24 @@
 import { Component, OnInit} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserService } from '../user.service';
+import { animations } from '../../utils/animations';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  animations: [animations]
 })
 export class ProfileComponent implements OnInit {
   loading:boolean = false;
   fileAttr = 'Изберете снимка';
-  imageSrc!: any;
+  imageSrc:string = '../../../assets/user-icon.jpg';
   form!: FormGroup;
   submitted = false;
   imgPath!: any;
   imgSize: number = 0;
   imgIsValid: boolean = false;
+  defaultImage: boolean = true;
   constructor( 
     private formBuilder: FormBuilder, 
     private us: UserService
@@ -50,6 +54,7 @@ export class ProfileComponent implements OnInit {
         if(user.photoURL){
           this.imageSrc = user.photoURL;
           this.imgIsValid = true;
+          this.defaultImage = false;
           this.form.patchValue({
             img: this.imageSrc
           });
@@ -88,9 +93,9 @@ export class ProfileComponent implements OnInit {
       this.form.get('imageSrc')!.updateValueAndValidity();
       this.imgIsValid = false;
       
-      
       if(this.form.get('imageSrc')!.valid){
         this.imgIsValid = true;
+        this.defaultImage = false;
         const file = e.target.files[0];
         this.form.patchValue({
           img: file
@@ -101,9 +106,6 @@ export class ProfileComponent implements OnInit {
         }
         reader.readAsDataURL(file)
       }
-    } else { 
-      this.imgIsValid = false;
-      this.fileAttr = 'Изберете снимка';
     }
   }
 
@@ -117,7 +119,7 @@ export class ProfileComponent implements OnInit {
     
     if(this.imgPath === undefined){
       this.loading = true;
-      await this.us.UpdateProfile("", data).then(()=>{
+      await this.us.UpdateProfile('default', data).then(()=>{
         this.loading = false;
       });
     }else{
@@ -133,5 +135,12 @@ export class ProfileComponent implements OnInit {
       return (control: AbstractControl): ValidationErrors | null =>  {
         return (this.imgSize < 999999) ? null : {fileTooBig: control.value};
       }
+  }
+  changeImgDefault(){
+    this.imageSrc = '../../../assets/user-icon.jpg';
+    this.defaultImage = true;
+    this.form.patchValue({
+      img: this.imageSrc
+    });
   }
 }

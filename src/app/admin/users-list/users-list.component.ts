@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
@@ -34,7 +35,6 @@ form!: FormGroup;
      this.getAllUsers().then(()=>{   
       this.filteredArr = this.usersArr;
       this.form.valueChanges.subscribe(formData=>{
-         console.log(formData);
          this._filter(formData)
        });
      
@@ -42,24 +42,42 @@ form!: FormGroup;
   }
   
    _filter(formData:{nameSearch:any, gameSearch:string}): void{
-    let nameStr = "";
+    console.log(formData.gameSearch.toLocaleLowerCase().length, "and", formData.nameSearch.length);
 
-      if(typeof formData.nameSearch === 'object'){
-       nameStr = formData.nameSearch.nickName.toLowerCase();
+    let nameStr = "";
+    let game = formData.gameSearch.toLocaleLowerCase();   
+    let name = formData.nameSearch;
+      if(typeof name === 'object'){
+       nameStr = name.nickName.toLowerCase();
       }else{
-       nameStr = formData.nameSearch.toLowerCase();
+       nameStr = name;
       }  
-      this.filteredArr = this.filteredArr.filter(user => {
-        return (user.nickName).toLowerCase().includes(nameStr);
-      })
-      if(formData.gameSearch){
-        const game = formData.gameSearch.toLocaleLowerCase();   
-        this.filteredArr =  this.filteredArr.filter(user => {
-          console.log(user);
-          return user[game] === true;
+      console.log(nameStr.length, "and", game.length);
+      if(nameStr.length !== 0 && game.length !== 0){ 
+        this.filteredArr = this.usersArr.filter(user => {
+          return (user.nickName).toLowerCase().includes(nameStr) && user[game] == true;
         })
       }
-    console.log(this.filteredArr);
+      if(nameStr.length !==0 && game.length === 0){
+              this.filteredArr = this.usersArr.filter(user => {
+                return (user.nickName).toLowerCase().includes(nameStr);
+              })
+        }
+      if(nameStr.length === 0 && game.length !== 0 ){ 
+        this.filteredArr = this.usersArr.filter(user => {
+          return (user.nickName).toLowerCase().includes(nameStr) && user[game] == true;
+        })
+      }
+
+      if(nameStr.length == 0 && game.length == 0){ 
+        console.log('3');
+        
+         this.filteredArr = this.usersArr
+      }
+
+      
+
+
   }
   async getAllUsers(){
     return  this.afs.collection('users').get().toPromise().then( record=>{

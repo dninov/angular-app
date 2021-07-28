@@ -6,14 +6,18 @@
     <form  [formGroup]="form" fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
       <mat-form-field  [ngClass]="['form-field-read']" >
         <div>
+          <button type='button'  [@scaleUp]  *ngIf="!defaultImage" mat-icon-button (click)="changeImgDefault()">
+            <mat-icon>close</mat-icon>
+          </button >
           <mat-toolbar fxLayoutAlign="center center" >
-            <div *ngIf="imgIsValid" class ="round">
+            <div  [@scaleUp]  *ngIf="imgIsValid || defaultImage" class ="round">
               <img [src]="imageSrc" [alt]="form.value.name" class = "imgPreview">
+              <mat-error *ngIf="f.imageSrc.errors?.fileTooBig">Моля изберете снимка до 1МБ</mat-error>
             </div>
+
             <input matInput [(ngModel)]="fileAttr" [ngModelOptions]="{standalone: true}" class = "fileAttr" readonly name="name" />
 
           <input type="file" #fileInput id="uploadFile" formControlName="imageSrc" (change)="uploadFileEvt($event)" name="uploadFile" accept="image/png, image/jpeg">
-          <mat-error *ngIf="f.imageSrc.errors?.fileTooBig">Моля изберете снимка до 1МБ</mat-error>
          
         </mat-toolbar>
         </div>

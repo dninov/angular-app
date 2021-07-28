@@ -35,8 +35,8 @@ export class UserService {
     const user = JSON.parse(localStorage.getItem('user')!);
     const id = user.uid;
     
-    if(image === ""){
-      this.imgUrl = user.photoURL;
+    if(image === "default"){
+      this.imgUrl = '../../../assets/user-icon.jpg';
     }else{
     const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
     const fileRef = this.afst.ref(filePath);
