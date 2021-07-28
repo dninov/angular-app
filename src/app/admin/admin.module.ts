@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { AdminRoutingModule } from './admin-routing.module';
 import { UsersListComponent } from './users-list/users-list.component';
 import { MaterialModue } from './../material.module'
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserCardComponent } from './user-card/user-card.component';
 
 @NgModule({
   declarations: [
-    UsersListComponent
+    UsersListComponent,
+    UserCardComponent
   ],
   imports: [
     CommonModule,
@@ -17,7 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MaterialModue,
     FlexLayoutModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class AdminModule { }

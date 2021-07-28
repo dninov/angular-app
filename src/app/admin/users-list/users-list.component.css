@@ -2,21 +2,3 @@
   padding:16px;
 }
 
-.user-card {
-    max-width: 300px;
-    max-height: 300px;
-    min-width: 200px;
-  }
-  
-
-.img-holder{
-  display: flex;
-  justify-content: center;
-}
-.user-image{
-  width: 120px; 
-  height: 120px;
-	border-radius: 10%!important;
-	box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
-  object-fit: cover;
-}

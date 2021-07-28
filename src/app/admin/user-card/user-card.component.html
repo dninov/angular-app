@@ -1,0 +1,23 @@
+<mat-card class="user-card">
+    <mat-card-header>
+      <mat-card-title>{{user.nickName}}</mat-card-title>
+      <mat-card-subtitle>
+        <img style="width: 30px;" *ngIf = "user.poker === true" src="../../../assets/poker.svg" alt="">
+        <img *ngIf = "user.baccart === true" src="../../../assets/chip.svg" alt="">
+        <img *ngIf = "user.blackjack === true" src="../../../assets/black-jack.svg" alt="">
+        <img *ngIf = "user.ar === true" src="../../../assets/rollet.svg" alt="">
+      </mat-card-subtitle>
+    </mat-card-header>
+    <div class="img-holder">
+        <img mat-card-image  class="user-image" src={{user.imgUrl}} alt="User image">
+    </div>
+    <mat-card-content>
+      <p>
+        The Shiba Inu 
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button>SHARE</button>
+    </mat-card-actions>
+  </mat-card>
