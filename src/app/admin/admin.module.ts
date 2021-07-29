@@ -6,11 +6,13 @@ import { MaterialModue } from './../material.module'
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserCardComponent } from './user-card/user-card.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
 
 @NgModule({
   declarations: [
     UsersListComponent,
-    UserCardComponent
+    UserCardComponent,
+    UserDetailsComponent
   ],
   imports: [
     CommonModule,

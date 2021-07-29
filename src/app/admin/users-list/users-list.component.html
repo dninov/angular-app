@@ -1,5 +1,5 @@
 
-<section fxLayout= "row wrap" fxLayoutAlign="center">
+<section fxLayout= "row wrap" fxLayoutAlign="center"> 
   <form [formGroup]="form" fxLayoutGap="10px">
     <mat-form-field>
         <input type="text" matInput [matAutocomplete]="auto" formControlName="nameSearch"/>
@@ -10,7 +10,7 @@
       </mat-autocomplete>
     </mat-form-field>
     <mat-form-field>
-      <mat-select placeholder="Игри" name="games" formControlName="gameSearch">
+      <mat-select multiple placeholder="Игри" name="games" formControlName="gameSearch">
           <mat-option *ngFor="let game of gamesArr" [value]="game">
              {{game}}
           </mat-option>
@@ -20,7 +20,7 @@
 </section>
 <div class="content">
     <div fxLayout= "row wrap"  fxLayoutGap="10px grid">
-        <div [@scaleUp] fxLayoutAlign="center"  fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%" *ngFor="let user of filteredArr">
+        <div (click)="onSelect(user)" [@scaleUp] fxLayoutAlign="center"  fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%" *ngFor="let user of filteredArr">
           <app-user-card [user] = "user"></app-user-card>
         </div>
     </div>
