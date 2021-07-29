@@ -18,10 +18,10 @@
   </mat-form-field>
   </form>
 </section>
-<div class="content">
-    <div fxLayout= "row wrap"  fxLayoutGap="10px grid">
-        <div (click)="onSelect(user)" [@scaleUp] fxLayoutAlign="center"  fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%" *ngFor="let user of filteredArr">
-          <app-user-card [user] = "user"></app-user-card>
+<div class="content"  [@scaleUp]="filteredArr.length">
+    <div  fxLayout= "row wrap"   fxLayoutGap="10px grid">
+        <div (click)="onSelect(user)" fxLayoutAlign="center"  fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%" *ngFor="let user of filteredArr">
+          <app-user-card [@clicked]  [user] = "user"></app-user-card>
         </div>
     </div>
 </div>
