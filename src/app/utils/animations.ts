@@ -1,19 +1,6 @@
 import { animation, style, animate, trigger, transition, useAnimation, query, stagger, keyframes } from '@angular/animations';
 export const animations = [
-  trigger('clicked', [
-    // Transition from any state to any state
-    transition('* => *', [
-
-     query(':leave', stagger('100ms', [
-       animate('.4s ease-out', keyframes([
-         style({ opacity: 1, transform: 'scale(1.1)', offset: 0 }),
-         style({ opacity: .5, transform: 'scale(1.5)', offset: 0.3 }),
-         style({ opacity: 0, transform: 'scale(2)', offset: 1 }),
-       ]))]), { optional: true })
-   ]),
-   ]),
   trigger('scaleUp', [
- // Transition from any state to any state
  transition('* => *', [
   query(':enter', style({ opacity: 0 }), { optional: true }),
 
@@ -31,5 +18,23 @@ export const animations = [
     ]))]), { optional: true })
 ]),
 ]),
+trigger('routeAnimations', [
+  transition('* <=> *', [
+    query(':enter, :leave', [
+      style({
+        position: 'absolute',
+        left: 0,
+        width: '100%',
+        opacity: 0,
+      }),
+    ]),
+    // Animate the new page in
+    query(':enter', [
+      animate('1s ease', style({ opacity: 1 })),
+    ]),
+
+  ]),
+])
+
 
 ]

@@ -7,7 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserCardComponent } from './user-card/user-card.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
-
+import { AdminService } from './admin.service';
 @NgModule({
   declarations: [
     UsersListComponent,
@@ -21,6 +21,13 @@ import { UserDetailsComponent } from './user-details/user-details.component';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-  ]
+  ], 
+  providers:[
+    {
+    provide: AdminService,
+    useClass: AdminService
+  }
+],
+
 })
 export class AdminModule { }

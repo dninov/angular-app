@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  HostListener} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { animations } from '../../utils/animations';
 import { Router } from '@angular/router';
@@ -38,7 +38,7 @@ filteredArr:Array<any> =[];
     return input ? input.nickName : undefined
   }
   onSelect(user:any){
-    this.router.navigate(['admin-dashboard/user-details', user.uid]);
+      this.router.navigate(['admin-dashboard/user-details', user.uid]);
   }
 
 }

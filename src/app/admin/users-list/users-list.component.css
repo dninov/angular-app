@@ -2,3 +2,11 @@
   padding:16px;
 }
 
+.user-card{
+  cursor: pointer;
+  transition: transform 250ms;
+  transition-timing-function: ease-out;
+}
+.user-card:hover {
+  transform: scale(1.1);
+}

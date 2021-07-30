@@ -21,7 +21,7 @@
 <div class="content"  [@scaleUp]="filteredArr.length">
     <div  fxLayout= "row wrap"   fxLayoutGap="10px grid">
         <div (click)="onSelect(user)" fxLayoutAlign="center"  fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%" *ngFor="let user of filteredArr">
-          <app-user-card [@clicked]  [user] = "user"></app-user-card>
+          <app-user-card  [user] = "user" class="user-card"></app-user-card>
         </div>
     </div>
 </div>

@@ -30,8 +30,8 @@
       <p>Auto-resizing sidenav</p>
     </mat-drawer>
   
-    <div> 
-      <router-outlet></router-outlet>
+    <div  [@routeAnimations]="o.isActivated ? o.activatedRoute : ''"> 
+      <router-outlet #o="outlet"></router-outlet>
     </div>
   
   </mat-drawer-container>
