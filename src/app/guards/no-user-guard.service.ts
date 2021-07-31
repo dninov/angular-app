@@ -12,16 +12,23 @@ export class NoUserGuardService {
     private route: ActivatedRoute,
     private router: Router,
     private as: AuthService) { }
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>  {           
+      return new Observable<boolean>(obs => { 
+          this.as.isAdmin().then( t => {
+              if(t === undefined || t === null){
+                   obs.next(true) 
+              }else if(!t?.claims.admin){
+                  this.router.navigate(['/dashboard']);
+                  obs.next(false) ;
+              }else{
+                this.router.navigate(['/admin-dashboard']);
+                  obs.next(false) ;
+              }
+          }).catch(err =>{ 
+            console.log(err);
+            this.router.navigate(['']);
+          })
+      })
 
- canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const user  = this.as.isAuthenticated;
-  if (user === null || user === undefined || !user) {
-    console.log('guard is active');    
-      return true;
-  } else {
-    this.router.navigate(['/dashboard']); 
-        return false;
-       }  
-  
 }
 }

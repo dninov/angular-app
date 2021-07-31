@@ -15,5 +15,9 @@ export class UserCardComponent implements OnInit {
     console.log('clicked');
     
   }
+  mailClicked(){
+    console.log('mail');
+    
+  }
 
 }

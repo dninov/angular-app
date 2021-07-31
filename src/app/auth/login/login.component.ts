@@ -11,11 +11,9 @@ import { AuthService } from '../auth.service';
 export class LoginComponent implements OnInit {
   form!: FormGroup;
   submitted = false;
- 
-  
   constructor(
     private formBuilder: FormBuilder, 
-    private authService: AuthService) {
+    public authService: AuthService) {
     
    }
 

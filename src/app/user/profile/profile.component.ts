@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit {
   defaultImage: boolean = true;
   constructor( 
     private formBuilder: FormBuilder, 
-    private us: UserService
+    private userService: UserService
     ) { }
 
   ngOnInit(): void {
@@ -65,8 +65,8 @@ export class ProfileComponent implements OnInit {
           });
         }
       } 
-      await this.us.userInfo().then(result => {
-        const data:any =  result.data();
+      await this.userService.userInfo().then(result => {
+        const data:any = result.data();
         for(const key in data){
           if((this.form.get(key)!) !== null){
             if(key === "startDate"){
@@ -80,13 +80,12 @@ export class ProfileComponent implements OnInit {
             }
           }
         }
-      })
+      }).catch(err=>console.log(err));
     }
   
 
 
   uploadFileEvt(e: any) {
-
     if (e.target.files && e.target.files[0]) {
       this.imgPath = e.target.files[0];
       this.imgSize = Number(e.target.files[0].size);
@@ -111,7 +110,7 @@ export class ProfileComponent implements OnInit {
 
   async onSubmit() {
     
-    this.submitted = true;
+    this.submitted = true; 
     if (this.form.invalid) {
       return;
     }
@@ -119,17 +118,17 @@ export class ProfileComponent implements OnInit {
     
     if(this.imgPath === undefined){
       this.loading = true;
-      await this.us.UpdateProfile('default', data).then(()=>{
-        this.loading = false;
+      await this.userService.UpdateProfile('default', data).then(()=>{
+      this.loading = false;
       });
     }else{
       this.loading = true;
-      await this.us.UpdateProfile(this.imgPath, data).then(()=>{
+      await this.userService.UpdateProfile(this.imgPath, data).then(()=>{
         this.loading = false;
       });
     }
    
-    
+     
   }
   imgFileBig(): ValidatorFn {  
       return (control: AbstractControl): ValidationErrors | null =>  {

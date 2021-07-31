@@ -20,19 +20,28 @@ export const animations = [
 ]),
 trigger('routeAnimations', [
   transition('* <=> *', [
-    query(':enter, :leave', [
+    query(':enter', [
       style({
         position: 'absolute',
         left: 0,
         width: '100%',
-        opacity: 0,
+        opacity: 0
       }),
-    ]),
+    ], { optional: true }),
+    query(':leave', [
+      style({
+        position: 'absolute',
+        left: 0,
+        width: '100%',
+      }),
+    ], { optional: true }),
     // Animate the new page in
     query(':enter', [
-      animate('1s ease', style({ opacity: 1 })),
-    ]),
-
+      animate('0.4s ease-out', style({ opacity: 1 })),
+    ], { optional: true }),
+    query(':leave', [
+      animate('0.2s ease-in', style({ opacity: 0 })),
+    ], { optional: true }),
   ]),
 ])
 

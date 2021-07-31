@@ -13,20 +13,21 @@ export class AdminGuardService {
         private as: AuthService) { }
 
        canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>  {           
-        return new Observable<boolean>(obs => {
+        return new Observable<boolean>(obs => { 
             this.as.isAdmin().then( t => {
                 if(t === undefined || t === null){
                     this.router.navigate(['']);
                      obs.next(false) 
                 }else if(!t?.claims.admin){
-                    console.log('no admin claims');
-                    
                     this.router.navigate(['/dashboard']);
                     obs.next(false) 
                 }else{
                     obs.next(true) 
                 }
-            })
+            }).catch(err => {
+                console.log(err);
+                this.router.navigate(['']);
+            });
         })
 
  }

@@ -1,5 +1,5 @@
-<section class="login-form"  fxLayoutAlign="center center">
-    <form  [formGroup]="form" fxLayout= "column"fxLayoutGap="10px" (ngSubmit)="onSubmit()">
+<section class="login-form"  fxLayoutAlign="center center" fxLayout="column">
+    <form  [formGroup]="form" fxLayout= "column"  fxLayoutAlign="center center"  fxLayoutGap="10px" (ngSubmit)="onSubmit()">
         <mat-form-field>
            <input 
             type="email" 
@@ -22,7 +22,10 @@
                 <mat-error *ngIf="f.password.errors?.minlength">Минимум 6 символа</mat-error> 
 
          </mat-form-field >
-   
-         <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Вход</button>
-    </form>
+         <div>
+            <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Вход</button>
+         </div>
+         
+        </form>
+        <mat-error style="margin-top: 10px;" *ngIf="!authService.validLogin">Паролата или имейлът са невалидни</mat-error> 
 </section>

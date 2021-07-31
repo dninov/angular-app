@@ -1,17 +1,17 @@
 import { Injectable, NgZone } from '@angular/core';
 import { User } from '../auth/user.model';
-import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { switchMap , first} from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Injectable()
 export class AuthService {
    userData: any;
    pass: string = '';
+   validLogin = true;
   constructor(
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
@@ -44,18 +44,17 @@ export class AuthService {
     }
 
      emailSignup(email: string, password: string, role: string) {
-      const userRole = role;
       this.afAuth.createUserWithEmailAndPassword(email, password)
       .then(async value => {
         await this.SetUserData(value.user);
-        if(userRole === "Администратор"){
+        if(role === "Администратор"){
           this.makeAdmin(email, password);
         }else{
           this.router.navigateByUrl('/dashboard');
         }
       })
-      .catch(error => {
-        console.log( error);
+      .catch(err => {
+        console.log( err);
       });
     }
 
@@ -65,12 +64,18 @@ export class AuthService {
         const token = await result.user?.getIdTokenResult();
         await this.SetUserData(result.user);
         if(token?.claims.admin === true){
+          this.validLogin = true;
           this.router.navigateByUrl('/admin-dashboard');
         }else{ 
+          this.validLogin = true;
           this.router.navigateByUrl('/dashboard');
         }
       }catch(error){
-        console.log(error.message);
+        if(error.code === 'auth/user-not-found'){
+          this.validLogin = false;
+        }else{
+          console.log(error.code);
+        }
       }
     }
 
@@ -78,28 +83,28 @@ export class AuthService {
         const callable =  this.fns.httpsCallable('addAdminRole');
         callable({ email: userEmail }).toPromise().then( value =>{
         this.logout();
-        this.login(userEmail, password);
+        this.login(userEmail, password).catch(err=>console.log(err));
         this.router.navigateByUrl('/admin-dashboard');
-      })
-    }
+      }).catch(err => console.log(err));
+    } 
 
     logout() {
       return this.afAuth.signOut().then(() => {
         localStorage.removeItem('user');
         this.router.navigate(['']);
-      })
+      }).catch(err=>console.log(err));
     }
     get isAuthenticated() {     
       return localStorage.getItem('user');
   }
     async isAdmin(){
-      return await this.afAuth.authState.pipe(first()).toPromise().then(u=> { return u?.getIdTokenResult();
-    });
+      return await this.afAuth.authState.pipe(first()).toPromise().then(u=> {
+         return u?.getIdTokenResult();
+    }).catch(err => console.log(err));
   }
     get currentUserId() {
       const user = JSON.parse(localStorage.getItem('user')!);
       return user.uid;
-     
     }
      
 }
