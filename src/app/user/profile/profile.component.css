@@ -5,9 +5,7 @@
     justify-content: center;
     align-items: center;
 }
-.chooseFile{
-    margin-left: 50px;
-}
+
 .mat-form-field {
     margin: 0;
     width: 200px !important;
@@ -19,7 +17,7 @@
 }
 
 .mat-toolbar-single-row button {
-    width: 200px;
+    width: 300px;
 }
 
 #uploadFile {
@@ -54,4 +52,7 @@
   right:0;
   bottom:0;
   background-color: rgba(143, 143, 143, 0.8);
+}
+.fileAttr{
+    width: 300px;
 }

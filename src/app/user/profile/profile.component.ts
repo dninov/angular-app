@@ -11,8 +11,7 @@ import { animations } from '../../utils/animations';
 })
 export class ProfileComponent implements OnInit {
   loading:boolean = false;
-  fileAttr = 'Изберете снимка';
-  imageSrc:string = '../../../assets/user-icon.jpg';
+  imageSrc:string = '';
   form!: FormGroup;
   submitted = false;
   imgPath!: any;
@@ -32,7 +31,7 @@ export class ProfileComponent implements OnInit {
         nickName: ['', [Validators.required]],
         fullName: ['', [Validators.required]],
         phoneNumber: ['', [Validators.required]],
-        imageSrc: ['', [ this.imgFileBig()]],
+        imageSrc: [''],
         ar:[false],
         poker:[false],
         blackjack:[false],
@@ -85,14 +84,13 @@ export class ProfileComponent implements OnInit {
   
 
 
-  uploadFileEvt(e: any) {
+  chooseFileEvt(e: any) {
     if (e.target.files && e.target.files[0]) {
       this.imgPath = e.target.files[0];
       this.imgSize = Number(e.target.files[0].size);
-      this.form.get('imageSrc')!.updateValueAndValidity();
       this.imgIsValid = false;
       
-      if(this.form.get('imageSrc')!.valid){
+      if(this.imgFileBig()){
         this.imgIsValid = true;
         this.defaultImage = false;
         const file = e.target.files[0];
@@ -104,6 +102,8 @@ export class ProfileComponent implements OnInit {
           this.imageSrc = reader.result as string;
         }
         reader.readAsDataURL(file)
+      }else{
+        
       }
     }
   }
@@ -130,16 +130,10 @@ export class ProfileComponent implements OnInit {
    
      
   }
-  imgFileBig(): ValidatorFn {  
-      return (control: AbstractControl): ValidationErrors | null =>  {
-        return (this.imgSize < 999999) ? null : {fileTooBig: control.value};
-      }
+  imgFileBig() {
+        return this.imgSize < 999999    
   }
   changeImgDefault(){
-    this.imageSrc = '../../../assets/user-icon.jpg';
     this.defaultImage = true;
-    this.form.patchValue({
-      img: this.imageSrc
-    });
   }
 }
