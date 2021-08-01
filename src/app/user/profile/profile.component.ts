@@ -16,8 +16,9 @@ export class ProfileComponent implements OnInit {
   submitted = false;
   imgPath!: any;
   imgSize: number = 0;
-  imgIsValid: boolean = false;
+  imgIsValid: boolean = true;
   defaultImage: boolean = true;
+  casinos:Array<string> =[ 'Casino1', 'Casino2', 'Casino3'];
   constructor( 
     private formBuilder: FormBuilder, 
     private userService: UserService
@@ -32,11 +33,6 @@ export class ProfileComponent implements OnInit {
         fullName: ['', [Validators.required]],
         phoneNumber: ['', [Validators.required]],
         imageSrc: [''],
-        ar:[false],
-        poker:[false],
-        blackjack:[false],
-        baccart:[false],
-        startDate:['']
       },
     );
     this.fillForm();
@@ -47,7 +43,7 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  async fillForm(){
+  fillForm(){
     const user = JSON.parse(localStorage.getItem('user')!);
     if(user){  
         if(user.photoURL){
@@ -64,7 +60,7 @@ export class ProfileComponent implements OnInit {
           });
         }
       } 
-      await this.userService.userInfo().then(result => {
+      this.userService.userInfo().then(result => {
         const data:any = result.data();
         for(const key in data){
           if((this.form.get(key)!) !== null){

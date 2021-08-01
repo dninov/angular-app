@@ -1,1 +1,38 @@
-<p>user-details works!</p>
+<div fxLayoutAlign="center center" class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+ </div>
+    <div class="signup-form" >
+    
+      <form [formGroup]="form" fxLayoutAlign="center center"  fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
+      
+        <mat-form-field>
+          <mat-select  placeholder="Казино" name="casino" formControlName="casino">
+              <mat-option *ngFor="let casino of casinos" [value]="casino">
+                 {{casino}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+         
+           <mat-form-field appearance="fill">
+            <mat-label>Дата на започване на работа</mat-label>
+            <input formControlName="startDate" matInput [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+            <section style="width: 300px;" fxLayoutAlign="center" fxLayout= "column"  fxLayoutGap="10px">
+              <div  fxLayoutAlign="center center">
+                <p>Игри които владеете</p>
+              </div>
+              <div fxLayout= "row wrap"   fxLayoutGap="10px grid">
+                <mat-checkbox   fxFlex ="50%" fxFlex.xs="100%" formControlName="ar">AR</mat-checkbox>
+                <mat-checkbox   fxFlex ="50%" fxFlex.xs="100%" formControlName="poker">Poker</mat-checkbox>
+                <mat-checkbox   fxFlex ="50%" fxFlex.xs="100%" formControlName="blackjack">Black Jack</mat-checkbox>
+                <mat-checkbox   fxFlex ="50%" fxFlex.xs="100%" formControlName="baccart">Baccart</mat-checkbox>
+              </div>
+            </section>
+  
+           <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Запази</button>
+      </form>
+    </div>
+  
+  

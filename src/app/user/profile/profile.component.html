@@ -1,15 +1,14 @@
 <div fxLayoutAlign="center center" class="loading" *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
-  <div class="signup-form">
+  <div class="signup-form" >
   
-    <form  [formGroup]="form" fxLayoutAlign="center center"  fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" fxLayoutAlign="center center"  fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
       <mat-form-field  [ngClass]="['form-field-read']" >
-        <div  fxLayoutAlign="center"  fxLayout= "column">
           <button type='button'  [@scaleUp]  *ngIf="!defaultImage" mat-icon-button (click)="changeImgDefault()">
             <mat-icon>close</mat-icon>
           </button >
-          <mat-toolbar  class = "fileAttr">
+          <mat-toolbar fxLayout= "column" style = "text-align: center;" >
             <div  [@scaleUp]  *ngIf="!imgIsValid || defaultImage">
               <img src="../../../assets/user-icon.jpg"  class = "imgPreview">
             </div>
@@ -17,15 +16,17 @@
               <img [src]="imageSrc" alt="profile photo" class = "imgPreview">
             </div>
             <mat-error *ngIf="!imgIsValid">Моля изберете снимка до 1МБ</mat-error>
-            <input matInput  readonly value="Моля изберете снимка" />
-          <input type="file" #fileInput id="uploadFile" formControlName="imageSrc" (change)="chooseFileEvt($event)" name="uploadFile" accept="image/png, image/jpeg">
-         
-        </mat-toolbar>
-        </div>
-        <button   mat-flat-button color="primary" class = "chooseFile"> 
-          Избери
-        </button>
+            <input type="file" #fileInput id="uploadFile" formControlName="imageSrc" (change)="chooseFileEvt($event)" name="uploadFile" accept="image/png, image/jpeg">
+            <span *ngIf="defaultImage && imgIsValid">Моля изберете снимка</span>
+            <input matInput readonly/>
+            <button   mat-flat-button style="width: 150px;" color="primary" class = "chooseFile">Избери</button>
+          </mat-toolbar>
+          <span>
+          </span>
       </mat-form-field>
+      <mat-form-field>
+        
+    </mat-form-field>
         <mat-form-field>
            <input 
             type="text" 
@@ -53,22 +54,6 @@
                 formControlName="phoneNumber"> 
                 <mat-error *ngIf="f.phoneNumber.errors?.required">Полето е задължително</mat-error>
          </mat-form-field >
-         <mat-form-field appearance="fill">
-          <mat-label>Дата на започване на работа</mat-label>
-          <input formControlName="startDate" matInput [matDatepicker]="picker">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-          <section fxLayout= "column"  fxLayoutGap="10px">
-            <div  fxLayoutAlign="center center">
-              <p>Игри които владеете</p>
-            </div>
-            <mat-checkbox  formControlName="ar">AR</mat-checkbox>
-            <mat-checkbox  formControlName="poker">Poker</mat-checkbox>
-            <mat-checkbox  formControlName="blackjack">Black Jack</mat-checkbox>
-            <mat-checkbox  formControlName="baccart">Baccart</mat-checkbox>
-          </section>
-
          <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Запази</button>
     </form>
   </div>

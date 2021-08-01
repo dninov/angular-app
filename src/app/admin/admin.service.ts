@@ -41,7 +41,7 @@ export class AdminService {
       }else{
        nameStr = name.toLowerCase();
       }  
-      
+       
     return this.usersArr.filter(user =>
         user.nickName.toLowerCase().includes(nameStr) &&  
         (game.length === 0 || this.checkGames(game, user))
@@ -72,7 +72,9 @@ export class AdminService {
   removeAdmin(){
      this.usersArr = this.allArr.filter(o=>o.hasOwnProperty('imgUrl'));
   }
-
+  userInfo(id:any){
+    return this.usersArr.filter(user => user.id === id);
+  }
 
 
 }

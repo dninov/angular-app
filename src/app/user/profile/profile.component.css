@@ -8,7 +8,7 @@
 
 .mat-form-field {
     margin: 0;
-    width: 200px !important;
+    width: 300px;
 }
 
 .mat-toolbar-single-row {
@@ -21,10 +21,10 @@
 }
 
 #uploadFile {
-    top:15%;
+    top:20%;
     width: 100%;    
     z-index: 9;
-    opacity: 0;
+    opacity:0;
     height: 80%;
     background-color: brown;
     cursor:pointer;
@@ -34,10 +34,9 @@
 .imgPreview{
     width: 200px; height: 200px;
 	border-radius: 40%;
-    border: 8px solid #673AB7;
 	overflow: hidden;
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     object-fit: cover;
 }
 ::ng-deep .form-field-read .mat-form-field-underline {
@@ -55,4 +54,7 @@
 }
 .fileAttr{
     width: 300px;
+    justify-content: center;
+    align-items: center;
+    background-color: brown;
 }
