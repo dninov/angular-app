@@ -18,14 +18,14 @@ export class ProfileComponent implements OnInit {
   imgSize: number = 0;
   imgIsValid: boolean = true;
   defaultImage: boolean = true;
-  casinos:Array<string> =[ 'Casino1', 'Casino2', 'Casino3'];
+  user: any;
   constructor( 
     private formBuilder: FormBuilder, 
     private userService: UserService
     ) { }
 
   ngOnInit(): void {
-
+    
     this.form = this.formBuilder.group(
       {
         img: [null],
@@ -44,24 +44,30 @@ export class ProfileComponent implements OnInit {
 
 
   fillForm(){
-    const user = JSON.parse(localStorage.getItem('user')!);
-    if(user){  
-        if(user.photoURL){
-          this.imageSrc = user.photoURL;
-          this.imgIsValid = true;
+    this.user = JSON.parse(localStorage.getItem('user')!);
+    if( this.user){  
+        if(!this.user.photoURL){
+          this.user.photoURL = '../../../assets/user-icon.jpg';
+        }
+        if( this.user.photoURL !== '../../../assets/user-icon.jpg'){
+          this.imageSrc =  this.user.photoURL;
           this.defaultImage = false;
           this.form.patchValue({
             img: this.imageSrc
           });
+        }else{
+
         }
-        if(user.displayName !== undefined){
+        if( this.user.displayName !== undefined){
           this.form.patchValue({
-            fullName: user.displayName
+            fullName:  this.user.displayName
           });
         }
       } 
       this.userService.userInfo().then(result => {
         const data:any = result.data();
+        this.user = data;
+        
         for(const key in data){
           if((this.form.get(key)!) !== null){
             if(key === "startDate"){
@@ -85,7 +91,6 @@ export class ProfileComponent implements OnInit {
       this.imgPath = e.target.files[0];
       this.imgSize = Number(e.target.files[0].size);
       this.imgIsValid = false;
-      
       if(this.imgFileBig()){
         this.imgIsValid = true;
         this.defaultImage = false;
@@ -99,22 +104,22 @@ export class ProfileComponent implements OnInit {
         }
         reader.readAsDataURL(file)
       }else{
-        
+        this.imgPath = "";
+        this.defaultImage = true;
       }
     }
   }
 
   async onSubmit() {
-    
     this.submitted = true; 
     if (this.form.invalid) {
       return;
     }
     const data = this.form.value;   
     
-    if(this.imgPath === undefined){
+    if(this.imgPath === undefined || this.defaultImage){
       this.loading = true;
-      await this.userService.UpdateProfile('default', data).then(()=>{
+      await this.userService.UpdateProfile('', data).then(()=>{
       this.loading = false;
       });
     }else{
@@ -123,11 +128,10 @@ export class ProfileComponent implements OnInit {
         this.loading = false;
       });
     }
-   
-     
   }
+
   imgFileBig() {
-        return this.imgSize < 999999    
+    return this.imgSize < 999999    
   }
   changeImgDefault(){
     this.defaultImage = true;

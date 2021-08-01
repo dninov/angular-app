@@ -67,8 +67,8 @@ export class UserDetailsComponent implements OnInit {
       return;
     }
     const data = this.form.value;   
-    
-  console.log(data);
+    this.adminService.updateUserData(data, this.id);
+    console.log(data);
   
   }
 

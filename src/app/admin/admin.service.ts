@@ -61,6 +61,7 @@ export class AdminService {
     if( this.allArr.length === 0){
       return  this.afs.collection('users').get().toPromise().then( record=>{
         record.docs.forEach( entry => {
+          console.log(entry.data())
           this.allArr.push(entry.data())
         });  
       }).then(r=>{this.removeAdmin()})
@@ -70,10 +71,14 @@ export class AdminService {
 
   }
   removeAdmin(){
-     this.usersArr = this.allArr.filter(o=>o.hasOwnProperty('imgUrl'));
+     this.usersArr = this.allArr.filter(user => user.role === "user");
   }
+
   userInfo(id:any){
     return this.usersArr.filter(user => user.id === id);
+  }
+  updateUserData(data:any, id:any){
+    this.afs.collection('users').doc(id).update(data);
   }
 
 

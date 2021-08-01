@@ -1,60 +1,81 @@
 <div fxLayoutAlign="center center" class="loading" *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
-  <div class="signup-form" >
-  
-    <form [formGroup]="form" fxLayoutAlign="center center"  fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
-      <mat-form-field  [ngClass]="['form-field-read']" >
-          <button type='button'  [@scaleUp]  *ngIf="!defaultImage" mat-icon-button (click)="changeImgDefault()">
-            <mat-icon>close</mat-icon>
-          </button >
-          <mat-toolbar fxLayout= "column" style = "text-align: center;" >
-            <div  [@scaleUp]  *ngIf="!imgIsValid || defaultImage">
-              <img src="../../../assets/user-icon.jpg"  class = "imgPreview">
+<div class="signup-form">
+      <form [formGroup]="form" fxLayoutAlign="center "  fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
+      <div fxLayout= "row wrap"   fxLayoutGap="10px grid">
+        <div  fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="center center"  fxLayout= "column" fxLayoutGap="10px" >
+          <mat-form-field  [ngClass]="['form-field-read']" >
+            <div>
+              <button type='button'  [@scaleUp]  *ngIf="!defaultImage" mat-icon-button (click)="changeImgDefault()">
+                <mat-icon>close</mat-icon>
+              </button >
             </div>
-            <div  [@scaleUp]  *ngIf="imgIsValid && !defaultImage" class ="round">
-              <img [src]="imageSrc" alt="profile photo" class = "imgPreview">
-            </div>
-            <mat-error *ngIf="!imgIsValid">Моля изберете снимка до 1МБ</mat-error>
-            <input type="file" #fileInput id="uploadFile" formControlName="imageSrc" (change)="chooseFileEvt($event)" name="uploadFile" accept="image/png, image/jpeg">
-            <span *ngIf="defaultImage && imgIsValid">Моля изберете снимка</span>
-            <input matInput readonly/>
-            <button   mat-flat-button style="width: 150px;" color="primary" class = "chooseFile">Избери</button>
-          </mat-toolbar>
-          <span>
-          </span>
-      </mat-form-field>
-      <mat-form-field>
-        
-    </mat-form-field>
-        <mat-form-field>
-           <input 
-            type="text" 
-            matInput 
-            name="nickName" 
-            formControlName="nickName"
-            placeholder="Псевдоним">
-            <mat-error *ngIf="f.nickName.errors?.required">Полето е задължително</mat-error>
+            <mat-toolbar fxLayout= "column" style = "text-align: center;" >
+              <div  [@scaleUp]  *ngIf="defaultImage">
+                <img src="../../../assets/user-icon.jpg"  class = "imgPreview">
+              </div>
+              <div  [@scaleUp]  *ngIf="imgIsValid && !defaultImage" class ="round">
+                <img [src]="imageSrc" alt="profile photo" class = "imgPreview">
+              </div>
+              <mat-error *ngIf="!imgIsValid">Моля изберете снимка до 1МБ</mat-error>
+              <input type="file" #fileInput id="uploadFile" formControlName="imageSrc" (change)="chooseFileEvt($event)" name="uploadFile" accept="image/png, image/jpeg">
+              <span *ngIf="defaultImage && imgIsValid">Моля изберете снимка</span>
+              <input matInput readonly/>
+
+              <button   mat-flat-button style="width: 150px; margin-top: -20px;" color="primary" class = "chooseFile">Избери</button>
+            </mat-toolbar>
+            <span>
+            </span>
         </mat-form-field>
-        <mat-form-field >
+        </div>
+        <div  fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="center center" fxLayout= "column"  fxLayoutGap="10px" >
+         <div style="width: 300px;" fxLayout= "row">
+           <div fxFlex ="50%" fxFlex.xs="100%" >
+              <div class="mat-headline" >{{user.casino}}</div>
+           </div>
+           <div fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="end start">
+            <section fxLayout= "row" >
+              <img style="width: 30px;" *ngIf = "user.poker === true" src="../../../assets/poker.svg" alt="">
+              <img *ngIf = "user.baccart === true" src="../../../assets/chip.svg" alt="">
+              <img *ngIf = "user.blackjack === true" src="../../../assets/black-jack.svg" alt="">
+              <img *ngIf = "user.ar === true" src="../../../assets/rollet.svg" alt="">
+            </section>
+           </div>
+         </div>
+         
+          <mat-form-field>
             <input 
-                type="text" 
-                matInput
-                name = "fullName" 
-                placeholder="Имена"
-                formControlName="fullName"> 
-                <mat-error *ngIf="f.fullName.errors?.required">Полето е задължително</mat-error>
-         </mat-form-field >
-         <mat-form-field>
-            <input 
-                type="text" 
-                matInput 
-                name="phoneNumber" 
-                placeholder="Телефон"
-                formControlName="phoneNumber"> 
-                <mat-error *ngIf="f.phoneNumber.errors?.required">Полето е задължително</mat-error>
-         </mat-form-field >
-         <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Запази</button>
+             type="text" 
+             matInput 
+             name="nickName" 
+             formControlName="nickName"
+             placeholder="Псевдоним">
+             <mat-error *ngIf="f.nickName.errors?.required">Полето е задължително</mat-error>
+         </mat-form-field>
+         <mat-form-field >
+             <input 
+                 type="text" 
+                 matInput
+                 name = "fullName" 
+                 placeholder="Имена"
+                 formControlName="fullName"> 
+                 <mat-error *ngIf="f.fullName.errors?.required">Полето е задължително</mat-error>
+          </mat-form-field >
+          <mat-form-field>
+             <input 
+                 type="text" 
+                 matInput 
+                 name="phoneNumber" 
+                 placeholder="Телефон"
+                 formControlName="phoneNumber"> 
+                 <mat-error *ngIf="f.phoneNumber.errors?.required">Полето е задължително</mat-error>
+          </mat-form-field >
+          <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Запази</button>
+        </div>
+      </div>
+        
+        
     </form>
   </div>
 
