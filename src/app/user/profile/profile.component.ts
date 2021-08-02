@@ -70,15 +70,9 @@ export class ProfileComponent implements OnInit {
         
         for(const key in data){
           if((this.form.get(key)!) !== null){
-            if(key === "startDate"){
-              this.form.patchValue({
-                [key] : data[key].toDate()
-              });
-            }else{
-              this.form.patchValue({
-                [key] : data[key]
-              });
-            }
+            this.form.patchValue({
+              [key] : data[key]
+            });
           }
         }
       }).catch(err=>console.log(err));

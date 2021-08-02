@@ -11,9 +11,10 @@ import { AdminService } from '../admin.service';
 })
 export class UsersListComponent implements OnInit {
 gamesArr:Array<string> = ['AR', 'Poker', 'Blackjack', 'Baccart'];
-
+casinosArr:Array<string> = ['Casino1', 'Casino2', 'Casino3'];
 form!: FormGroup;
 filteredArr:Array<any> =[]; 
+loading = true;
   constructor(
     private adminService: AdminService,
     private formBuilder: FormBuilder, 
@@ -25,9 +26,11 @@ filteredArr:Array<any> =[];
       {
         nameSearch: [''],
         gameSearch: [''],
+        casinoSearch:[''],
       },
     );
     this.adminService.getAllUsers().then((r)=>{
+      this.loading = false;
       this.filteredArr = this.adminService.usersArr;
       this.form.valueChanges.subscribe(formData=>{
         this.filteredArr = this.adminService._filter(formData)

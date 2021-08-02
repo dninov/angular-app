@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../admin.service';
 import { animations } from '../../utils/animations';
 import { ActivatedRoute } from '@angular/router';
@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserDetailsComponent implements OnInit {
   id:any;
-  loading:boolean = false;
+  loading:boolean = true;
   form!: FormGroup;
   casinos:Array<string> =[ 'Casino1', 'Casino2', 'Casino3'];
   constructor( 
@@ -22,8 +22,12 @@ export class UserDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get("uid");
-    const data:any =  this.adminService.userInfo(this.id);
-    console.log(data);
+    this.adminService.getAllUsers().then(()=>{
+      this.loading = false;
+      const data = this.adminService.allArr.filter(user=> user.uid === this.id);
+      this.fillForm(data[0]);
+    }).catch(error=> console.log(error));
+
     this.form = this.formBuilder.group(
       {
         casino: ['', [Validators.required]],
@@ -34,7 +38,7 @@ export class UserDetailsComponent implements OnInit {
         startDate:['']
       },
     );
-    this.fillForm(data);
+    
   }
   
   get f(): { [key: string]: AbstractControl } {
@@ -56,7 +60,6 @@ export class UserDetailsComponent implements OnInit {
             }
           }
         }
-
     }
   
 

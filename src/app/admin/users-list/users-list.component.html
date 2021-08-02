@@ -1,8 +1,10 @@
-
-<section fxLayout= "row wrap" fxLayoutAlign="center"> 
+<div fxLayoutAlign="center center" class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<section *ngIf ="!loading" fxLayout= "row wrap" fxLayoutAlign="center"> 
   <form [formGroup]="form" fxLayoutGap="10px">
     <mat-form-field>
-        <input type="text" matInput [matAutocomplete]="auto" formControlName="nameSearch"/>
+        <input type="text" matInput placeholder="Имена" [matAutocomplete]="auto" formControlName="nameSearch"/>
         <mat-autocomplete #auto="matAutocomplete" [displayWith] = "autocompleteName">
         <mat-option *ngFor="let user of filteredArr" [value]="user">
           {{user.nickName}}
@@ -14,11 +16,18 @@
           <mat-option *ngFor="let game of gamesArr" [value]="game">
              {{game}}
           </mat-option>
-      </mat-select>
+      </mat-select> 
+  </mat-form-field>
+    <mat-form-field>
+      <mat-select  placeholder="Казино" name="casino" formControlName="casinoSearch">
+          <mat-option *ngFor="let casino of casinosArr" [value]="casino">
+             {{casino}}
+          </mat-option>
+      </mat-select> 
   </mat-form-field>
   </form>
 </section>
-<div class="content"  [@scaleUp]="filteredArr.length">
+<div  *ngIf ="!loading" class="content"  [@scaleUp]="filteredArr.length">
     <div  fxLayout= "row wrap"   fxLayoutGap="10px grid">
         <div (click)="onSelect(user)" fxLayoutAlign="center"  fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%" *ngFor="let user of filteredArr">
           <app-user-card  [user] = "user" class="user-card"></app-user-card>

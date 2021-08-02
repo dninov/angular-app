@@ -20,6 +20,7 @@ export const animations = [
 ]),
 trigger('routeAnimations', [
   transition('* <=> *', [
+    style({ position: 'relative' }),
     query(':enter', [
       style({
         position: 'absolute',
@@ -33,14 +34,11 @@ trigger('routeAnimations', [
         position: 'absolute',
         left: 0,
         width: '100%',
+        opacity: 0
       }),
     ], { optional: true }),
-    // Animate the new page in
     query(':enter', [
-      animate('0.4s ease-out', style({ opacity: 1 })),
-    ], { optional: true }),
-    query(':leave', [
-      animate('0.2s ease-in', style({ opacity: 0 })),
+      animate('1s ease-out', style({ opacity: 1 })),
     ], { optional: true }),
   ]),
 ])
