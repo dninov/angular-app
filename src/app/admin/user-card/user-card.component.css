@@ -1,6 +1,6 @@
 .user-card {
     width: 200px;
-    height: 250px;
+    height: 260px;
   }
   
 
@@ -16,4 +16,8 @@
 	border-radius: 10%!important;
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
   object-fit: cover;
+}
+.action.mat-card-actions{
+  margin-top: -20px!important;
+  margin-right: 15px!important;
 }

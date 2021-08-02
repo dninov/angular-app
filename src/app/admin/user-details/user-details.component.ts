@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../admin.service';
 import { animations } from '../../utils/animations';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   templateUrl: './user-details.component.html',
@@ -11,13 +11,16 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserDetailsComponent implements OnInit {
   id:any;
+  imgUrl = "";
   loading:boolean = true;
   form!: FormGroup;
   casinos:Array<string> =[ 'Casino1', 'Casino2', 'Casino3'];
   constructor( 
     private readonly route: ActivatedRoute,
     private formBuilder: FormBuilder, 
-    private adminService: AdminService
+    private adminService: AdminService,
+    private router: Router,
+
     ) { }
 
   ngOnInit(): void {
@@ -47,6 +50,9 @@ export class UserDetailsComponent implements OnInit {
 
 
   fillForm(data:any){
+    if(data.imgUrl){
+      this.imgUrl = data.imgUrl;
+    }
         for(const key in data){
           if((this.form.get(key)!) !== null){
             if(key === "startDate"){
@@ -73,6 +79,9 @@ export class UserDetailsComponent implements OnInit {
     this.adminService.updateUserData(data, this.id);
     console.log(data);
   
+  }
+  back(){
+    this.router.navigate(['admin-dashboard']);
   }
 
 }

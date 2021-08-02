@@ -1,13 +1,25 @@
 <div fxLayoutAlign="center center" class="loading" *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
-<div fxLayoutAlign="center center" class="loading" *ngIf="loading">
-    <mat-spinner></mat-spinner>
- </div>
-    <div class="signup-form" >
-    
-      <form [formGroup]="form" fxLayoutAlign="center center"  fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
-      
+
+<div fxLayout= "row wrap"   fxLayoutGap="40px grid" >
+  <div  fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="center end"  fxLayoutAlign.xs="center start" fxLayout= "column" fxLayoutGap="10px" >
+    <div fxLayout= "row" fxLayoutAlign="start center" fxLayoutGap="10px grid" >
+        <div  fxLayout="column" fxFlex ="5%" fxFlex.xs="15%" >
+          <button  mat-icon-button aria-label="Обратно" (click)="back()">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+          </button>
+        </div>
+        <div fxLayout= "column" fxFlex ="95%" fxFlex.xs="85%" fxLayoutGap="10px" >
+          <div class="img-holder">
+            <img  class="user-image" src={{imgUrl}} alt="User image">
+          </div>
+        </div>
+    </div>
+  </div>
+  <div  fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="center start" fxLayoutAlign.xs="center center"  fxLayout= "column" fxLayoutGap="10px" >
+    <div class="form">
+      <form [formGroup]="form"  fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
         <mat-form-field>
           <mat-select  placeholder="Казино" name="casino" formControlName="casino">
               <mat-option *ngFor="let casino of casinos" [value]="casino">
@@ -15,27 +27,26 @@
               </mat-option>
           </mat-select>
       </mat-form-field>
-         
            <mat-form-field appearance="fill">
             <mat-label>Дата на започване на работа</mat-label>
             <input formControlName="startDate" matInput [matDatepicker]="picker">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-            <section style="width: 300px;" fxLayoutAlign="center" fxLayout= "column"  fxLayoutGap="10px">
-              <div  fxLayoutAlign="center center">
-                <p>Игри които владеете</p>
-              </div>
-              <div fxLayout= "row wrap"   fxLayoutGap="10px grid">
-                <mat-checkbox   fxFlex ="50%" fxFlex.xs="100%" formControlName="ar">AR</mat-checkbox>
-                <mat-checkbox   fxFlex ="50%" fxFlex.xs="100%" formControlName="poker">Poker</mat-checkbox>
-                <mat-checkbox   fxFlex ="50%" fxFlex.xs="100%" formControlName="blackjack">Black Jack</mat-checkbox>
-                <mat-checkbox   fxFlex ="50%" fxFlex.xs="100%" formControlName="baccart">Baccart</mat-checkbox>
-              </div>
-            </section>
-  
-           <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Запази</button>
+          <section style="width: 300px;">
+              <p>Игри които владее</p>
+            <div fxLayout= "row wrap" fxLayoutAlign="center center"  fxLayoutGap="10px grid">
+              <mat-checkbox   fxFlex ="50%" formControlName="ar">AR</mat-checkbox>
+              <mat-checkbox   fxFlex ="50%" formControlName="poker">Poker</mat-checkbox>
+              <mat-checkbox   fxFlex ="50%" formControlName="blackjack">Black Jack</mat-checkbox>
+              <mat-checkbox   fxFlex ="50%" formControlName="baccart">Baccart</mat-checkbox>
+            </div>
+          </section>
+          <div style="width: 300px; text-align: center;">
+            <button style="width: 150px; margin-right: 75px;" type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Запази</button>
+          </div>
       </form>
     </div>
-  
-  
+   
+  </div>
+</div>

@@ -11,13 +11,13 @@
     <div class="img-holder">
       <img  class="user-image" src={{user.imgUrl}} alt="User image">
     </div>
-    <mat-card-content>
-      <p>
-        The Shiba Inu 
+    <mat-card-content  *ngIf="user.casino">
+      <p style="margin-top: 10px;" class = "mat-h3">
+        {{user.casino}}
       </p>
     </mat-card-content>
-    <mat-card-actions>
-      <a (click)="scheduleClicked()" color="primary">
+    <mat-card-actions class= "action">
+      <a style="margin-right: 10px;" (click)="scheduleClicked()" color="primary">
         <span matTooltip="График">
             <mat-icon>event</mat-icon>
         </span>
