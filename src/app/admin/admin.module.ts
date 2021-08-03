@@ -9,7 +9,15 @@ import { UserCardComponent } from './user-card/user-card.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { AdminService } from './admin.service';
 import { ScheduleBuilderComponent } from './schedule-builder/schedule-builder.component';
-import { FullCalendarModule } from '@fullcalendar/angular'; 
+import { FullCalendarModule } from '@fullcalendar/angular'; // must go before plugins
+import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
+import interactionPlugin from '@fullcalendar/interaction'; // a plugin!
+
+
+FullCalendarModule.registerPlugins([ // register FullCalendar plugins
+  dayGridPlugin,
+  interactionPlugin
+]);
 
 @NgModule({
   declarations: [
