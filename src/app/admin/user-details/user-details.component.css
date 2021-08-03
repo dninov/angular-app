@@ -22,6 +22,11 @@
    margin-top: 40px;
    max-width: 250px;
   }
+  @media only screen and (max-width: 600px) {
+    .form {
+      margin-top: -30px;
+    }
+  }
 .user-image{
   margin-left: 20px;
   width: 220px; 
@@ -29,4 +34,7 @@
   border-radius: 10%!important;
   box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
   object-fit: cover;
+}
+.action-row{
+  width: 300px;
 }

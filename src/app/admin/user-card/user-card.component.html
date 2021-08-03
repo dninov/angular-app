@@ -11,10 +11,15 @@
     <div class="img-holder">
       <img  class="user-image" src={{user.imgUrl}} alt="User image">
     </div>
-    <mat-card-content  *ngIf="user.casino">
-      <p style="margin-top: 10px;" class = "mat-h3">
-        {{user.casino}}
-      </p>
+    <mat-card-content >
+      <div fxLayout="row"  fxLayoutAlign="space-between center" style="width: 200px;">
+        <p  *ngIf="user.casino" style="margin-top: 10px;" class = "mat-h3">
+          {{user.casino}}
+        </p>
+        <p  *ngIf="user.startDate" style="margin-top: 10px;" class = "mat-h3">
+          {{user.startDate.toDate().toDateString().slice(4)}}
+        </p>
+      </div>
     </mat-card-content>
     <mat-card-actions class= "action">
       <a style="margin-right: 10px;" (click)="scheduleClicked()" color="primary">

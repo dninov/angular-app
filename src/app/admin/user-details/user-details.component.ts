@@ -83,5 +83,13 @@ export class UserDetailsComponent implements OnInit {
   back(){
     this.router.navigate(['admin-dashboard']);
   }
+  scheduleClicked(){
+    console.log('clicked');
+    
+  }
+  mailClicked(){
+    console.log('mail');
+    
+  }
 
 }

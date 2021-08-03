@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DatePipe } from '@angular/common'
 @Component({
   selector: 'app-user-card',
   templateUrl: './user-card.component.html',

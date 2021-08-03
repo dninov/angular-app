@@ -1,5 +1,7 @@
 # StaffManager
-A basic role based admin/user app. Users can build up profile details and admins can view/filter list of users and add aditional details to users collections. Live preview to be added. Working sections to the moment user/profile, admin/users-list, admin/user-details. To be added private messages, angular-calendar.
+A basic role based admin/user app. Users can build up profile details and admins can view/filter list of users and add aditional details to users collections. Live preview at:
+https://ang-app-85803.web.app/
+Working sections to the moment user/profile, admin/users-list, admin/user-details. To be added private messages, angular-calendar.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.2.
 

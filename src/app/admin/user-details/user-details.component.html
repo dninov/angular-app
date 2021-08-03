@@ -6,13 +6,25 @@
   <div  fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="center end"  fxLayoutAlign.xs="center start" fxLayout= "column" fxLayoutGap="10px" >
     <div fxLayout= "row" fxLayoutAlign="start center" fxLayoutGap="10px grid" >
         <div  fxLayout="column" fxFlex ="5%" fxFlex.xs="15%" >
-          <button  mat-icon-button aria-label="Обратно" (click)="back()">
+          <button  mat-icon-button  matTooltip="Лист" (click)="back()">
             <mat-icon>keyboard_arrow_left</mat-icon>
           </button>
         </div>
         <div fxLayout= "column" fxFlex ="95%" fxFlex.xs="85%" fxLayoutGap="10px" >
           <div class="img-holder">
             <img  class="user-image" src={{imgUrl}} alt="User image">
+          </div>
+          <div fxLayout="row" fxLayoutGap="30px" fxLayoutAlign="center center" class="action-row">
+            <a style="margin-right: 10px;" (click)="scheduleClicked()" color="primary">
+              <button  mat-icon-button matTooltip="График">
+                  <mat-icon>event</mat-icon>
+              </button>
+            </a>
+            <a (click)="mailClicked()" color="primary">
+              <button  mat-icon-button matTooltip="Съобщение">
+                  <mat-icon>mail</mat-icon>
+              </button>
+            </a>
           </div>
         </div>
     </div>
