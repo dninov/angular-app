@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { UsersListComponent } from './users-list/users-list.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { ScheduleBuilderComponent } from './schedule-builder/schedule-builder.component';
 
 const routes: Routes = [
     { 
@@ -16,6 +17,10 @@ const routes: Routes = [
     { 
       path: 'user-details/:uid',
       component: UserDetailsComponent
+    },
+    { 
+      path: 'schedule-builder/:uid',
+      component: ScheduleBuilderComponent
     },
 ];
 

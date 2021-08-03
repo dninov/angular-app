@@ -8,11 +8,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserCardComponent } from './user-card/user-card.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { AdminService } from './admin.service';
+import { ScheduleBuilderComponent } from './schedule-builder/schedule-builder.component';
+import { FullCalendarModule } from '@fullcalendar/angular'; 
+
 @NgModule({
   declarations: [
     UsersListComponent,
     UserCardComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    ScheduleBuilderComponent
   ],
   imports: [
     CommonModule,
@@ -21,6 +25,7 @@ import { AdminService } from './admin.service';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    FullCalendarModule
   ], 
   providers:[
     {

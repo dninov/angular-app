@@ -17,8 +17,15 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
-import { GuardService } from './guards/guard.service'
-import { AdminGuardService } from './guards/admin-guard.service'
+import { GuardService } from './guards/guard.service';
+import { AdminGuardService } from './guards/admin-guard.service';
+import { FullCalendarModule } from '@fullcalendar/angular'; 
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+FullCalendarModule.registerPlugins([ // register FullCalendar plugins
+  dayGridPlugin,
+  interactionPlugin
+]);
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +46,8 @@ import { AdminGuardService } from './guards/admin-guard.service'
     AngularFirestoreModule,
     AngularFireAuthModule, 
     AngularFireStorageModule ,
-    AngularFireFunctionsModule
+    AngularFireFunctionsModule,
+    FullCalendarModule 
   ],
   providers: [AuthService, GuardService, AdminGuardService],
   bootstrap: [AppComponent]
