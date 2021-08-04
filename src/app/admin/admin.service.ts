@@ -68,10 +68,15 @@ export class AdminService {
       return await this.getAllUsers()
     }
   }
-  updateUserData(data:any, id:any){
-    this.afs.collection('users').doc(id).update(data); 
+  async updateUserData(data:any, id:any){
+    await this.afs.collection('users').doc(id).update(data); 
   }
-
+  async updateUserSchedule(data:any, id:any){
+    await this.afs.collection('users').doc(id).collection('schedule').doc(id).set({schedule: data});
+  }
+  async getUserSchedule(id:any){
+    return await this.afs.collection('users').doc(id).collection('schedule').doc(id).get().toPromise();
+  }
 
 }
 

@@ -70,22 +70,21 @@ export class UserDetailsComponent implements OnInit {
   
 
 
-  async onSubmit() {
-    
+  onSubmit() {
     if (this.form.invalid) {
       return;
     }
-    const data = this.form.value;   
-    this.adminService.updateUserData(data, this.id);
-    console.log(data);
-  
+    const data = this.form.value;  
+    this.loading = true; 
+    this.adminService.updateUserData(data, this.id).then(()=>{
+    this.loading = false;
+    })
   }
   back(){
     this.router.navigate(['admin-dashboard']);
   }
   scheduleClicked(){
-    console.log('clicked');
-    
+    this.router.navigate(['admin-dashboard/schedule-builder', this.id]);
   }
   mailClicked(){
     console.log('mail');
