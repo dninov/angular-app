@@ -19,12 +19,10 @@ export class DashboardComponent implements OnInit {
     this.authService.logout();
   }
   showProfile(){
-    this.router.navigateByUrl('dashboard/profile');
-    console.log('profile');
+    this.router.navigate(['dashboard/profile']);
     
   }
-  showSchedule(){
-    this.router.navigateByUrl('dashboard/schedule');
-    console.log('schedule');
+  goSchedule(){
+    this.router.navigate(['dashboard/schedule']);
   }
 }

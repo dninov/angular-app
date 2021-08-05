@@ -14,6 +14,7 @@ export class UserDetailsComponent implements OnInit {
   imgUrl = "";
   loading:boolean = true;
   form!: FormGroup;
+  userData:any;
   casinos:Array<string> =[ 'Casino1', 'Casino2', 'Casino3'];
   constructor( 
     private readonly route: ActivatedRoute,
@@ -27,8 +28,8 @@ export class UserDetailsComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get("uid");
     this.adminService.getAllUsers().then(()=>{
       this.loading = false;
-      const data = this.adminService.allArr.filter(user=> user.uid === this.id);
-      this.fillForm(data[0]);
+      this.userData = this.adminService.allArr.filter(user=> user.uid === this.id);
+      this.fillForm(this.userData[0]);
     }).catch(error=> console.log(error));
 
     this.form = this.formBuilder.group(
@@ -48,7 +49,6 @@ export class UserDetailsComponent implements OnInit {
     return this.form.controls;  
   }
 
-
   fillForm(data:any){
     if(data.imgUrl){
       this.imgUrl = data.imgUrl;
@@ -67,8 +67,6 @@ export class UserDetailsComponent implements OnInit {
           }
         }
     }
-  
-
 
   onSubmit() {
     if (this.form.invalid) {
@@ -88,7 +86,17 @@ export class UserDetailsComponent implements OnInit {
   }
   mailClicked(){
     console.log('mail');
-    
   }
+  async deleteClicked(){
+    console.log(this.userData[0]);
+    
+    this.loading = true;
+    await this.adminService.deleteUser(this.userData[0].email, this.userData[0].uid).then(()=>{
+       this.loading = false;
+       this.router.navigateByUrl('/admin-dashboard');
+     }).catch(error=> console.log(error));
+  }
+
+
 
 }

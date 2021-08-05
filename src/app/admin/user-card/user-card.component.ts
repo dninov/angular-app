@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DatePipe } from '@angular/common'
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-user-card',
   templateUrl: './user-card.component.html',
@@ -9,12 +10,13 @@ import { DatePipe } from '@angular/common'
 export class UserCardComponent implements OnInit {
   @Input() user!: any;
 
-  constructor() { }
+  constructor(
+    private router: Router,
+  ) { }
   ngOnInit(): void {
   }
   scheduleClicked(){
-    console.log('clicked');
-    
+    this.router.navigate(['admin-dashboard/schedule-builder', this.user.uid]);
   }
   mailClicked(){
     console.log('mail');

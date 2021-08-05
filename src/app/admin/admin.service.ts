@@ -1,6 +1,8 @@
 import { error } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +13,16 @@ export class AdminService {
  
   constructor(
     private  afs:AngularFirestore,
+    private fns: AngularFireFunctions,
+    private router: Router,
   ) { }
   async getAllUsers(){
-    if( this.allArr.length === 0){
-      return  await this.afs.collection('users').get().toPromise().then( record=>{
-        record.docs.forEach( entry => {
-          this.allArr.push(entry.data());
-        });  
-      }).then(r=>{this.removeAdmin()})
-    }else{
-      return
-    }
+    this.allArr = [];
+    return  await this.afs.collection('users').get().toPromise().then( record=>{
+      record.docs.forEach( entry => {
+        this.allArr.push(entry.data());
+      });  
+    }).then(r=>{this.removeAdmin()})
   }
 
   _filter(formData:{nameSearch:any, gameSearch:Array<string>, casinoSearch:string} ){
@@ -76,6 +77,19 @@ export class AdminService {
   }
   async getUserSchedule(id:any){
     return await this.afs.collection('users').doc(id).collection('schedule').doc(id).get().toPromise();
+  }
+  async deleteUser(email:any, id:any){
+    const callable =  this.fns.httpsCallable('deleteUser');
+    await callable({ email: email }).toPromise().then(async ()=>{
+      try{
+        await this.afs.collection('users').doc(id).collection('schedule').doc(id).delete();
+        await this.afs.collection('users').doc(id).delete();
+      }catch(error){
+        console.log(error);
+      }
+    }).then(()=>{
+      this.allArr=[];
+    })
   }
 
 }

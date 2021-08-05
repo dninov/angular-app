@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import Validation from '../../utils/validation';
+import { AbstractControl, FormBuilder, FormGroup, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../auth.service';
-
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -30,20 +28,28 @@ export class SignupComponent implements OnInit {
             Validators.minLength(6),
             Validators.maxLength(40)
           ]
-        ],
-        rePass: ['', Validators.required],
+        ], 
+        rePass: ['', Validators.required, [this.checkPasswords()]],
         roles: ['', [Validators.required]],
       },
-      {
-        validators: [Validation.match('password', 'rePass')]
-      }
     );
   }
  
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;  
   }
-
+  checkPasswords(): ValidatorFn {  
+    let pass = this.f.controls.get('password')?.value;
+   // let confirmPass = this.form.controls['rePass'];
+    return (control: AbstractControl): ValidationErrors | null =>  {
+      return pass === 'confirmPass' ? null : {notSame: control.value};
+  }
+}
+  // checkPasswords: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => { 
+  //   let pass = this.form.get('password')!.value;
+  //   let confirmPass = this.form.get('rePass')!.value;
+  //   return pass === confirmPass ? null : { notSame: true }
+  // }
   onSubmit(): void {
     this.submitted = true;
     if (this.form.invalid) {

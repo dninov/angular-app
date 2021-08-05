@@ -8,18 +8,15 @@ const routes: Routes = [
   {
     path: '',
     component: ProfileComponent,
-    children: [
-      { 
-        path: 'profile',
-        component: ProfileComponent
-      },
-      { 
-        path: 'schedule',
-        component: ScheduleComponent
-      }
-    ]
+  },
+  { 
+    path: 'profile',
+    component: ProfileComponent
+  },
+  { 
+    path: 'schedule',
+    component: ScheduleComponent
   }
-
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
