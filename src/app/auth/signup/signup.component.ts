@@ -39,7 +39,7 @@ export class SignupComponent implements OnInit {
       },
 
     );
-    this.subscr = this.form.get('password')?.valueChanges.subscribe(val=>{
+    this.subscr = this.form?.valueChanges.subscribe(val=>{
       this.form.get('rePass')!.updateValueAndValidity();
     })
   }
@@ -65,14 +65,20 @@ export class SignupComponent implements OnInit {
     }
     const data = this.form.value;    
     this.loading = true;
-    this.afAuth.createUserWithEmailAndPassword(data.email, data.password).catch(error=>{
+    this.afAuth.createUserWithEmailAndPassword(data.email, data.password)
+    .then((result)=>{
+      console.log(result.user?.uid);
+      delete data.rePass;
+      data.uid = result.user?.uid;
+      this.authService.emailSignup(data);
+    })
+    .catch(error=>{
        if(error.code === 'auth/email-already-in-use'){
         this.loading = false;
         this.emailTaken = true;
         this.form.get('email')!.updateValueAndValidity();
         return 
-      }
-      return
+      } 
     })
   }
   get errorMsg(): string {

@@ -32,14 +32,14 @@
         <div  fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="center center" fxLayout= "column"  fxLayoutGap="10px" >
          <div style="width: 300px;" fxLayout= "row">
            <div fxFlex ="50%" fxFlex.xs="100%" >
-              <div class="mat-headline" >{{user.casino}}</div>
+              <div class="mat-headline" >{{user?.casino}}</div> 
            </div>
            <div fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="end start">
             <section fxLayout= "row" >
-              <img style="width: 30px;" *ngIf = "user.poker === true" src="../../../assets/poker.svg" alt="">
-              <img *ngIf = "user.baccart === true" src="../../../assets/chip.svg" alt="">
-              <img *ngIf = "user.blackjack === true" src="../../../assets/black-jack.svg" alt="">
-              <img *ngIf = "user.ar === true" src="../../../assets/rollet.svg" alt="">
+              <img style="width: 30px;" *ngIf = "user?.poker === true" src="../../../assets/poker.svg" alt="">
+              <img *ngIf = "user?.baccart === true" src="../../../assets/chip.svg" alt="">
+              <img *ngIf = "user?.blackjack === true" src="../../../assets/black-jack.svg" alt="">
+              <img *ngIf = "user?.ar === true" src="../../../assets/rollet.svg" alt="">
             </section>
            </div>
          </div>

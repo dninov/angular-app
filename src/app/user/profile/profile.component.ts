@@ -56,7 +56,7 @@ export class ProfileComponent implements OnInit {
             img: this.imageSrc
           });
         }else{
-
+ 
         }
         if( this.user.displayName !== undefined){
           this.form.patchValue({

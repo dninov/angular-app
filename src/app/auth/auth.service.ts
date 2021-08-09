@@ -33,25 +33,25 @@ export class AuthService {
       })
     }
 
-    SetUserData(user: any, role: string) {
+    SetUserData(user: any) {
       const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
       const userD: User = {
         uid: user.uid,
         email: user.email,
-        role: role,
+        role: user.roles,
       }
       return userRef.set(userD, {
         merge: true
       })
     }
 
-    async emailSignup(user:any, email: string, password: string, role: string) {
-      if(role === "Администратор"){
-        await this.SetUserData(user, 'admin');
-        this.makeAdmin(email, password);
-      }else{
-        await this.SetUserData(user, 'user');
+     async emailSignup(user:any) {
+       await this.SetUserData(user);
+       if(user.roles === "Администратор"){
+         this.makeAdmin(user.email, user.password);
+        }else{
         this.router.navigateByUrl('/dashboard');
+        
       }
     }
 
