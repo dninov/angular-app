@@ -16,7 +16,11 @@
   transform: scale(1.1);
 }
 .loading{
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(143, 143, 143, 0.8);
+  height: 500px;
+ 
+}
+@media only screen and (max-width: 1080px) {
+  .user-card {
+   margin-top: -30%;
+  }
 }

@@ -1,4 +1,7 @@
-<section class="signup-form"  fxLayoutAlign="center center">
+<div fxLayoutAlign="center center" class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+<section  *ngIf="!loading" class="signup-form"  fxLayoutAlign="center center">
     <form  [formGroup]="form" fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
         <mat-form-field>
            <input 
@@ -8,6 +11,7 @@
             placeholder="Имейл">
             <mat-error *ngIf="f.email.errors?.required">Полето е задължително</mat-error>
             <mat-error *ngIf="f.email.errors?.email">Имейлът е невалиден</mat-error>
+            <mat-error *ngIf="f.email.errors?.isTaken">Имейлът е зает</mat-error>
         </mat-form-field>
         <mat-form-field >
             <input 
@@ -32,7 +36,7 @@
                 <mat-hint align="end"> {{f.rePass.value?.length}}/6 </mat-hint>
                 <mat-error *ngIf="f.rePass.errors?.required">Полето е задължително</mat-error>
                 <mat-error *ngIf="f.rePass.errors?.minlength">Минимум 6 символа</mat-error> 
-                <mat-error *ngIf="f.rePass.errors?.notSame">Паролите не съвпадат</mat-error>
+                <mat-error *ngIf="f.rePass.errors?.notSame && !f.rePass.errors?.minlength">Паролите не съвпадат</mat-error>
          </mat-form-field >
          <mat-form-field>
             <mat-select placeholder="Роля" name="roles" formControlName="roles">

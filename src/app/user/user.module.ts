@@ -7,6 +7,15 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { MaterialModue } from '../material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FullCalendarModule } from '@fullcalendar/angular'; 
+import dayGridPlugin from '@fullcalendar/daygrid'; 
+import interactionPlugin from '@fullcalendar/interaction'; 
+
+FullCalendarModule.registerPlugins([ 
+  dayGridPlugin,
+  interactionPlugin
+]);
+
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -19,7 +28,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MaterialModue,
     FormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    FullCalendarModule
   ]
 })
 export class UserModule { }

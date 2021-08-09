@@ -27,13 +27,11 @@ loading = true;
         nameSearch: [''],
         gameSearch: [''],
         casinoSearch:[''],
-      },
+      }, 
     );
     this.adminService.getAllUsers().then((r)=>{
       this.loading = false;
       this.filteredArr = this.adminService.usersArr;
-      console.log(this.filteredArr);
-      
       this.form.valueChanges.subscribe(formData=>{
         this.filteredArr = this.adminService._filter(formData)
       });
@@ -43,7 +41,7 @@ loading = true;
     return input ? input.nickName : undefined
   }
   onSelect(user:any){
-      this.router.navigate(['admin-dashboard/user-details', user.uid]);
+    this.router.navigate(['admin-dashboard/user-details', user.uid]);
   }
 
 }

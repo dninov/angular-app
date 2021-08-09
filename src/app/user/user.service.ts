@@ -21,18 +21,15 @@ export class UserService {
     await task.snapshotChanges().pipe().toPromise() 
   }
 
-  async UpdateProfile(
-    image: any, 
-    data:any){
+  async UpdateProfile(image: any, data:any){
     const user = JSON.parse(localStorage.getItem('user')!);
     const id = user.uid;
-    
     if(image !== ""){
-    const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
-    const fileRef = this.afst.ref(filePath);
-    await this.uploadImg(image, filePath).then(async ()=>{
-      this.imgUrl = await fileRef.getDownloadURL().toPromise();
-    })
+      const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
+      const fileRef = this.afst.ref(filePath);
+      await this.uploadImg(image, filePath).then(async ()=>{
+        this.imgUrl = await fileRef.getDownloadURL().toPromise();
+      })
     }else{
       this.imgUrl = "../../../assets/user-icon.jpg";
     }
@@ -42,19 +39,20 @@ export class UserService {
         photoURL: this.imgUrl
         }); 
    
-        data.imgUrl = this.imgUrl;
-        data.role = "user";
-        delete data.imageSrc;
-        delete data.img;
-        console.log(data);
-
-    this.afs.collection('users').doc(id).update(data).then(()=>{
-        this.as.SetUserData(this.as.userData);   
-      })
+    data.imgUrl = this.imgUrl;
+    delete data.imageSrc;
+    delete data.img;
+    this.afs.collection('users').doc(id).update(data);
     }
 
 userInfo(){
     const user =  (JSON.parse(localStorage.getItem('user')!));    
     return  this.afs.collection('users').doc(user.uid!).get().toPromise(); 
   }
+async getSchedule(){
+  const user = JSON.parse(localStorage.getItem('user')!);
+  const id = user.uid;
+  return await this.afs.collection('users').doc(id).collection('schedule').doc(id).get().toPromise();
+}
+
 }

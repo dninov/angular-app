@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { AdminService } from '../admin.service';
 import { animations } from '../../utils/animations';
 import { ActivatedRoute, Router } from '@angular/router';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 @Component({
   selector: 'app-profile',
   templateUrl: './user-details.component.html',
@@ -11,11 +12,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class UserDetailsComponent implements OnInit {
   id:any;
-  imgUrl = "";
-  loading:boolean = true;
+  loading:boolean = true; 
   form!: FormGroup;
   userData:any;
-  casinos:Array<string> =[ 'Casino1', 'Casino2', 'Casino3'];
+  casinos:Array<string> = [ 'Casino1', 'Casino2', 'Casino3'];
   constructor( 
     private readonly route: ActivatedRoute,
     private formBuilder: FormBuilder, 
@@ -28,8 +28,9 @@ export class UserDetailsComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get("uid");
     this.adminService.getAllUsers().then(()=>{
       this.loading = false;
-      this.userData = this.adminService.allArr.filter(user=> user.uid === this.id);
-      this.fillForm(this.userData[0]);
+      const data = this.adminService.allArr.filter(user=> user.uid === this.id);
+      this.userData = data[0];
+      this.fillForm(data[0]);
     }).catch(error=> console.log(error));
 
     this.form = this.formBuilder.group(
@@ -50,22 +51,20 @@ export class UserDetailsComponent implements OnInit {
   }
 
   fillForm(data:any){
-    if(data.imgUrl){
-      this.imgUrl = data.imgUrl;
-    }
-        for(const key in data){
-          if((this.form.get(key)!) !== null){
-            if(key === "startDate"){
-              this.form.patchValue({
-                [key] : data[key].toDate()
-              });
-            }else{
-              this.form.patchValue({
-                [key] : data[key]
-              });
-            }
+    console.log(data);
+    for(const key in data){
+        if((this.form.get(key)!) !== null){
+          if(key === "startDate"){
+            this.form.patchValue({
+              [key] : data[key].toDate()
+            });
+          }else{
+            this.form.patchValue({
+              [key] : data[key]
+            });
           }
         }
+      }
     }
 
   onSubmit() {

@@ -12,9 +12,10 @@ export class AuthService {
    userData: any;
    pass: string = '';
    validLogin = true;
+   errorMsg: string="";
   constructor(
     private afs: AngularFirestore,
-    private afAuth: AngularFireAuth,
+    public afAuth: AngularFireAuth,
     private router: Router,
     private ngZone: NgZone,
     private fns: AngularFireFunctions) 
@@ -32,37 +33,32 @@ export class AuthService {
       })
     }
 
-    SetUserData(user: any) {
+    SetUserData(user: any, role: string) {
       const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
       const userD: User = {
         uid: user.uid,
         email: user.email,
+        role: role,
       }
       return userRef.set(userD, {
         merge: true
       })
     }
 
-     emailSignup(email: string, password: string, role: string) {
-      this.afAuth.createUserWithEmailAndPassword(email, password)
-      .then(async value => {
-        await this.SetUserData(value.user);
-        if(role === "Администратор"){
-          this.makeAdmin(email, password);
-        }else{
-          this.router.navigateByUrl('/dashboard');
-        }
-      })
-      .catch(err => {
-        console.log( err);
-      });
+    async emailSignup(user:any, email: string, password: string, role: string) {
+      if(role === "Администратор"){
+        await this.SetUserData(user, 'admin');
+        this.makeAdmin(email, password);
+      }else{
+        await this.SetUserData(user, 'user');
+        this.router.navigateByUrl('/dashboard');
+      }
     }
 
     async login(email: string, password: string) {
       try{
         const result = await this.afAuth.signInWithEmailAndPassword(email, password);
         const token = await result.user?.getIdTokenResult();
-        await this.SetUserData(result.user);
         if(token?.claims.admin === true){
           this.validLogin = true;
           this.router.navigateByUrl('/admin-dashboard');

@@ -1,7 +1,7 @@
 <div fxLayoutAlign="center center" class="loading" *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
-<section *ngIf ="!loading" class="form"> 
+<section *ngIf="!loading" class="form"> 
   <form [formGroup]="form" fxLayout="row" fxLayout.xs="column" fxLayoutGap="30px" fxLayoutAlign="center center">
     <mat-form-field>
         <input type="text" matInput placeholder="Имена" [matAutocomplete]="auto" formControlName="nameSearch"/>
@@ -28,8 +28,8 @@
   </form>
 </section>
 <div  *ngIf ="!loading" class="content"  [@scaleUp]="filteredArr.length">
-    <div  fxLayout= "row wrap"   fxLayoutGap="10px grid">
-        <div (click)="onSelect(user)" fxLayoutAlign="center center"  fxFlex="25%" fxFlex.sm="50%" fxFlex.xs="100%" *ngFor="let user of filteredArr">
+    <div  fxLayout= "row wrap" fxLayoutAlign="start" fxLayoutAlign.md="center" fxLayoutGap="20px grid">
+        <div (click)="onSelect(user)" fxLayoutAlign="center center"  fxFlex.xl="10%" fxFlex.lg="17%" fxFlex.md="25%" fxFlex.xs="50%" *ngFor="let user of filteredArr">
           <app-user-card  [user] = "user" class="user-card"></app-user-card>
         </div>
     </div>

@@ -22,7 +22,9 @@ export class AdminService {
       record.docs.forEach( entry => {
         this.allArr.push(entry.data());
       });  
-    }).then(r=>{this.removeAdmin()})
+    }).then(r=>{
+      console.log(this.allArr);
+      this.removeAdmin()})
   }
 
   _filter(formData:{nameSearch:any, gameSearch:Array<string>, casinoSearch:string} ){
@@ -71,7 +73,7 @@ export class AdminService {
   }
   async updateUserData(data:any, id:any){
     await this.afs.collection('users').doc(id).update(data); 
-  }
+  } 
   async updateUserSchedule(data:any, id:any){
     await this.afs.collection('users').doc(id).collection('schedule').doc(id).set({schedule: data});
   }

@@ -12,7 +12,7 @@ import bgLocale from '@fullcalendar/core/locales/bg';
   styleUrls: ['./schedule-builder.component.css']
 })
 export class ScheduleBuilderComponent  implements OnInit{
-  @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
+  @ViewChild('calendar') calendarComponent!: FullCalendarComponent; 
   render: boolean = false;
   id:any;
   first:boolean=true;
@@ -96,15 +96,6 @@ export class ScheduleBuilderComponent  implements OnInit{
     }else{
       this.eventsArr.push(eventObj);
       calendarApi.addEvent(eventObj);
-    }
-  }
-
-  setOptions(){
-    this.calendarOptions = {
-      initialView: 'dayGridMonth',
-      weekends: true,
-      dateClick: this.eventClick.bind(this), // bind is important!
-      events: this.eventsArr
     }
   }
 
