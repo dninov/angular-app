@@ -3,7 +3,9 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { AdminService } from '../admin.service';
 import { animations } from '../../utils/animations';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 @Component({
   selector: 'app-profile',
   templateUrl: './user-details.component.html',
@@ -16,21 +18,21 @@ export class UserDetailsComponent implements OnInit {
   form!: FormGroup;
   userData:any;
   casinos:Array<string> = [ 'Casino1', 'Casino2', 'Casino3'];
+
   constructor( 
+    public dialog: MatDialog,
     private readonly route: ActivatedRoute,
     private formBuilder: FormBuilder, 
     private adminService: AdminService,
     private router: Router,
-
     ) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get("uid");
-    this.adminService.getAllUsers().then(()=>{
+    this.adminService.getUser(this.id).then(result=>{
       this.loading = false;
-      const data = this.adminService.allArr.filter(user=> user.uid === this.id);
-      this.userData = data[0];
-      this.fillForm(data[0]);
+      this.userData = result.data();
+      this.fillForm(this.userData);
     }).catch(error=> console.log(error));
 
     this.form = this.formBuilder.group(
@@ -86,14 +88,23 @@ export class UserDetailsComponent implements OnInit {
   mailClicked(){
     console.log('mail');
   }
-  async deleteClicked(){
-    console.log(this.userData[0]);
-    
+  deleteClicked(){
     this.loading = true;
-    await this.adminService.deleteUser(this.userData[0].email, this.userData[0].uid).then(()=>{
+    this.adminService.deleteUser(this.userData.email, this.userData.uid).then(()=>{
        this.loading = false;
        this.router.navigateByUrl('/admin-dashboard');
      }).catch(error=> console.log(error));
+  }
+
+  openDialog(){
+    let dialogRef = this.dialog.open(DeleteDialogComponent);
+    dialogRef.afterClosed().subscribe(result =>{
+      if(result === "yes"){
+        this.deleteClicked();
+      }else{
+        return
+      }
+    })
   }
 
 

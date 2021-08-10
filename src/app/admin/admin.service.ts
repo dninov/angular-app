@@ -26,7 +26,9 @@ export class AdminService {
       console.log(this.allArr);
       this.removeAdmin()})
   }
-
+   getUser(id:any){
+    return  this.afs.collection('users').doc(id).get().toPromise();
+  }
   _filter(formData:{nameSearch:any, gameSearch:Array<string>, casinoSearch:string} ){
     let nameStr = "";
     let game:Array<string> = [];   
@@ -64,13 +66,6 @@ export class AdminService {
      this.usersArr = this.allArr.filter(user => user.role === "user");
   }
 
-  async userInfo(uid:any){
-    if(this.usersArr.length > 0){
-      return this.usersArr.filter(user => user.uid === uid);
-    }else{
-      return await this.getAllUsers()
-    }
-  }
   async updateUserData(data:any, id:any){
     await this.afs.collection('users').doc(id).update(data); 
   } 

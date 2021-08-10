@@ -11,7 +11,8 @@ import { AdminService } from './admin.service';
 import { ScheduleBuilderComponent } from './schedule-builder/schedule-builder.component';
 import { FullCalendarModule } from '@fullcalendar/angular'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
-import interactionPlugin from '@fullcalendar/interaction'; // a plugin!
+import interactionPlugin from '@fullcalendar/interaction';
+import { DeleteDialogComponent } from './user-details/delete-dialog/delete-dialog.component'; // a plugin!
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -23,7 +24,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     UsersListComponent,
     UserCardComponent,
     UserDetailsComponent,
-    ScheduleBuilderComponent
+    ScheduleBuilderComponent,
+    DeleteDialogComponent
   ],
   imports: [
     CommonModule,

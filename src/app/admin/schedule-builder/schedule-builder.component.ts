@@ -41,7 +41,6 @@ export class ScheduleBuilderComponent  implements OnInit{
   ) { }
 
   ngOnInit(){
-    
     this.id = this.route.snapshot.paramMap.get("uid");
     this.adminService.getUserSchedule(this.id).then((result:any)=>{
       this.loading = false;

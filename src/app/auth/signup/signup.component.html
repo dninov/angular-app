@@ -10,7 +10,7 @@
             formControlName="email"
             placeholder="Имейл">
             <mat-error *ngIf="f.email.errors?.required">Полето е задължително</mat-error>
-            <mat-error *ngIf="f.email.errors?.email">Имейлът е невалиден</mat-error>
+            <mat-error *ngIf="f.email.errors?.email || f.email.errors?.isNotValid">Имейлът е невалиден</mat-error>
             <mat-error *ngIf="f.email.errors?.isTaken">Имейлът е зает</mat-error>
         </mat-form-field>
         <mat-form-field >

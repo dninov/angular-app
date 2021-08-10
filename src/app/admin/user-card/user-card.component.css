@@ -19,6 +19,9 @@
   margin-top: -20px!important;
   margin-right: 15px!important;
 }
+.user-email{
+  margin-top: -20px!important;
+}
 @media only screen and (max-width: 1080px) {
   .user-card {
    transform: scale(0.7);

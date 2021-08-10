@@ -44,7 +44,7 @@ export class ProfileComponent implements OnInit {
 
 
   fillForm(){
-    this.user = JSON.parse(localStorage.getItem('user')!);
+    this.user = JSON.parse(localStorage.getItem('user')!); 
     if( this.user){  
         if(!this.user.photoURL){
           this.user.photoURL = '../../../assets/user-icon.jpg';

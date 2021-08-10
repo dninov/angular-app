@@ -9,11 +9,12 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class SignupComponent implements OnInit {
   form!: FormGroup;
-  submitted = false;
   roleList: string[] = ['Администратор', 'Потребител'];
-  subscr!:any;
+  passSubscr!:any;
+  emailSubscr!:any;
   loading = true;
   emailTaken = false;
+  emailNotValid = false;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -23,31 +24,31 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = false;
+    //BUILD UP FORM GROUP
     this.form = this.formBuilder.group(
       {
-        email: ['', [Validators.required, Validators.email,  (c:any) => this.emailIsTaken(c)]],
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(6),
-            Validators.maxLength(40),
-          ]
-        ], 
+        email: ['', [ Validators.required, Validators.email, (c:any) => this.emailIsTaken(c), (c:any) => this.emailIsNotValid(c)]],
+        password: ['',[ Validators.required, Validators.minLength(6), Validators.maxLength(40)]], 
         rePass: ['', [Validators.required, (c:any) => this.checkPasswords(c)]],
         roles: ['', [Validators.required]],
       },
-
     );
-    this.subscr = this.form?.valueChanges.subscribe(val=>{
+    //SUBSCRIBE FOR VALIDATION PURPOSES
+    this.passSubscr = this.form?.controls.password.valueChanges.subscribe(val=>{
       this.form.get('rePass')!.updateValueAndValidity();
+    })
+    this.emailSubscr = this.form?.controls.email.valueChanges.subscribe(val=>{
+     if (val === ""){
+        this.emailTaken = false;
+        this.emailNotValid = false;
+      }
     })
   }
  
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;  
   }
-  
+  //VALIDATION FUNCTIONS
   checkPasswords(control: AbstractControl): ValidationErrors | null {  
     let pass = this.form?.controls.password.value;
     let confirmPass =  this.form?.controls.rePass.value;
@@ -56,42 +57,45 @@ export class SignupComponent implements OnInit {
   emailIsTaken(control: AbstractControl): ValidationErrors | null {  
     return (!this.emailTaken) ? null : { isTaken: control.value };
   }
-  
+  emailIsNotValid(control: AbstractControl): ValidationErrors | null {  
+    return (!this.emailNotValid) ? null : { isNotValid: control.value };
+  }
+  // FORM SUBMITTED
   onSubmit() {
-    this.submitted = true;
     this.emailTaken = false;
     if (this.form.invalid) {
       return;
     }
     const data = this.form.value;    
     this.loading = true;
-    this.afAuth.createUserWithEmailAndPassword(data.email, data.password)
-    .then((result)=>{
-      console.log(result.user?.uid);
+    this.afAuth.createUserWithEmailAndPassword(data.email, data.password).then((result)=>{
       delete data.rePass;
       data.uid = result.user?.uid;
+      if(data.roles === "Администратор"){
+        data.roles = "admin"
+      }else{
+        data.roles = "user"
+      }
       this.authService.emailSignup(data);
-    })
-    .catch(error=>{
+    }).catch(error=>{
        if(error.code === 'auth/email-already-in-use'){
         this.loading = false;
         this.emailTaken = true;
         this.form.get('email')!.updateValueAndValidity();
         return 
-      } 
+      }else if(error.code === 'auth/invalid-email') {
+        this.loading = false;
+        this.emailNotValid = true;
+        return
+      }
+      this.loading = false;
+      return
     })
   }
-  get errorMsg(): string {
-    let errMsg = this.authService.errorMsg;
-    console.log(errMsg);
-    return errMsg
-  }
-  onReset(): void {
-    this.submitted = false;
-    this.form.reset();
-  }
+
   ngOnDestroy(){
-    this.subscr.unsubscribe()
+    this.passSubscr.unsubscribe();
+    this.emailSubscr.unsubscribe();
   }
 }
 

@@ -13,7 +13,7 @@ export class UsersListComponent implements OnInit {
 gamesArr:Array<string> = ['AR', 'Poker', 'Blackjack', 'Baccart'];
 casinosArr:Array<string> = ['', 'Casino1', 'Casino2', 'Casino3'];
 form!: FormGroup;
-filteredArr:Array<any> =[]; 
+filteredArr:Array<any> =[];  
 loading = true;
   constructor(
     private adminService: AdminService,

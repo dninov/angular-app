@@ -39,6 +39,15 @@ export class AuthService {
         uid: user.uid,
         email: user.email,
         role: user.roles,
+        ar: false,
+        baccart: false,
+        blackjack: false,
+        casino: "",
+        fullName: "",
+        imgUrl: "../../../assets/user-icon.jpg",
+        nickName: "",
+        phoneNumber: "",
+        poker: false,
       }
       return userRef.set(userD, {
         merge: true
@@ -47,11 +56,10 @@ export class AuthService {
 
      async emailSignup(user:any) {
        await this.SetUserData(user);
-       if(user.roles === "Администратор"){
+       if(user.roles === "admin"){
          this.makeAdmin(user.email, user.password);
         }else{
         this.router.navigateByUrl('/dashboard');
-        
       }
     }
 
