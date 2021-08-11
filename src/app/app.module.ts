@@ -22,7 +22,7 @@ import { AdminGuardService } from './guards/admin-guard.service';
 import { FullCalendarModule } from '@fullcalendar/angular'; 
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { SharedModule } from './shared/shared/shared.module';
+import { SharedModule } from './shared/shared.module';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
