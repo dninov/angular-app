@@ -78,8 +78,10 @@ export class SignupComponent implements OnInit {
       }
       this.authService.emailSignup(data);
     }).catch(error=>{
+     
        if(error.code === 'auth/email-already-in-use'){
         this.loading = false;
+        console.log(this.loading);
         this.emailTaken = true;
         this.form.get('email')!.updateValueAndValidity();
         return 

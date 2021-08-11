@@ -17,7 +17,7 @@ export class UserDetailsComponent implements OnInit {
   loading:boolean = true; 
   form!: FormGroup;
   userData:any;
-  casinos:Array<string> = [ 'Casino1', 'Casino2', 'Casino3'];
+  casinos:Array<string> = [ 'Casino1', 'Casino2', 'Casino3']; 
 
   constructor( 
     public dialog: MatDialog,
@@ -53,7 +53,6 @@ export class UserDetailsComponent implements OnInit {
   }
 
   fillForm(data:any){
-    console.log(data);
     for(const key in data){
         if((this.form.get(key)!) !== null){
           if(key === "startDate"){

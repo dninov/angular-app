@@ -9,10 +9,8 @@
   font-size: 50px;
 }
 .loading{
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(143, 143, 143, 0.8);
-  }
+  height: 500px;
+}
   .img-holder{
     min-width: 250px; 
     text-align: center;

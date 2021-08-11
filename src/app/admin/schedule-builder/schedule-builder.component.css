@@ -2,17 +2,20 @@
    margin: 20px; 
 }
 .loading{
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(143, 143, 143, 0.8);
-  }
+  height: 500px;
+}
 .calendar{
     margin: auto;
     padding: 0;
     width: 80%;
     height: 100%;
 }
-
+.not-visible{
+  opacity: 0.1;
+}
+.visible{
+  opacity: 1;
+}
 @media only screen and (max-width: 600px) {
     .calendar{
         width: 100%;

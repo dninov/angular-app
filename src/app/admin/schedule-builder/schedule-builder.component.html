@@ -1,19 +1,26 @@
 <div fxLayoutAlign="center center" class="loading" *ngIf="loading">
-    <mat-spinner></mat-spinner>
+    <app-loader></app-loader>
 </div>
-<section class="buttons"fxLayout = "row wrap" fxLayout.xs="column" fxLayoutAlign="space-between center"  fxLayoutGap="20px" >
-    <div fxLayoutGap="20px" fxLayout = "row">
-        <button  mat-icon-button  matTooltip="Лист" (click)="back()">
-            <mat-icon>keyboard_arrow_left</mat-icon>
-         </button>
-        <button mat-raised-button color="secondary" (click)="firstActive()">Първа</button>
-        <button mat-raised-button color="accent" (click)="secondActive()">Втора</button>
-        <button mat-raised-button color="primary" (click)="thirdActive()">Нощна</button>
-        <mat-slide-toggle [(ngModel)]="checked" >Добавяне</mat-slide-toggle>
+<div [ngClass]=" loading ? 'not-visible': 'visible'">
+    <div fxLayout= "column" fxLayoutAlign= "center center" style="margin-top: 40px;" >
+        <h1 class="mat-display-1" >{{this.userData?.fullName}}</h1>
+        <p style="margin-top: -40px;"  class="mat-h2">{{this.userData?.casino}}</p>
     </div>
-    <div>
-        <button mat-raised-button color="warn" (click)="saveSchedule()">Запази</button>
-    </div>
-</section>
-
-<full-calendar  #calendar dateClick="eventClick($event)" eventClick="eventClick($event)" *ngIf="render" class="calendar" [options]="calendarOptions"></full-calendar>
+    <section class="buttons"fxLayout = "row wrap" fxLayout.xs="column" fxLayoutAlign="space-between center"  fxLayoutGap="20px" >
+        <div fxLayoutGap="20px" fxLayout = "row">
+            <button  mat-icon-button  matTooltip="Лист" (click)="back()">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+             </button>
+            <button mat-raised-button color="secondary" (click)="firstActive()">Първа</button>
+            <button mat-raised-button color="accent" (click)="secondActive()">Втора</button>
+            <button mat-raised-button color="primary" (click)="thirdActive()">Нощна</button>
+            <mat-slide-toggle [(ngModel)]="checked" >Добавяне</mat-slide-toggle>
+        </div>
+        <div>
+            <button mat-raised-button color="warn" (click)="saveSchedule()">Запази</button>
+        </div>
+    </section>
+    
+    <full-calendar  #calendar dateClick="eventClick($event)" eventClick="eventClick($event)" *ngIf="render" class="calendar" [options]="calendarOptions"></full-calendar>
+    
+</div>

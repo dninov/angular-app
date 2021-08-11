@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { animations } from '../../utils/animations';
 import { Router } from '@angular/router';
 import { AdminService } from '../admin.service';
+
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',

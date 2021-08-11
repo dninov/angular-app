@@ -1,5 +1,5 @@
 <div fxLayoutAlign="center center" class="loading" *ngIf="loading">
-  <mat-spinner></mat-spinner>
+  <app-loader></app-loader>
 </div>
 <section *ngIf="!loading" class="form"> 
   <form [formGroup]="form" fxLayout="row" fxLayout.xs="column" fxLayoutGap="30px" fxLayoutAlign="center center">

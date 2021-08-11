@@ -21,7 +21,7 @@ export class ScheduleBuilderComponent  implements OnInit{
   checked = false;
   eventsArr:Array<any>=[];
   loading:boolean = true;
-
+  userData: any;
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [interactionPlugin],
@@ -42,6 +42,9 @@ export class ScheduleBuilderComponent  implements OnInit{
 
   ngOnInit(){
     this.id = this.route.snapshot.paramMap.get("uid");
+    this.adminService.getUser(this.id).then(result=>{
+      this.userData = result.data();
+    })
     this.adminService.getUserSchedule(this.id).then((result:any)=>{
       this.loading = false;
       if(result.data()){

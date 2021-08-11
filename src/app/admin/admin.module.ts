@@ -9,12 +9,12 @@ import { UserCardComponent } from './user-card/user-card.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { AdminService } from './admin.service';
 import { ScheduleBuilderComponent } from './schedule-builder/schedule-builder.component';
-import { FullCalendarModule } from '@fullcalendar/angular'; // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
+import { FullCalendarModule } from '@fullcalendar/angular'; 
+import dayGridPlugin from '@fullcalendar/daygrid'; 
 import interactionPlugin from '@fullcalendar/interaction';
-import { DeleteDialogComponent } from './user-details/delete-dialog/delete-dialog.component'; // a plugin!
-
-FullCalendarModule.registerPlugins([ // register FullCalendar plugins
+import { DeleteDialogComponent } from './user-details/delete-dialog/delete-dialog.component'; 
+import { SharedModule } from '../shared/shared/shared.module';
+FullCalendarModule.registerPlugins([ 
   dayGridPlugin,
   interactionPlugin
 ]);
@@ -25,7 +25,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     UserCardComponent,
     UserDetailsComponent,
     ScheduleBuilderComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -34,7 +34,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    SharedModule
   ], 
   providers:[
     {
