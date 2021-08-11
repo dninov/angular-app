@@ -4,7 +4,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { UsersListComponent } from './users-list/users-list.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { ScheduleBuilderComponent } from './schedule-builder/schedule-builder.component';
-
+import { ChatFormComponent } from '../shared/chat-form/chat-form.component';
 const routes: Routes = [
     { 
       path: '',
@@ -21,6 +21,10 @@ const routes: Routes = [
     { 
       path: 'schedule-builder/:uid',
       component: ScheduleBuilderComponent
+    },
+    { 
+      path: 'chat/:uid',
+      component: ChatFormComponent
     },
 ];
 

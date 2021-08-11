@@ -5,7 +5,7 @@ import { ChatFormComponent } from './chat-form/chat-form.component';
 import { ChatroomComponent } from './chatroom/chatroom.component';
 import { FeedComponent } from './feed/feed.component';
 import { MessageComponent } from './message/message.component'
-
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,7 +16,8 @@ import { MessageComponent } from './message/message.component'
     MessageComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   exports:[
     LoaderComponent,

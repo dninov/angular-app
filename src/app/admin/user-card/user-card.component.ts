@@ -19,8 +19,9 @@ export class UserCardComponent implements OnInit {
     this.router.navigate(['admin-dashboard/schedule-builder', this.user.uid]); 
   }
   mailClicked(){
-    console.log('mail');
-    
+    console.log('mail'); 
+    this.router.navigate(['admin-dashboard/chat', this.user.uid]); 
+
   }
 
 }
