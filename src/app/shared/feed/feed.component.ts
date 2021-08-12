@@ -1,15 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { ChatService } from '../chat.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.css']
 })
-export class FeedComponent implements OnInit {
-
-  constructor() { }
+export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
+  chatId:any;
+  msgArray!:any;
+  messages!: Subscription;
+  constructor(
+    private chat: ChatService,
+    private readonly route: ActivatedRoute,
+  ) { }
 
   ngOnInit(): void {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    if(this.route.snapshot.paramMap.get("uid") === null){
+      this.chatId = user.uid;
+    }else{
+      this.chatId = this.route.snapshot.paramMap.get("uid");
+    }
+    this.msgArray = this.chat.getMessages(this.chatId);
   }
-
+  ngOnChanges(){
+    this.msgArray = this.chat.getMessages(this.chatId);
+    console.log(this.msgArray);
+    
+  }
+  ngOnDestroy(): void {
+    this.messages.unsubscribe();
+  }
 }

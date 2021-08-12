@@ -25,4 +25,7 @@ export class DashboardComponent implements OnInit {
   goSchedule(){
     this.router.navigate(['dashboard/schedule']);
   }
+  goMail(){
+    this.router.navigate(['dashboard/chat']);
+  }
 }

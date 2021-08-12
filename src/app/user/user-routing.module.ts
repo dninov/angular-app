@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ScheduleComponent } from './schedule/schedule.component';
-
+import { UserChatComponent } from './user-chat/user-chat.component';
 const routes: Routes = [
   {
     path: '',
@@ -16,7 +16,11 @@ const routes: Routes = [
   { 
     path: 'schedule',
     component: ScheduleComponent
-  }
+  },
+  { 
+    path: 'chat',
+    component: UserChatComponent
+  },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

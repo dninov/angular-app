@@ -1,1 +1,14 @@
-<p>message works!</p>
+<!-- <div>{{chatMessage.messages.message}}</div> -->
+<div class="messageContainer">
+    <div class="messageData">
+        <span class="sender">
+            {{chatMessage.messages.email}}
+        </span>
+        <span class="timestamp">
+            {{chatMessage.messages.timeSent | date: 'medium' }}
+        </span>
+    </div>
+    <div class="messageContent">
+        {{chatMessage.messages.message}}
+    </div>
+</div>

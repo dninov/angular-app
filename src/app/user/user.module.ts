@@ -9,8 +9,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FullCalendarModule } from '@fullcalendar/angular'; 
 import dayGridPlugin from '@fullcalendar/daygrid'; 
-import interactionPlugin from '@fullcalendar/interaction'; 
-
+import interactionPlugin from '@fullcalendar/interaction';
+import { UserChatComponent } from './user-chat/user-chat.component'; 
+import { SharedModule } from '../shared/shared.module'
 FullCalendarModule.registerPlugins([ 
   dayGridPlugin,
   interactionPlugin
@@ -21,6 +22,7 @@ FullCalendarModule.registerPlugins([
     DashboardComponent,
     ProfileComponent,
     ScheduleComponent,
+    UserChatComponent,
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ FullCalendarModule.registerPlugins([
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    FullCalendarModule
+    FullCalendarModule,
+    SharedModule
   ]
 })
 export class UserModule { }

@@ -6,18 +6,25 @@ import { ChatroomComponent } from './chatroom/chatroom.component';
 import { FeedComponent } from './feed/feed.component';
 import { MessageComponent } from './message/message.component'
 import { FormsModule } from '@angular/forms';
-
+import { DatePipe } from '@angular/common';
+import { SortPipe } from './feed/sort.pipe';
+import { MaterialModue } from '../material.module';
 @NgModule({
   declarations: [
     LoaderComponent,
     ChatFormComponent,
     ChatroomComponent,
     FeedComponent,
-    MessageComponent
+    MessageComponent,
+    SortPipe
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    MaterialModue
+  ],
+  providers:[
+    DatePipe,
   ],
   exports:[
     LoaderComponent,
