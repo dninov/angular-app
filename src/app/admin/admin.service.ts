@@ -23,7 +23,6 @@ export class AdminService {
         this.allArr.push(entry.data());
       });  
     }).then(r=>{
-      console.log(this.allArr);
       this.removeAdmin()})
   }
    getUser(id:any){

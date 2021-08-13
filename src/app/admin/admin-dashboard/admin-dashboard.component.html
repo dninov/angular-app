@@ -13,10 +13,20 @@
                 </span>
             </a>
             <a color="primary">
-                <span matTooltip="Съобщения">
+                <span [matBadge] = "unreadMsg"  matBadgeColor="warn" matTooltip="Съобщения" [matMenuTriggerFor]="menu" [matBadgeHidden]="unreadMsg === 0" >
                     <mat-icon>mail</mat-icon>
                 </span>
             </a>
+            <mat-menu  #menu="matMenu">
+                <div *ngFor="let user of msgUsers">
+                    <app-user-tag></app-user-tag>
+                </div>
+                <!-- <button (click)="msgClicked($event)" mat-menu-item *ngFor="let user of msgUsers">
+                  {{user.email}} 
+                </button> -->
+            </mat-menu>
+
+
             <a (click)="logout()" color="primary">
                 <span matTooltip="Изход">
                     <mat-icon>logout</mat-icon>

@@ -26,11 +26,19 @@ export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
       this.chatId = this.route.snapshot.paramMap.get("uid");
     }
     this.msgArray = this.chat.getMessages(this.chatId);
+    this.messages = this.msgArray.subscribe((result:any)=>{
+      let notOwnMsg = result.filter((m:any)=>{
+       return m.id !== user.uid;
+      })
+      notOwnMsg.forEach((m:any) => {
+        this.chat.updateReadMsg(user.uid, m.docId);
+       });
+    
+      
+    })
   }
   ngOnChanges(){
     this.msgArray = this.chat.getMessages(this.chatId);
-    console.log(this.msgArray);
-    
   }
   ngOnDestroy(): void {
     this.messages.unsubscribe();

@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ChatFormComponent implements OnInit {
   chatId:any;
+  userId:any
   message!:string;
   email!: string;
   constructor(
@@ -19,6 +20,7 @@ export class ChatFormComponent implements OnInit {
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user')!);
+    this.userId = user.uid;
     this.email = user.email;
     if(this.route.snapshot.paramMap.get("uid") === null){
       this.chatId = user.uid;
@@ -28,7 +30,7 @@ export class ChatFormComponent implements OnInit {
   }
 
   async send(){
-    this.chat.sendMessage(this.message, this.chatId, this.email);
+    this.chat.sendMessage(this.message, this.chatId, this.email, this.userId);
     this.message = '';
   }
 

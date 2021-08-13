@@ -18,19 +18,36 @@ export class ChatService {
     private datePipe: DatePipe
   ) { }
 
-  sendMessage(msg:string, id:string, email:string){
+  sendMessage(msg:string, id:string, email:string, userId:string){
     this.date = new Date();
+
     let mediumDate = this.datePipe.transform(this.date, 'medium');
     const data = {
       message: msg,
       timeSent: mediumDate,
       email: email,
-      id: id
+      id: userId
     }
-    this.afs.collection('users').doc(id).collection('messages').doc().set({messages: data}, {merge: true});
+    const newDoc:any = this.afs.collection('users').doc(id).collection('messages').doc();
+    newDoc.set({
+      message: msg,
+      timeSent: mediumDate,
+      email: email,
+      id: userId,
+      docId: newDoc.ref.id
+    }, {merge: true});
   }
 
   getMessages(id:any):Observable<object>{
     return this.afs.collection('users').doc(id).collection('messages').valueChanges();
+  }
+  getNewMessages(readMsg:any):Observable<object>{
+    return this.afs.collectionGroup('messages', (ref:any) => ref.where("docId", 'not-in', readMsg)).snapshotChanges();
+  }
+  updateReadMsg(userId:string, msgId:any){
+    this.afs.collection('users').doc(userId).collection('readMsg').doc(msgId).set({id:msgId}, {merge: true});
+  }
+  getReadMsg(userId:string){
+    return this.afs.collection('users').doc(userId).collection('readMsg').snapshotChanges();
   }
 }

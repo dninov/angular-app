@@ -7,7 +7,7 @@ import { FeedComponent } from './feed/feed.component';
 import { MessageComponent } from './message/message.component'
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { SortPipe } from './feed/sort.pipe';
+import { SortPipe } from './feed/sortPipe/sort.pipe';
 import { MaterialModue } from '../material.module';
 @NgModule({
   declarations: [

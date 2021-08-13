@@ -14,6 +14,8 @@ export class MessageComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.chatMessage);
+    
     //this.messageContent = this.chatMessage.message;
   }
 
