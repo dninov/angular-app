@@ -41,8 +41,8 @@ export class ChatService {
   getMessages(id:any):Observable<object>{
     return this.afs.collection('users').doc(id).collection('messages').valueChanges();
   }
-  getNewMessages(readMsg:any):Observable<object>{
-    return this.afs.collectionGroup('messages', (ref:any) => ref.where("docId", 'not-in', readMsg)).snapshotChanges();
+  getNewMessages(readMsg:any):any{
+     return this.afs.collectionGroup('messages', (ref:any) => ref.where("docId", 'not-in', readMsg)).snapshotChanges();
   }
   updateReadMsg(userId:string, msgId:any){
     this.afs.collection('users').doc(userId).collection('readMsg').doc(msgId).set({id:msgId}, {merge: true});

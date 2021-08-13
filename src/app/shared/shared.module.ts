@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { SortPipe } from './feed/sortPipe/sort.pipe';
 import { MaterialModue } from '../material.module';
+import { UserTagComponent } from './user-tag/user-tag.component';
 @NgModule({
   declarations: [
     LoaderComponent,
@@ -16,7 +17,9 @@ import { MaterialModue } from '../material.module';
     ChatroomComponent,
     FeedComponent,
     MessageComponent,
-    SortPipe
+    SortPipe,
+    UserTagComponent
+
   ],
   imports: [
     CommonModule,
@@ -31,7 +34,8 @@ import { MaterialModue } from '../material.module';
     ChatFormComponent,
     ChatroomComponent,
     FeedComponent,
-    MessageComponent
+    MessageComponent,
+    UserTagComponent
   ]
 })
 export class SharedModule { }

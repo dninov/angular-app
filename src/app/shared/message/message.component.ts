@@ -7,16 +7,10 @@ import { ChatMessage } from '../chat.message.model';
 })
 export class MessageComponent implements OnInit {
   @Input() chatMessage!: any;
-  // userEmail!: string;
-  // messageContent!: string;
-  // timeStamp!: string;
-
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.chatMessage);
-    
-    //this.messageContent = this.chatMessage.message;
+
   }
 
 }

@@ -46,18 +46,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   setUnreadMsg(users:string[]){
+    this.msgUsers = [];
     this.unreadMsg = users.length;
     users.forEach(user => {
       this.adminService.getUser(user).then((user:any)=>{
       this.msgUsers.push(user.data());
-      this.logUsers();
       })
     });
    
   }
-logUsers(){
-  console.log(this.msgUsers[0].email);
-}
+
   logout(){
     this.authService.logout();
   }
@@ -76,9 +74,9 @@ logUsers(){
     this.readMsgSubscription.unsubscribe();
     this.newMsgSubscription.unsubscribe();
   }
-  msgClicked(e:any){
-    console.log(e.target.value);
-    
+  onSelect(user:any){
+    this.router.navigate(['admin-dashboard/chat', user.uid]); 
   }
+
 }
 

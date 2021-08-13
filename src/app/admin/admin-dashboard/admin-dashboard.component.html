@@ -18,12 +18,9 @@
                 </span>
             </a>
             <mat-menu  #menu="matMenu">
-                <div *ngFor="let user of msgUsers">
-                    <app-user-tag></app-user-tag>
+                <div (click)="onSelect(user)" *ngFor="let user of msgUsers">
+                    <app-user-tag [user] = "user"></app-user-tag>
                 </div>
-                <!-- <button (click)="msgClicked($event)" mat-menu-item *ngFor="let user of msgUsers">
-                  {{user.email}} 
-                </button> -->
             </mat-menu>
 
 

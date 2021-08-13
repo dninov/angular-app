@@ -1,0 +1,25 @@
+img {
+    position: relative;
+    top: 20px;
+    left: 10px;
+    overflow: hidden;
+    object-fit: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #eee;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.26), 0 3px 6px rgba(0,0,0,0.23);
+  }
+  p{
+      margin-left: 50px;
+      margin-top: -10px;
+  }
+  .container{
+      cursor: pointer;
+      width: 200px;
+      height: 60px;;
+      border-radius: 5%;
+      margin-left: 5px;
+      margin-right: 5px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.26), 0 1px 2px rgba(0,0,0,0.23);
+  }
