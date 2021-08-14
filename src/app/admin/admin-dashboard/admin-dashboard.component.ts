@@ -21,26 +21,36 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     private chatService: ChatService,
-    private adminService: AdminService,
+    private adminService: AdminService, 
   ) { }
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user')!);
-    this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe((result:any)=>{
+    this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe(async (result:any)=>{
       let allReadMsg:any = [];
       result.map((m:any)=>{
        allReadMsg.push(m.payload.doc.id);
       })
       if(allReadMsg.length>0){
-        this.newMsgSubscription = this.chatService.getNewMessages(allReadMsg).subscribe((result:any)=>{
-          let newMsg:any = [];
-          result.map((m:any)=>{
-            newMsg.push(m.payload.doc.data())
-          })
-          console.log(newMsg);
-          let idsArrr = newMsg.map((item:any) => item.id).filter((value:any, index:any, self:any) => self.indexOf(value) === index)
-          this.setUnreadMsg(idsArrr);
-        })
+       this.chatService.getNewMessages(user.uid).subscribe((result:any)=>{
+         result.map((m:any)=>{
+          // console.log(allReadMsg);
+           
+           console.log(m.payload.doc.data());
+         })
+         
+       })
+        
+        //console.log(allMsg);
+        // this.newMsgSubscription = this.chatService.getNewMessages(allReadMsg, user.uid).subscribe((result:any)=>{
+        //   let newMsg:any = [];
+        //   result.map((m:any)=>{
+        //     newMsg.push(m.payload.doc.data())
+        //   })
+        //   newMsg = newMsg.filter((m:any)=> {return m.id !== user.uid; })
+        //  let idsArrr = newMsg.map((item:any) => item.id).filter((value:any, index:any, self:any) => self.indexOf(value) === index)
+        //  this.setUnreadMsg(idsArrr);
+        // })
       }
     })
   }
@@ -48,12 +58,14 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   setUnreadMsg(users:string[]){
     this.msgUsers = [];
     this.unreadMsg = users.length;
+    console.log(users);
+    
     users.forEach(user => {
       this.adminService.getUser(user).then((user:any)=>{
       this.msgUsers.push(user.data());
+      console.log(this.msgUsers);
       })
     });
-   
   }
 
   logout(){

@@ -6,7 +6,7 @@ import { first } from 'rxjs/operators';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
-
+import { ChatService } from '../shared/chat.service';
 @Injectable()
 export class AuthService {
    userData: any;
@@ -18,7 +18,9 @@ export class AuthService {
     public afAuth: AngularFireAuth,
     private router: Router,
     private ngZone: NgZone,
-    private fns: AngularFireFunctions) 
+    private fns: AngularFireFunctions,
+    private chatService: ChatService
+    ) 
     {
       this.afAuth.authState.subscribe(user => {
         if (user) {
@@ -35,6 +37,7 @@ export class AuthService {
 
     SetUserData(user: any) {
       const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+      this.afs.collection('users').doc(user.uid).collection('readMsg').doc('Initialization').set({id:user.uid});
       const userD: User = {
         uid: user.uid,
         email: user.email,

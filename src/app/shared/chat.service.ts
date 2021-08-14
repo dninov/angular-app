@@ -41,12 +41,22 @@ export class ChatService {
   getMessages(id:any):Observable<object>{
     return this.afs.collection('users').doc(id).collection('messages').valueChanges();
   }
-  getNewMessages(readMsg:any):any{
-     return this.afs.collectionGroup('messages', (ref:any) => ref.where("docId", 'not-in', readMsg)).snapshotChanges();
+  getNewMessages(id:any):any{
+    return this.afs.collectionGroup('messages', (ref:any) => ref.where("id", '!=', id)).snapshotChanges();
   }
-  updateReadMsg(userId:string, msgId:any){
-    this.afs.collection('users').doc(userId).collection('readMsg').doc(msgId).set({id:msgId}, {merge: true});
-  }
+  async updateReadMsg(userId:string, msgId:any){
+    this.afs.collection('users').doc(userId).collection('readMsg', ref => ref.where('id', "==", msgId)).snapshotChanges().subscribe(res => {
+      if (res.length > 0)
+      {
+        return
+      }
+      else
+      {
+        console.log('update');
+        this.afs.collection('users').doc(userId).collection('readMsg').doc(msgId).set({id:msgId}, {merge: true});
+      }
+  });
+}
   getReadMsg(userId:string){
     return this.afs.collection('users').doc(userId).collection('readMsg').snapshotChanges();
   }
