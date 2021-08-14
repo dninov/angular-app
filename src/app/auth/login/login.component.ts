@@ -30,9 +30,6 @@ export class LoginComponent implements OnInit {
           ]
         ],
       },
-      {
-       // validators: [Validation.match('password', 'rePass')]
-      }
     );
   }
  
@@ -42,11 +39,9 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     this.submitted = true;
-
     if (this.form.invalid) {
       return;
     }
-
     const data = this.form.value;
     this.authService.login(data.email, data.password);
   }

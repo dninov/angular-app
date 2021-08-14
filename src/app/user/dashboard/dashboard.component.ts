@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ChatService } from 'src/app/shared/chat.service';
@@ -8,7 +8,7 @@ import { AuthService } from '../../auth/auth.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   openSidenav = false;
   unreadMsg: number = 0;
   readMsg!: Subscription;
@@ -21,6 +21,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+   
+  }
+  ngAfterViewInit(){
     const user = JSON.parse(localStorage.getItem('user')!);
     this.id = user.uid;
     this.readMsg = this.chatService.getReadMsg(this.id).subscribe((result:any)=>{

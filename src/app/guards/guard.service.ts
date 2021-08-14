@@ -7,14 +7,13 @@ export class GuardService {
         private router: Router,
         private as: AuthService) { }
 
-     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        const user  = this.as.isAuthenticated;
-      if (user === null || user === undefined || !user) {
-          this.router.navigate(['']); 
-          return false;
-      } else {
-            return true;
-           }  
-      
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+      const user  = this.as.isAuthenticated;
+    if (user === null || user === undefined || !user) {
+        this.router.navigate(['']); 
+        return false;
+    } else {
+          return true;
+          }  
   }
 }

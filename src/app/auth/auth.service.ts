@@ -5,7 +5,6 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { first } from 'rxjs/operators';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { ChatService } from '../shared/chat.service';
 @Injectable()
 export class AuthService {
@@ -17,20 +16,18 @@ export class AuthService {
     private afs: AngularFirestore,
     public afAuth: AngularFireAuth,
     private router: Router,
-    private ngZone: NgZone,
     private fns: AngularFireFunctions,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private ngZone: NgZone,
     ) 
     {
       this.afAuth.authState.subscribe(user => {
         if (user) {
           this.userData = user;
           localStorage.setItem('user', JSON.stringify(this.userData));
-          JSON.parse(localStorage.getItem('user')!);
         } else {
           this.userData = false;
-          localStorage.removeItem('user');
-          JSON.parse(localStorage.getItem('user')!);
+          localStorage.setItem('user', '');
         }
       })
     }
@@ -62,20 +59,22 @@ export class AuthService {
        if(user.roles === "admin"){
          this.makeAdmin(user.email, user.password);
         }else{
-        this.router.navigateByUrl('/dashboard');
+          this.router.navigateByUrl('/dashboard');
       }
     }
 
     async login(email: string, password: string) {
       try{
         const result = await this.afAuth.signInWithEmailAndPassword(email, password);
+        localStorage.setItem('user', JSON.stringify(result.user));
+        console.log(result.user?.uid);
         const token = await result.user?.getIdTokenResult();
         if(token?.claims.admin === true){
           this.validLogin = true;
           this.router.navigateByUrl('/admin-dashboard');
         }else{ 
           this.validLogin = true;
-          this.router.navigateByUrl('/dashboard');
+         this.router.navigateByUrl('/dashboard');
         }
       }catch(error){
         if(error.code === 'auth/user-not-found'){
@@ -114,4 +113,4 @@ export class AuthService {
       return user.uid;
     }
      
-}
+} 
