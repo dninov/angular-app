@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
   animations: [animations]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
+  subscribed = true;
   openSidenav = false;
   unreadMsg:number = 0;
   msgUsers: any[] = [];
@@ -26,46 +27,46 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user')!);
-    this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe(async (result:any)=>{
-      let allReadMsg:any = [];
-      result.map((m:any)=>{
-       allReadMsg.push(m.payload.doc.id);
+   
+      this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe((result:any)=>{
+        if(this.subscribed){
+          let allReadMsg:any = [];
+          result.map((m:any)=>{
+           allReadMsg.push(m.payload.doc.id);
+          });
+          if(allReadMsg.length>0){
+            this.newMsgSubscription = this.chatService.getNewMessages(user.uid).subscribe((result:any)=>{
+              if(this.subscribed && result){
+                let newMsg:any = [];
+                result.map((m:any)=>{
+                  let data:any = m.payload.doc.data();
+                  newMsg.push(data)
+                })
+                newMsg = newMsg
+                .filter((val:any) => !allReadMsg.includes(val.docId))
+                .map((item:any) => item.id).filter((value:any, index:any, self:any) => self.indexOf(value) === index);
+                console.log(newMsg);
+                this.setUnreadMsg(newMsg);    
+              }
+           })
+          }
+        }
       })
-      if(allReadMsg.length>0){
-       this.chatService.getNewMessages(user.uid).subscribe((result:any)=>{
-         result.map((m:any)=>{
-          // console.log(allReadMsg);
-           
-           console.log(m.payload.doc.data());
-         })
-         
-       })
-        
-        //console.log(allMsg);
-        // this.newMsgSubscription = this.chatService.getNewMessages(allReadMsg, user.uid).subscribe((result:any)=>{
-        //   let newMsg:any = [];
-        //   result.map((m:any)=>{
-        //     newMsg.push(m.payload.doc.data())
-        //   })
-        //   newMsg = newMsg.filter((m:any)=> {return m.id !== user.uid; })
-        //  let idsArrr = newMsg.map((item:any) => item.id).filter((value:any, index:any, self:any) => self.indexOf(value) === index)
-        //  this.setUnreadMsg(idsArrr);
-        // })
-      }
-    })
   }
 
   setUnreadMsg(users:string[]){
-    this.msgUsers = [];
-    this.unreadMsg = users.length;
-    console.log(users);
-    
-    users.forEach(user => {
-      this.adminService.getUser(user).then((user:any)=>{
-      this.msgUsers.push(user.data());
-      console.log(this.msgUsers);
-      })
-    });
+      if(this.subscribed){
+        this.msgUsers = [];
+        this.unreadMsg = users.length;
+        users.forEach(user => {
+          this.adminService.getUser(user).then((user:any)=>{
+            this.msgUsers.push(user.data());
+            this.msgUsers =  [...this.msgUsers]
+            console.log(this.msgUsers);
+            
+          })
+        });
+      }
   }
 
   logout(){
@@ -83,11 +84,15 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     console.log('schedule');
   }
   ngOnDestroy(): void {
+    console.log('unsubscribe');
+    this.subscribed = false;
     this.readMsgSubscription.unsubscribe();
     this.newMsgSubscription.unsubscribe();
   }
   onSelect(user:any){
-    this.router.navigate(['admin-dashboard/chat', user.uid]); 
+    let newLocation = `admin-dashboard/chat/${user.uid}`;
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {return false;};
+    this.router.navigateByUrl(newLocation).catch(err=>console.log(err));
   }
 
 }

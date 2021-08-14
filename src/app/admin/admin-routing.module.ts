@@ -24,6 +24,7 @@ const routes: Routes = [
     },
     { 
       path: 'chat/:uid',
+      pathMatch: 'full',
       component: ChatroomComponent
     },
 ];

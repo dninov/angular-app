@@ -44,6 +44,9 @@ export class ChatService {
   getNewMessages(id:any):any{
     return this.afs.collectionGroup('messages', (ref:any) => ref.where("id", '!=', id)).snapshotChanges();
   }
+  getUserNewMessages(id:any){
+    return this.afs.collection('users').doc(id).collection('messages', (ref:any) => ref.where("id", '!=', id)).snapshotChanges();
+  }
   async updateReadMsg(userId:string, msgId:any){
     this.afs.collection('users').doc(userId).collection('readMsg', ref => ref.where('id', "==", msgId)).snapshotChanges().subscribe(res => {
       if (res.length > 0)

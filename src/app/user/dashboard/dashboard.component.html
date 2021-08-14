@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
     <div>
         <button mat-icon-button (click)="drawer.toggle()">
-            <mat-icon>menu</mat-icon>
+            <mat-icon>menu</mat-icon> 
         </button>
     </div>
     <div>LOGO</div>
@@ -12,7 +12,8 @@
                     <mat-icon>person</mat-icon>
                 </span>
             </a>
-            <a  (click)="goMail()" color="primary">
+
+            <a [matBadge] = "unreadMsg"  matBadgeColor="warn" matTooltip="Съобщения" [matBadgeHidden]="unreadMsg === 0" (click)="goMail()" color="primary">
                 <span matTooltip="Съобщения">
                     <mat-icon>mail</mat-icon>
                 </span>
