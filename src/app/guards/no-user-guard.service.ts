@@ -16,7 +16,7 @@ export class NoUserGuardService {
       return new Observable<boolean>(obs => { 
           this.as.isAdmin().then( t => {
               if(t === undefined || t === null){
-                   obs.next(true) 
+                   obs.next(true)  
               }else if(!t?.claims.admin){
                   this.router.navigate(['/dashboard']);
                   obs.next(false) ;

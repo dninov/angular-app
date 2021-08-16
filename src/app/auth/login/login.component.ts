@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import Validation from '../../utils/validation';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -49,7 +48,7 @@ export class LoginComponent implements OnInit {
   onReset(): void {
     this.submitted = false;
     this.form.reset();
-  }
+  } 
 }
 
 

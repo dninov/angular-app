@@ -1,25 +1,26 @@
 import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { ChatService } from '../chat.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first } from 'rxjs/operators';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
-  styleUrls: ['./feed.component.css']
+  styleUrls: ['./feed.component.css'],
 })
 export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
+
   chatId:any;
   msgArray!:any;
   messages!: Subscription;
   constructor(
     private chat: ChatService,
     private readonly route: ActivatedRoute,
+
   ) { }
 
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('user')!);
+    const user = JSON.parse(localStorage.getItem('user')!); 
     if(this.route.snapshot.paramMap.get("uid") === null){
       this.chatId = user.uid;
     }else{
@@ -33,8 +34,6 @@ export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
       notOwnMsg.forEach((m:any) => {
         this.chat.updateReadMsg(user.uid, m.docId);
        });
-    
-      
     })
   }
   ngOnChanges(){
@@ -43,4 +42,5 @@ export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
   ngOnDestroy(): void {
     this.messages.unsubscribe();
   }
+
 }

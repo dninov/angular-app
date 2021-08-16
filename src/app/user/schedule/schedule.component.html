@@ -1,5 +1,5 @@
 <div fxLayoutAlign="center center" class="loading" *ngIf="loading">
-    <mat-spinner></mat-spinner>
+    <app-loader></app-loader> 
 </div>
-<full-calendar  #calendar  *ngIf="render" class="calendar" [options]="calendarOptions"></full-calendar>
+<full-calendar  #calendar  *ngIf="render" class="calendar" [options]="calendarOptions"  [ngClass]=" loading ? 'not-visible': 'visible'"></full-calendar>
 

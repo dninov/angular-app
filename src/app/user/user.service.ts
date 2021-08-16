@@ -23,6 +23,7 @@ export class UserService {
 
   async UpdateProfile(image: any, data:any){
     const user = JSON.parse(localStorage.getItem('user')!);
+    console.log(user);
     const id = user.uid;
     if(image !== ""){
       const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
@@ -37,7 +38,11 @@ export class UserService {
     this.as.userData.updateProfile({
         displayName: data.fullName,
         photoURL: this.imgUrl
-        }); 
+        }).then(()=>{
+          user.photoURL = this.imgUrl
+          localStorage.setItem('user', JSON.stringify(user));
+          console.log(user);
+        })
    
     data.imgUrl = this.imgUrl;
     delete data.imageSrc;

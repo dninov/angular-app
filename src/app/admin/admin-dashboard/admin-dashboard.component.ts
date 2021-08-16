@@ -73,12 +73,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.authService.logout();
   }
 
-  showProfile(){
-    this.router.navigateByUrl('dashboard/profile');
-    console.log('profile');
-    
-  }
-
   showSchedule(){
     this.router.navigateByUrl('dashboard/schedule');
     console.log('schedule');

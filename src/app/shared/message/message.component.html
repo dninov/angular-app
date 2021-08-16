@@ -1,5 +1,5 @@
 <!-- <div>{{chatMessage.messages.message}}</div> -->
-<div class="messageContainer">
+<div [ngClass]=" chatMessage.id === id ? 'messageContainer': 'not-own-messageContainer'">
     <div class="messageData">
         <span class="sender">
             {{chatMessage.email}}
@@ -8,7 +8,7 @@
             {{chatMessage.timeSent | date: 'medium' }}
         </span>
     </div>
-    <div class="messageContent">
+    <div  [ngClass]=" chatMessage.id === id ? 'own-message': 'not-own-message'">
         {{chatMessage.message}}
     </div>
-</div>
+</div> 

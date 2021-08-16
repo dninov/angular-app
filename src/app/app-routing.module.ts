@@ -7,9 +7,11 @@ import { GuardService} from './guards/guard.service'
 import { AdminGuardService} from './guards/admin-guard.service'
 import { NoUserGuardService } from './guards/no-user-guard.service'
 const routes: Routes = [
-  {path: '', 
-  component: HomeComponent,
-  canActivate: [NoUserGuardService]
+  
+  {
+    path: '', 
+    component: HomeComponent,
+    canActivate: [NoUserGuardService]
   },
   {
     path:'',
@@ -43,7 +45,12 @@ const routes: Routes = [
         loadChildren: () => import('./admin/admin.module').then(module => module.AdminModule)
       }
     ]
-  }
+  },
+  {
+    path: '**',
+    pathMatch: 'full',
+    component: HomeComponent,
+  },
 ];
 
 @NgModule({

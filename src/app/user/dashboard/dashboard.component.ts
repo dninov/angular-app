@@ -31,7 +31,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       result.map((m:any)=>{
        allReadMsg.push(m.payload.doc.id);
       });
-      console.log(allReadMsg);
       this.checkForUnreadMsg(allReadMsg);
     })
    

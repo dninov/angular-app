@@ -1,14 +1,11 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRoute, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
-import { of, Observable } from 'rxjs';  
-import { tap, map } from "rxjs/operators";
-import { first } from 'rxjs/operators';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { Observable } from 'rxjs';  
 import { AuthService } from './../auth/auth.service';
 
 @Injectable()
 export class AdminGuardService {
     constructor(
-        private route: ActivatedRoute,
         private router: Router,
         private as: AuthService) { }
 

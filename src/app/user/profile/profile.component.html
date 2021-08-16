@@ -1,7 +1,7 @@
 <div fxLayoutAlign="center center" class="loading" *ngIf="loading">
-  <mat-spinner></mat-spinner>
+  <app-loader></app-loader> 
 </div>
-<div class="signup-form">
+<div class="signup-form" [ngClass]=" loading ? 'not-visible': 'visible'">
       <form [formGroup]="form" fxLayoutAlign="center "  fxLayout= "column" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
       <div fxLayout= "row wrap"   fxLayoutGap="10px grid">
         <div  fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="center center"  fxLayout= "column" fxLayoutGap="10px" >

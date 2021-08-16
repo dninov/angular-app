@@ -1,17 +1,7 @@
-<mat-toolbar color="primary">
-    <div>
-        <button mat-icon-button (click)="drawer.toggle()">
-            <mat-icon>menu</mat-icon>
-        </button>
-    </div>
+<mat-toolbar color="primary" class="app-toolbar">
     <div>LOGO</div>
     <div fxFlex fxLayout  fxLayoutAlign="flex-end">
         <ul fxLayout fxLayoutGap="20px" class="navigation-items">
-            <a color="primary">
-                <span matTooltip="Профил">
-                    <mat-icon>person</mat-icon>
-                </span>
-            </a>
             <a color="primary">
                 <span [matBadge] = "unreadMsg"  matBadgeColor="warn" matTooltip="Съобщения" [matMenuTriggerFor]="menu" [matBadgeHidden]="unreadMsg === 0" >
                     <mat-icon>mail</mat-icon>
@@ -32,15 +22,9 @@
         </ul>
     </div>
 </mat-toolbar>
-<mat-drawer-container autosize>
-    <mat-drawer #drawer mode="side">
-      <p>Auto-resizing sidenav</p>
-    </mat-drawer>
-  
     <div  [@routeAnimations]="o.isActivated ? o.activatedRoute : ''"> 
       <router-outlet #o="outlet"></router-outlet>
     </div>
-  
-  </mat-drawer-container>
+
 
 

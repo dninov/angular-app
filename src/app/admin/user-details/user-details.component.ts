@@ -4,7 +4,6 @@ import { AdminService } from '../admin.service';
 import { animations } from '../../utils/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 @Component({
   selector: 'app-profile',
@@ -85,7 +84,7 @@ export class UserDetailsComponent implements OnInit {
     this.router.navigate(['admin-dashboard/schedule-builder', this.id]);
   }
   mailClicked(){
-    console.log('mail');
+    this.router.navigate(['admin-dashboard/chat', this.id]); 
   }
   deleteClicked(){
     this.loading = true;
@@ -101,7 +100,7 @@ export class UserDetailsComponent implements OnInit {
       if(result === "yes"){
         this.deleteClicked();
       }else{
-        return
+        return 
       }
     })
   }

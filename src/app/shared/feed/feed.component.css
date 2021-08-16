@@ -1,9 +1,16 @@
 .feed{
+    padding-top: 150px;
     display: flex;
     flex-direction: column;
+    max-width: 600px;
+    padding-bottom: 50px;
 }
 .message{
     padding: 1px;
     flex-direction: column;
     margin: 10px 0;
 }
+.scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none; /* Firefox */
+  }

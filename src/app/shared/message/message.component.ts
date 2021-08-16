@@ -7,10 +7,12 @@ import { ChatMessage } from '../chat.message.model';
 })
 export class MessageComponent implements OnInit {
   @Input() chatMessage!: any;
+  id:any;
   constructor() { }
 
   ngOnInit(): void {
-
+    const user = JSON.parse(localStorage.getItem('user')!); 
+    this.id = user.uid;
   }
 
 }

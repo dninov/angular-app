@@ -1,0 +1,27 @@
+.userInfo{
+    position:fixed;
+    min-width: 400px;
+    width: 100%;
+    height: 140px;
+    background-color: white;
+    z-index: 2;
+    padding: 20px;
+}
+.user-image{
+    margin-left: 20px;
+    margin-bottom: 20px;
+    width: 110px; 
+    height: 110px;
+    border-radius: 10%!important;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+    object-fit: cover;
+  }
+.back-button{
+    margin-top: 40px;;
+    width: 40px;
+    height: 40px;
+}
+.chat{
+    overflow-y: scroll;
+    height: xyz;
+}

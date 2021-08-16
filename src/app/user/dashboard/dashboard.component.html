@@ -1,9 +1,4 @@
-<mat-toolbar color="primary">
-    <div>
-        <button mat-icon-button (click)="drawer.toggle()">
-            <mat-icon>menu</mat-icon> 
-        </button>
-    </div>
+<mat-toolbar color="primary" class="app-toolbar">
     <div>LOGO</div>
     <div fxFlex fxLayout  fxLayoutAlign="flex-end">
         <ul fxLayout fxLayoutGap="20px" class="navigation-items">
@@ -31,14 +26,9 @@
         </ul>
     </div>
 </mat-toolbar>
-<mat-drawer-container autosize>
-    <mat-drawer #drawer mode="side">
-      <p>Auto-resizing sidenav</p>
-    </mat-drawer>
+<div class = "main" > 
+    <router-outlet></router-outlet>
+</div>
   
-    <div class = "main" > 
-      <router-outlet></router-outlet>
-    </div>
-  
-  </mat-drawer-container>
+
 

@@ -69,6 +69,7 @@ export class SignupComponent implements OnInit {
     const data = this.form.value;    
     this.loading = true;
     this.afAuth.createUserWithEmailAndPassword(data.email, data.password).then((result)=>{
+      localStorage.setItem('user', JSON.stringify(result.user));
       delete data.rePass;
       data.uid = result.user?.uid;
       if(data.roles === "Администратор"){
@@ -78,7 +79,6 @@ export class SignupComponent implements OnInit {
       }
       this.authService.emailSignup(data);
     }).catch(error=>{
-     
        if(error.code === 'auth/email-already-in-use'){
         this.loading = false;
         console.log(this.loading);

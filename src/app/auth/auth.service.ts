@@ -1,11 +1,10 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { User } from '../auth/user.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
-import { ChatService } from '../shared/chat.service';
 @Injectable()
 export class AuthService {
    userData: any;
@@ -17,8 +16,6 @@ export class AuthService {
     public afAuth: AngularFireAuth,
     private router: Router,
     private fns: AngularFireFunctions,
-    private chatService: ChatService,
-    private ngZone: NgZone,
     ) 
     {
       this.afAuth.authState.subscribe(user => {
@@ -54,8 +51,8 @@ export class AuthService {
       })
     }
 
-     async emailSignup(user:any) {
-       await this.SetUserData(user);
+     emailSignup(user:any) {
+       this.SetUserData(user);
        if(user.roles === "admin"){
          this.makeAdmin(user.email, user.password);
         }else{
@@ -67,7 +64,6 @@ export class AuthService {
       try{
         const result = await this.afAuth.signInWithEmailAndPassword(email, password);
         localStorage.setItem('user', JSON.stringify(result.user));
-        console.log(result.user?.uid);
         const token = await result.user?.getIdTokenResult();
         if(token?.claims.admin === true){
           this.validLogin = true;
@@ -94,20 +90,20 @@ export class AuthService {
       }).catch(err => console.log(err));
     } 
 
-    logout() {
-      return this.afAuth.signOut().then(() => {
+    async logout() {
+      return await this.afAuth.signOut().then(() => {
         localStorage.removeItem('user');
         this.router.navigate(['']);
       }).catch(err=>console.log(err));
     }
     get isAuthenticated() {     
       return localStorage.getItem('user');
-  }
+    }
     async isAdmin(){
       return await this.afAuth.authState.pipe(first()).toPromise().then(u=> {
          return u?.getIdTokenResult();
     }).catch(err => console.log(err));
-  }
+   }
     get currentUserId() {
       const user = JSON.parse(localStorage.getItem('user')!);
       return user.uid;

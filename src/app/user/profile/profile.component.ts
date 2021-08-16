@@ -55,8 +55,6 @@ export class ProfileComponent implements OnInit {
           this.form.patchValue({
             img: this.imageSrc
           });
-        }else{
- 
         }
         if( this.user.displayName !== undefined){
           this.form.patchValue({
@@ -67,7 +65,6 @@ export class ProfileComponent implements OnInit {
       this.userService.userInfo().then(result => {
         const data:any = result.data();
         this.user = data;
-        
         for(const key in data){
           if((this.form.get(key)!) !== null){
             this.form.patchValue({
@@ -78,8 +75,6 @@ export class ProfileComponent implements OnInit {
       }).catch(err=>console.log(err));
     }
   
-
-
   chooseFileEvt(e: any) {
     if (e.target.files && e.target.files[0]) {
       this.imgPath = e.target.files[0];
@@ -110,17 +105,16 @@ export class ProfileComponent implements OnInit {
       return;
     }
     const data = this.form.value;   
-    
     if(this.imgPath === undefined || this.defaultImage){
       this.loading = true;
       await this.userService.UpdateProfile('', data).then(()=>{
       this.loading = false;
-      });
+      }).catch(err=>console.log(err));
     }else{
       this.loading = true;
       await this.userService.UpdateProfile(this.imgPath, data).then(()=>{
         this.loading = false;
-      });
+      }).catch(err=>{console.log(err)});
     }
   }
 

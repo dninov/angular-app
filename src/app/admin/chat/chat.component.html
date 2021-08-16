@@ -1,1 +1,19 @@
-<app-chatroom></app-chatroom>
+<div fxLayoutAlign="center center" class="loading" *ngIf="loading">
+    <app-loader></app-loader>
+</div>
+<div *ngIf="!loading" class="conatiner">
+    <div class="userInfo" fxLayout="row-wrap" fxLayoutGap="20px">
+        <button class="back-button" mat-icon-button  matTooltip="Лист" (click)="back()">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+        <div class="img-holder">
+            <img *ngIf = "this.userData?.imgUrl !== undefined" class="user-image" src={{this.userData?.imgUrl}} alt="User image">
+         </div>
+         <div>
+            <h1>{{this.userData?.fullName}}</h1>
+         </div>
+    </div>
+    <div>
+        <app-chatroom   #chat class="chat"></app-chatroom>
+    </div>
+</div>

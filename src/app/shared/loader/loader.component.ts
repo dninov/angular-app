@@ -1,6 +1,4 @@
-import { rendererTypeName } from '@angular/compiler';
-import {Component, OnInit, ElementRef, ViewChild, Injectable, NgZone, OnDestroy} from '@angular/core';
-import { render } from '@fullcalendar/angular';
+import {Component, OnInit, ElementRef, ViewChild, NgZone, OnDestroy} from '@angular/core';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 @Component({
@@ -31,8 +29,8 @@ export class LoaderComponent  implements OnDestroy, OnInit {
     this.canvas = canvas.nativeElement;
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
-      alpha: true,    // transparent background
-      antialias: true // smooth edges
+      alpha: true,    
+      antialias: true 
     });
     this.renderer.setSize(200, 200);
 
@@ -45,7 +43,7 @@ export class LoaderComponent  implements OnDestroy, OnInit {
     this.light = new THREE.AmbientLight(0xffffff, 0.8);
     this.scene.add(this.light);
     this.lightPoint  = new THREE.DirectionalLight(0xffffff, 0.9);
-    this.lightPoint.position.set(0.5, 0, 0.866); // ~60º
+    this.lightPoint.position.set(0.5, 0, 0.866);
     this.scene.add( this.lightPoint );
 
     this.loader = new GLTFLoader();

@@ -1,6 +1,7 @@
 app-chatroom{
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 .chat-form{
     position: fixed;
@@ -10,11 +11,16 @@ app-chatroom{
     width: 100%;
 }
 .feedWrapper{
+    width: 600px;
+    margin: auto;
     flex: 5;
     order: 2;
     overflow-y: scroll;
+    height: xyz;
     padding: 10px 0px 0px 10px;
+
 }
+
 .chatFormWrapper{
     display: flex;
     height: 50px;
@@ -24,3 +30,6 @@ app-chatroom{
     border-radius: 10px;
     background-color: #f5f5f5;
 }
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
