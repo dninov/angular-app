@@ -1,4 +1,5 @@
 # Casino Staff Manager
+![alt text](https://img.shields.io/github/repo-size/dninov/angular-app?color=red)
 ![alt text](https://img.shields.io/github/commit-activity/m/dninov/angular-app?color=blueviolet)
 [![alt text](https://img.shields.io/badge/website-ang--app--85803.web.app-yellow)](https://ang-app-85803.firebaseapp.com/)
 
@@ -17,7 +18,7 @@ A role based admin/user application with schedule builder and chat functionality
   - Sends and recieves messages from employees
 
 ## Tools
-- Angular Fire
+- [Angular Fire](https://www.npmjs.com/package/@angular/fire)
 - Angular Material
 - Flex-Layout
 - Angular Full Calendar
