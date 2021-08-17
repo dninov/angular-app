@@ -1,6 +1,6 @@
 # Casino Staff Manager
 ![alt text](https://img.shields.io/github/commit-activity/m/dninov/angular-app?color=blueviolet)
-![alt text](https://img.shields.io/badge/website-ang--app--85803.web.app-yellow)
+[![alt text](https://img.shields.io/badge/website-ang--app--85803.web.app-yellow)](ang-app-85803.web.app)
 
 A role based admin/user application with schedule builder and chat functionality.
 ## Features
