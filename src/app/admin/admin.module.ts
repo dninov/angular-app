@@ -15,6 +15,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { DeleteDialogComponent } from './user-details/delete-dialog/delete-dialog.component'; 
 import { SharedModule } from '../shared/shared.module';
 import { ChatComponent } from './chat/chat.component';
+import { FormFilterPipe } from './users-list/form-filter.pipe';
 FullCalendarModule.registerPlugins([ 
   dayGridPlugin,
   interactionPlugin
@@ -28,6 +29,7 @@ FullCalendarModule.registerPlugins([
     ScheduleBuilderComponent,
     DeleteDialogComponent,
     ChatComponent,
+    FormFilterPipe,
   ],
   imports: [
     CommonModule,

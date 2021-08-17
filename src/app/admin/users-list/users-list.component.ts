@@ -1,8 +1,9 @@
-import { Component, OnInit,  HostListener} from '@angular/core';
+import { Component, OnInit,  OnDestroy} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { animations } from '../../utils/animations';
 import { Router } from '@angular/router';
 import { AdminService } from '../admin.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users-list',
@@ -10,12 +11,15 @@ import { AdminService } from '../admin.service';
   styleUrls: ['./users-list.component.css'],
   animations: [animations]
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy {
 gamesArr:Array<string> = ['AR', 'Poker', 'Blackjack', 'Baccart'];
 casinosArr:Array<string> = ['', 'Casino1', 'Casino2', 'Casino3'];
 form!: FormGroup;
 filteredArr:Array<any> =[];  
 loading = true;
+userArr:any;
+formData:object={nameSearch:"", gameSearch:[], casinoSearch:""};
+formSub!:Subscription;
   constructor(
     private adminService: AdminService,
     private formBuilder: FormBuilder, 
@@ -30,19 +34,24 @@ loading = true;
         casinoSearch:[''],
       }, 
     );
-    this.adminService.getAllUsers().then((r)=>{
-      this.loading = false;
-      this.filteredArr = this.adminService.usersArr;
-      this.form.valueChanges.subscribe(formData=>{
-        this.filteredArr = this.adminService._filter(formData)
-      });
-    })
-  }
+   this.userArr = this.adminService.getAllUsers();
+   this.loading = false;
+    // this.loading = false;
+    // this.filteredArr = this.adminService.usersArr;
+    this.formSub = this.form.valueChanges.subscribe(formData=>{
+      this.formData = formData;
+     // this.filteredArr = this.adminService._filter(formData)
+    });
+    }
+
   autocompleteName(input:any){
     return input ? input.nickName : undefined
   }
   onSelect(user:any){
     this.router.navigate(['admin-dashboard/user-details', user.uid]);
+  }
+  ngOnDestroy(){
+    this.formSub.unsubscribe();
   }
 
 }

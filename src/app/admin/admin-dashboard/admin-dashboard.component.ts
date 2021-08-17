@@ -32,7 +32,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         if(this.subscribed){
           let allReadMsg:any = [];
           result.map((m:any)=>{
-           allReadMsg.push(m.payload.doc.id);
+           allReadMsg.push(m.payload.doc.id); 
           });
           if(allReadMsg.length>0){
             this.newMsgSubscription = this.chatService.getNewMessages(user.uid).subscribe((result:any)=>{

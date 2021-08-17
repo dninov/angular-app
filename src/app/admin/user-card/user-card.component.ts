@@ -14,6 +14,10 @@ export class UserCardComponent implements OnInit {
     private router: Router,
   ) { }
   ngOnInit(): void {
+    console.log('here');
+    
+    console.log(this.user);
+    
   }
   scheduleClicked(){
     this.router.navigate(['admin-dashboard/schedule-builder', this.user.uid]); 

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,14 +16,15 @@ export class AdminService {
     private fns: AngularFireFunctions,
     private router: Router,
   ) { }
-  async getAllUsers(){
-    this.allArr = [];
-    return  await this.afs.collection('users').get().toPromise().then( record=>{
-      record.docs.forEach( entry => {
-        this.allArr.push(entry.data());
-      });  
-    }).then(r=>{
-      this.removeAdmin()})
+  getAllUsers():Observable<object>{
+    return this.afs.collection('users', (ref:any) => ref.where("role", '!=', 'admin')).valueChanges();
+    // this.allArr = []; 
+    // return  await this.afs.collection('users').get().toPromise().then( record=>{
+    //   record.docs.forEach( entry => {
+    //     this.allArr.push(entry.data());
+    //   });  
+    // }).then(r=>{
+    //   this.removeAdmin()})
   }
    getUser(id:any){
     return  this.afs.collection('users').doc(id).get().toPromise();
