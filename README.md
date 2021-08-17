@@ -19,10 +19,10 @@ A role based admin/user application with schedule builder and chat functionality
 
 ## Tools
 - [Angular Fire](https://www.npmjs.com/package/@angular/fire)
-- Angular Material
-- Flex-Layout
-- Angular Full Calendar
-- ThreeJS
+- [Angular Material](https://www.npmjs.com/package/@angular/material)
+- [Flex-Layout](https://www.npmjs.com/package/@angular/flex-layout)
+- [Angular Full Calendar](https://www.npmjs.com/package/@fullcalendar/angular)
+- [ThreeJS](https://threejs.org/docs/#manual/en/buildTools/Testing-with-NPM)
 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.2.
