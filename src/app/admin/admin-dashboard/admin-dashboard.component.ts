@@ -78,9 +78,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     console.log('schedule');
   }
   ngOnDestroy(): void {
-    console.log('unsubscribe');
     this.subscribed = false;
-    this.readMsgSubscription.unsubscribe();
+    //this.readMsgSubscription.unsubscribe();
     this.newMsgSubscription.unsubscribe();
   }
   onSelect(user:any){

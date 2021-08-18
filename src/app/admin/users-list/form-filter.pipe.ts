@@ -14,25 +14,27 @@ export class FormFilterPipe implements PipeTransform {
     return passing;
   }
   transform(value: any, formData:any): any{
-    let nameStr = "";
-    let game:Array<string> = [];   
-    if(formData.gameSearch.length !== 0){
-      formData.gameSearch.forEach((str:any) => {
-        str = str.toLocaleLowerCase();
-        game.push(str);
-      });
+    if (value !== null ){
+      let nameStr = "";
+      let game:Array<string> = [];   
+      if(formData.gameSearch.length !== 0){
+        formData.gameSearch.forEach((str:any) => {
+          str = str.toLocaleLowerCase();
+          game.push(str);
+        });
+      }
+      let name = formData.nameSearch;
+        if(typeof name === 'object'){
+         nameStr = name.nickName.toLowerCase();
+        }else{
+         nameStr = name.toLowerCase();
+        }  
+      let casino = formData.casinoSearch;
+      return value.filter((user:any) =>
+          user.nickName.toLowerCase().includes(nameStr) &&  
+          (game.length === 0 || this.checkGames(game, user)) &&  
+          (casino.length === 0 || user.casino === casino)
+      );
     }
-    let name = formData.nameSearch;
-      if(typeof name === 'object'){
-       nameStr = name.nickName.toLowerCase();
-      }else{
-       nameStr = name.toLowerCase();
-      }  
-    let casino = formData.casinoSearch;
-    return value.filter((user:any) =>
-        user.nickName.toLowerCase().includes(nameStr) &&  
-        (game.length === 0 || this.checkGames(game, user)) &&  
-        (casino.length === 0 || user.casino === casino)
-    );
   } 
 }

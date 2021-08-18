@@ -1,12 +1,16 @@
-<div fxLayoutAlign="center center" class="loading" *ngIf="loading">
-  <app-loader></app-loader>
-</div>
-<section *ngIf="!loading" class="form"> 
+<ng-template #loading>
+  <div style="position: absolute; left: 50%; top:200px;">
+    <div style="position: relative; left: -50%;">
+      <app-loader></app-loader>
+    </div>
+  </div>
+</ng-template>
+<section class="form"  *ngIf="loading"> 
   <form [formGroup]="form" fxLayout="row" fxLayout.xs="column" fxLayoutGap="30px" fxLayoutAlign="center center">
     <mat-form-field>
         <input type="text" matInput placeholder="Имена" [matAutocomplete]="auto" formControlName="nameSearch"/>
         <mat-autocomplete #auto="matAutocomplete" [displayWith] = "autocompleteName">
-        <mat-option *ngFor="let user of filteredArr" [value]="user">
+        <mat-option *ngFor="let user of filteredArr ; else indicator" [value]="user">
           {{user.nickName}}
         </mat-option>
       </mat-autocomplete>
@@ -27,11 +31,11 @@
   </mat-form-field>
   </form>
 </section>
-<ng-container *ngIf = userArr$ | async as userArr>
-  <div  *ngIf = "!loading" class="content"  [@scaleUp]="userArr.length"> 
+<ng-container *ngIf = "userArr | async |  formFilter: formData as userArr; else loading">
+  <div class="content"  [@scaleUp]="userArr.length"> 
     <div  fxLayout= "row wrap" fxLayoutAlign="start" fxLayoutAlign.md="center" fxLayoutGap="20px grid">
         <div (click)="onSelect(user)" fxLayoutAlign="center center"  fxFlex.xl="15%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.xs="50%"
-         *ngFor="let user of userArr | async | formFilter: formData">
+         *ngFor="let user of userArr">
           <app-user-card  [user] = "user" class="user-card"></app-user-card>
         </div>
     </div>

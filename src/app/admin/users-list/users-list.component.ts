@@ -36,13 +36,10 @@ formSub!:Subscription;
     );
    this.userArr = this.adminService.getAllUsers();
    this.loading = false;
-    // this.loading = false;
-    // this.filteredArr = this.adminService.usersArr;
-    this.formSub = this.form.valueChanges.subscribe(formData=>{
+   this.formSub = this.form.valueChanges.subscribe(formData=>{
       this.formData = formData;
-     // this.filteredArr = this.adminService._filter(formData)
     });
-    }
+  }
 
   autocompleteName(input:any){
     return input ? input.nickName : undefined
@@ -53,5 +50,4 @@ formSub!:Subscription;
   ngOnDestroy(){
     this.formSub.unsubscribe();
   }
-
 }
