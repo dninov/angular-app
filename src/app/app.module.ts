@@ -23,6 +23,10 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { SharedModule } from './shared/shared.module';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './app.reducer';
+
+
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -50,7 +54,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     AngularFireStorageModule ,
     AngularFireFunctionsModule,
     FullCalendarModule,
-    SharedModule
+    SharedModule,
+    StoreModule.forRoot(reducers),
   ],
   providers: [AuthService, GuardService, AdminGuardService],
   bootstrap: [AppComponent]
