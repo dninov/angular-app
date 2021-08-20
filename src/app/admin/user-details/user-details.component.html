@@ -16,10 +16,10 @@
         <div fxLayout= "column" fxFlex ="95%" fxFlex.xs="85%" fxLayoutGap="10px" >
           <!-- <div *ngIf = "userInfo.fullName" class="mat-headline" >{{userInfo.fullName}}</div> -->
           <div class="img-holder">
-            <img *ngIf = "this.userData?.imgUrl !== undefined" class="user-image" src={{this.userData?.imgUrl}} alt="User image">
+            <img *ngIf = "this.userData[0]?.imgUrl !== undefined" class="user-image" src={{this.userData[0]?.imgUrl}} alt="User image">
           </div>
           <div class="img-holder">
-            <img *ngIf = "this.userData?.imgUrl === undefined" class="user-image" src="../../../assets/user-icon.jpg" alt="Default user image">
+            <img *ngIf = "this.userData[0]?.imgUrl === undefined" class="user-image" src="../../../assets/user-icon.jpg" alt="Default user image">
           </div>
           <div>
 

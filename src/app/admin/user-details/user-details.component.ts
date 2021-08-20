@@ -31,17 +31,6 @@ export class UserDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get("uid");
-    let something = this.store.select(store=> store.admin.list);
-    something.subscribe((r:any)=>{
-      console.log(r);
-    })
-    
-    this.adminService.getUser(this.id).then(result=>{
-      this.loading = false;
-      this.userData = result.data();
-      this.fillForm(this.userData);
-    }).catch(error=> console.log(error));
-
     this.form = this.formBuilder.group(
       {
         casino: ['', [Validators.required]],
@@ -52,7 +41,12 @@ export class UserDetailsComponent implements OnInit {
         startDate:['']
       },
     );
-    
+    let allUsers = this.store.select(store=> store.admin.list);
+    allUsers.subscribe((users:any)=>{
+      this.userData = users.filter((user:any) => user.uid == this.id);
+      this.loading = false;
+      this.fillForm(this.userData[0]);
+    });
   }
   
   get f(): { [key: string]: AbstractControl } {

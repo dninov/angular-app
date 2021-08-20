@@ -17,7 +17,7 @@ gamesArr:Array<string> = ['AR', 'Poker', 'Blackjack', 'Baccart'];
 casinosArr:Array<string> = ['', 'Casino1', 'Casino2', 'Casino3'];
 form!: FormGroup;
 filteredArr:Array<any> =[];  
-loading = true;
+loading!: Observable<boolean>;
 userArr:any;
 storeUserArr!:Observable<Array<any>>;
 formData:object={nameSearch:"", gameSearch:[], casinoSearch:""};
@@ -38,7 +38,7 @@ formSub!:Subscription;
     );
     
    this.storeUserArr = this.store.select(store=> store.admin.list);
-   this.loading = false;
+   this.loading = this.store.select(store=> store.admin.loading);;
    this.formSub = this.form.valueChanges.subscribe(formData=>{
       this.formData = formData;
     });

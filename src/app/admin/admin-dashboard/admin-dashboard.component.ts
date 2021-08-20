@@ -16,7 +16,6 @@ import { LoadUsersAction } from '../store/admin.actions';
   animations: [animations]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
-  subscribed = true;
   openSidenav = false;
   unreadMsg:number = 0;
   msgUsers: any[] = [];
@@ -34,17 +33,18 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     const user = JSON.parse(localStorage.getItem('user')!);
     this.store.dispatch(new LoadUsersAction());
       this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe((result:any)=>{
-        if(this.subscribed){
           let allReadMsg:any = [];
           result.map((m:any)=>{
            allReadMsg.push(m.payload.doc.id); 
           });
           if(allReadMsg.length>0){
             this.newMsgSubscription = this.chatService.getNewMessages(user.uid).subscribe((result:any)=>{
-              if(this.subscribed && result){
+              if(result){
                 let newMsg:any = [];
                 result.map((m:any)=>{
                   let data:any = m.payload.doc.data();
+                  console.log(data);
+                  
                   newMsg.push(data)
                 })
                 newMsg = newMsg
@@ -55,12 +55,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
               }
            })
           }
-        }
       })
   }
 
   setUnreadMsg(users:string[]){
-      if(this.subscribed){
         this.msgUsers = [];
         this.unreadMsg = users.length;
         users.forEach(user => {
@@ -69,9 +67,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             this.msgUsers =  [...this.msgUsers]
             console.log(this.msgUsers);
             
-          })
+          }) 
         });
-      }
   }
 
   logout(){
@@ -82,16 +79,15 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('dashboard/schedule');
     console.log('schedule');
   }
-  ngOnDestroy(): void {
-    this.subscribed = false;
-    //this.readMsgSubscription.unsubscribe();
-    this.newMsgSubscription.unsubscribe();
-  }
+
   onSelect(user:any){
     let newLocation = `admin-dashboard/chat/${user.uid}`;
     this.router.routeReuseStrategy.shouldReuseRoute = function () {return false;};
     this.router.navigateByUrl(newLocation).catch(err=>console.log(err));
   }
-
+  ngOnDestroy(){
+    this.readMsgSubscription.unsubscribe();
+    this.newMsgSubscription.unsubscribe();
+  }
 }
 

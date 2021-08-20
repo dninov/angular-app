@@ -1,4 +1,5 @@
 .content{
+  margin-top: 40px;
   padding:16px;
 }
 .form{
@@ -14,6 +15,10 @@
 .user-card:hover {
   z-index: 100;
   transform: scale(1.1);
+}
+
+.loading{
+  height: 500px;
 }
 
 @media only screen and (max-width: 1080px) {
