@@ -16,7 +16,6 @@ import { AngularFireAuthModule} from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
-import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { GuardService } from './guards/guard.service';
 import { AdminGuardService } from './guards/admin-guard.service';
 import { FullCalendarModule } from '@fullcalendar/angular'; 
@@ -25,6 +24,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { SharedModule } from './shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './app.reducer';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 
 
@@ -38,7 +39,6 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     SignupComponent,
     LoginComponent,
     HomeComponent,
-    AdminDashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +56,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     FullCalendarModule,
     SharedModule,
     StoreModule.forRoot(reducers),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    EffectsModule.forRoot(),
   ],
   providers: [AuthService, GuardService, AdminGuardService],
   bootstrap: [AppComponent]

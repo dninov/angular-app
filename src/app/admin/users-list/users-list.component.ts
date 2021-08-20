@@ -2,8 +2,9 @@ import { Component, OnInit,  OnDestroy} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { animations } from '../../utils/animations';
 import { Router } from '@angular/router';
-import { AdminService } from '../admin.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/app.reducer';
 
 @Component({
   selector: 'app-users-list',
@@ -18,12 +19,13 @@ form!: FormGroup;
 filteredArr:Array<any> =[];  
 loading = true;
 userArr:any;
+storeUserArr!:Observable<Array<any>>;
 formData:object={nameSearch:"", gameSearch:[], casinoSearch:""};
 formSub!:Subscription;
   constructor(
-    private adminService: AdminService,
     private formBuilder: FormBuilder, 
     private router: Router,
+    private store: Store<State>
   ) { }
 
   ngOnInit(): void {
@@ -34,7 +36,8 @@ formSub!:Subscription;
         casinoSearch:[''],
       }, 
     );
-   this.userArr = this.adminService.getAllUsers();
+    
+   this.storeUserArr = this.store.select(store=> store.admin.list);
    this.loading = false;
    this.formSub = this.form.valueChanges.subscribe(formData=>{
       this.formData = formData;

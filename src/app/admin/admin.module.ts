@@ -5,6 +5,7 @@ import { UsersListComponent } from './users-list/users-list.component';
 import { MaterialModue } from './../material.module'
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { UserCardComponent } from './user-card/user-card.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { AdminService } from './admin.service';
@@ -16,6 +17,11 @@ import { DeleteDialogComponent } from './user-details/delete-dialog/delete-dialo
 import { SharedModule } from '../shared/shared.module';
 import { ChatComponent } from './chat/chat.component';
 import { FormFilterPipe } from './users-list/form-filter.pipe';
+import { StoreModule} from '@ngrx/store';
+import { AdminReducer } from './store/admin.reducer';
+import { AdminEffects } from './store/admin.effects';
+import { EffectsModule } from '@ngrx/effects';
+
 FullCalendarModule.registerPlugins([ 
   dayGridPlugin,
   interactionPlugin
@@ -23,6 +29,7 @@ FullCalendarModule.registerPlugins([
 
 @NgModule({
   declarations: [
+    AdminDashboardComponent,
     UsersListComponent,
     UserCardComponent,
     UserDetailsComponent,
@@ -39,7 +46,9 @@ FullCalendarModule.registerPlugins([
     FormsModule,
     ReactiveFormsModule,
     FullCalendarModule,
-    SharedModule
+    SharedModule,
+    StoreModule.forFeature('admin', AdminReducer),
+    EffectsModule.forFeature([AdminEffects]),
   ], 
   providers:[
     {

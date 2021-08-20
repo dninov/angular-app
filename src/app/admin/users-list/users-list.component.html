@@ -10,7 +10,7 @@
     <mat-form-field>
         <input type="text" matInput placeholder="Имена" [matAutocomplete]="auto" formControlName="nameSearch"/>
         <mat-autocomplete #auto="matAutocomplete" [displayWith] = "autocompleteName">
-        <mat-option *ngFor="let user of filteredArr ; else indicator" [value]="user">
+        <mat-option *ngFor="let user of storeUserArr | async ; else indicator" [value]="user">
           {{user.nickName}}
         </mat-option>
       </mat-autocomplete>
@@ -26,16 +26,16 @@
       <mat-select  placeholder="Казино" name="casino" formControlName="casinoSearch">
           <mat-option *ngFor="let casino of casinosArr" [value]="casino">
              {{casino}}
-          </mat-option>
+          </mat-option> 
       </mat-select> 
   </mat-form-field>
   </form>
 </section>
-<ng-container *ngIf = "userArr | async |  formFilter: formData as userArr; else loading">
-  <div class="content"  [@scaleUp]="userArr.length"> 
+<ng-container *ngIf = "storeUserArr | async |  formFilter: formData as storeUserArr; else loading">
+  <div class="content"  [@scaleUp]="storeUserArr.length"> 
     <div  fxLayout= "row wrap" fxLayoutAlign="start" fxLayoutAlign.md="center" fxLayoutGap="20px grid">
         <div (click)="onSelect(user)" fxLayoutAlign="center center"  fxFlex.xl="15%" fxFlex.lg="20%" fxFlex.md="25%" fxFlex.xs="50%"
-         *ngFor="let user of userArr">
+         *ngFor="let user of storeUserArr">
           <app-user-card  [user] = "user" class="user-card"></app-user-card>
         </div>
     </div>

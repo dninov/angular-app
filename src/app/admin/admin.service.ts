@@ -18,6 +18,7 @@ export class AdminService {
   ) { }
 
   getAllUsers():Observable<object>{
+    console.log('getAllUsers');
     return this.afs.collection('users', (ref:any) => ref.where("role", '!=', 'admin')).valueChanges();
   }
 

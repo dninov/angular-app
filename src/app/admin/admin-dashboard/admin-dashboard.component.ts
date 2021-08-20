@@ -5,6 +5,10 @@ import { animations } from 'src/app/utils/animations';
 import { ChatService } from 'src/app/shared/chat.service';
 import { AdminService } from '../admin.service';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/app.reducer';
+import { LoadUsersAction } from '../store/admin.actions';
+
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -23,11 +27,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private chatService: ChatService,
     private adminService: AdminService, 
+    private store: Store<State>
   ) { }
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user')!);
-   
+    this.store.dispatch(new LoadUsersAction());
       this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe((result:any)=>{
         if(this.subscribed){
           let allReadMsg:any = [];

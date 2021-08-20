@@ -5,6 +5,8 @@ import { animations } from '../../utils/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/app.reducer';
 @Component({
   selector: 'app-profile',
   templateUrl: './user-details.component.html',
@@ -24,10 +26,16 @@ export class UserDetailsComponent implements OnInit {
     private formBuilder: FormBuilder, 
     private adminService: AdminService,
     private router: Router,
+    private store: Store<State>
     ) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get("uid");
+    let something = this.store.select(store=> store.admin.list);
+    something.subscribe((r:any)=>{
+      console.log(r);
+    })
+    
     this.adminService.getUser(this.id).then(result=>{
       this.loading = false;
       this.userData = result.data();
