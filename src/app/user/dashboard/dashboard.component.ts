@@ -26,13 +26,13 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(){
     const user = JSON.parse(localStorage.getItem('user')!);
     this.id = user.uid;
-    this.readMsg = this.chatService.getReadMsg(this.id).subscribe((result:any)=>{
-      let allReadMsg:any = [];
-      result.map((m:any)=>{
-       allReadMsg.push(m.payload.doc.id);
-      });
-      this.checkForUnreadMsg(allReadMsg);
-    })
+    // this.readMsg = this.chatService.getReadMsg(this.id).subscribe((result:any)=>{
+    //   let allReadMsg:any = [];
+    //   result.map((m:any)=>{
+    //    allReadMsg.push(m.payload.doc.id);
+    //   });
+    //   this.checkForUnreadMsg(allReadMsg);
+    // })
    
   }
   checkForUnreadMsg(allReadMsg:any){

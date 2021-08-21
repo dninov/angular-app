@@ -17,11 +17,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
   animations: [animations]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
-  @HostListener('window:beforeunload', ['$event'])
-  public async unloadHandler($event:any) {
-    let user = JSON.parse(localStorage.getItem('user')!);
-    await this.afs.collection('users').doc(user.uid).set({lastOnline:Date.now()});
-  }
   openSidenav = false;
   unreadMsg:number = 0;
   msgUsers: any[] = [];
@@ -39,8 +34,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('user')!);
+    this.chatService.getAdminUnreadMessages(this.user.uid);
     this.store.dispatch(new LoadUsersAction());
-    this.store.dispatch(new LoadReadMessagesAction(this.user.uid));
+    // this.store.dispatch(new LoadReadMessagesAction(this.user.uid)); 
       // this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe((result:any)=>{
       //     let allReadMsg:any = []; 
       //     result.map((m:any)=>{
@@ -95,8 +91,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(newLocation).catch(err=>console.log(err));
   }
   ngOnDestroy(){
-    let user = JSON.parse(localStorage.getItem('user')!);
-    this.afs.collection('users').doc(user.uid).set({lastOnline:Date.now()});
+    //let user = JSON.parse(localStorage.getItem('user')!);
+    //this.afs.collection('users').doc(user.uid).set({lastOnline:Date.now()});
     // this.readMsgSubscription.unsubscribe();
     // this.newMsgSubscription.unsubscribe();
   }

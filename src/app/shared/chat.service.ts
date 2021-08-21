@@ -38,7 +38,11 @@ export class ChatService {
       docId: newDoc.ref.id
     }, {merge: true});
   }
-
+  getAdminUnreadMessages(id:any){
+    this.afs.collection('users').doc(id).collection('messages').doc("admin-timestamp").get().subscribe((r)=>{
+      console.log(r);
+    })
+  }
   getMessages(id:any):Observable<object>{ 
     return this.afs.collection('users').doc(id).collection('messages').valueChanges();
   }
@@ -48,20 +52,30 @@ export class ChatService {
   getUserNewMessages(id:any){
     return this.afs.collection('users').doc(id).collection('messages', (ref:any) => ref.where("id", '!=', id)).snapshotChanges();
   }
-  async updateReadMsg(userId:string, msgId:any){
-    this.afs.collection('users').doc(userId).collection('readMsg', ref => ref.where('id', "==", msgId)).snapshotChanges().subscribe(res => {
-      if (res.length > 0)
-      {
-        return
-      }
-      else
-      {
-        console.log('update');
-        this.afs.collection('users').doc(userId).collection('readMsg').doc(msgId).set({id:msgId}, {merge: true});
-      }
-  });
-}
-  getReadMsg(userId:string){
-    return this.afs.collection('users').doc(userId).collection('readMsg').valueChanges();
+  setTimestampUser(id:any){
+    this.date = new Date();
+    let mediumDate = this.datePipe.transform(this.date, 'medium');
+    this.afs.collection('users').doc(id).collection('messages-timestamps').doc("user-timestamp").set({lastSeen:mediumDate});
   }
+  setTimestampAdmin(id:any){
+    this.date = new Date();
+    let mediumDate = this.datePipe.transform(this.date, 'medium');
+    this.afs.collection('users').doc(id).collection('messages-timestamps').doc("admin-timestamp").set({lastSeen:mediumDate});
+  }
+//   async updateReadMsg(userId:string, msgId:any){
+//     this.afs.collection('users').doc(userId).collection('readMsg', ref => ref.where('id', "==", msgId)).snapshotChanges().subscribe(res => {
+//       if (res.length > 0)
+//       {
+//         return
+//       }
+//       else
+//       {
+//         console.log('update');
+//         this.afs.collection('users').doc(userId).collection('readMsg').doc(msgId).set({id:msgId}, {merge: true});
+//       }
+//   });
+// }
+//   getReadMsg(userId:string){
+//     return this.afs.collection('users').doc(userId).collection('readMsg').valueChanges();
+//   }
 }

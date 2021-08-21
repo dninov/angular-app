@@ -31,7 +31,7 @@ export class AdminEffects {
         .pipe(
             ofType<LoadReadMessagesAction>(AdminActionTypes.LOAD_READ_MESSAGES), 
             mergeMap(
-                (data:any) => this.chatService.getReadMsg(data.payload)
+                (data:any) => this.chatService.getMessages(data.payload)
                 .pipe(
                     map(data => new LoadReadMessagesSuccessAction(data)),
                     catchError(error => of (new LoadReadMessagesFailureAction(error)))

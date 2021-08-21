@@ -5,6 +5,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { first } from 'rxjs/operators';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
+
 @Injectable()
 export class AuthService {
    userData: any;
@@ -24,7 +25,7 @@ export class AuthService {
           localStorage.setItem('user', JSON.stringify(this.userData));
         } else {
           this.userData = false;
-          localStorage.setItem('user', '');
+          localStorage.setItem('user', ''); 
         }
       })
     }
@@ -45,7 +46,6 @@ export class AuthService {
         nickName: "",
         phoneNumber: "",
         poker: false,
-        lastOnline: "",
       }
       return userRef.set(userD, {
         merge: true
@@ -92,12 +92,10 @@ export class AuthService {
     } 
 
     async logout(id:any) {
-      this.afs.collection('users').doc(id).set({lastOnline:Date.now()}).then(()=>{
-        this.afAuth.signOut().then(() => {
-          localStorage.removeItem('user');
-          this.router.navigate(['']);
-          }).catch(err=>console.log(err));
-      })
+      this.afAuth.signOut().then(() => {
+        localStorage.removeItem('user');
+        this.router.navigate(['']);
+        }).catch(err=>console.log(err));
     }
     get isAuthenticated() {     
       return localStorage.getItem('user');
