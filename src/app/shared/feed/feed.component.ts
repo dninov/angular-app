@@ -15,7 +15,7 @@ export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
   messages!: Subscription;
   constructor(
     private chat: ChatService,
-    private readonly route: ActivatedRoute,
+    private readonly route: ActivatedRoute, 
 
   ) { }
 

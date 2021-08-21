@@ -31,7 +31,7 @@ export class AuthService {
 
     SetUserData(user: any) {
       const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-      this.afs.collection('users').doc(user.uid).collection('readMsg').doc('Initialization').set({id:user.uid});
+      
       const userD: User = {
         uid: user.uid,
         email: user.email,
@@ -45,6 +45,7 @@ export class AuthService {
         nickName: "",
         phoneNumber: "",
         poker: false,
+        lastOnline: "",
       }
       return userRef.set(userD, {
         merge: true
@@ -54,7 +55,7 @@ export class AuthService {
      emailSignup(user:any) {
        this.SetUserData(user);
        if(user.roles === "admin"){
-         this.makeAdmin(user.email, user.password);
+         this.makeAdmin(user.email, user.password, user.uid);
         }else{
           this.router.navigateByUrl('/dashboard');
       }
@@ -81,20 +82,22 @@ export class AuthService {
       }
     }
 
-     makeAdmin(userEmail: string, password: string){
+     makeAdmin(userEmail: string, password: string, id:string){
         const callable =  this.fns.httpsCallable('addAdminRole');
         callable({ email: userEmail }).toPromise().then( value =>{
-        this.logout();
+        this.logout(id);
         this.login(userEmail, password).catch(err=>console.log(err));
         this.router.navigateByUrl('/admin-dashboard');
       }).catch(err => console.log(err));
     } 
 
-    async logout() {
-      return await this.afAuth.signOut().then(() => {
-        localStorage.removeItem('user');
-        this.router.navigate(['']);
-      }).catch(err=>console.log(err));
+    async logout(id:any) {
+      this.afs.collection('users').doc(id).set({lastOnline:Date.now()}).then(()=>{
+        this.afAuth.signOut().then(() => {
+          localStorage.removeItem('user');
+          this.router.navigate(['']);
+          }).catch(err=>console.log(err));
+      })
     }
     get isAuthenticated() {     
       return localStorage.getItem('user');

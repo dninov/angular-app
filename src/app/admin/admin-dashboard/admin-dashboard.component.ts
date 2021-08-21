@@ -7,8 +7,9 @@ import { AdminService } from '../admin.service';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
-import { LoadUsersAction } from '../store/admin.actions';
-
+import { LoadUsersAction, LoadReadMessagesAction } from '../store/admin.actions';
+import { HostListener } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -16,12 +17,19 @@ import { LoadUsersAction } from '../store/admin.actions';
   animations: [animations]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
+  @HostListener('window:beforeunload', ['$event'])
+  public async unloadHandler($event:any) {
+    let user = JSON.parse(localStorage.getItem('user')!);
+    await this.afs.collection('users').doc(user.uid).set({lastOnline:Date.now()});
+  }
   openSidenav = false;
   unreadMsg:number = 0;
   msgUsers: any[] = [];
   readMsgSubscription!: Subscription;
   newMsgSubscription!: Subscription;
+  user:any;
   constructor(
+    private afs: AngularFirestore,
     private router: Router,
     private authService: AuthService,
     private chatService: ChatService,
@@ -30,32 +38,33 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('user')!);
+    this.user = JSON.parse(localStorage.getItem('user')!);
     this.store.dispatch(new LoadUsersAction());
-      this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe((result:any)=>{
-          let allReadMsg:any = [];
-          result.map((m:any)=>{
-           allReadMsg.push(m.payload.doc.id); 
-          });
-          if(allReadMsg.length>0){
-            this.newMsgSubscription = this.chatService.getNewMessages(user.uid).subscribe((result:any)=>{
-              if(result){
-                let newMsg:any = [];
-                result.map((m:any)=>{
-                  let data:any = m.payload.doc.data();
-                  console.log(data);
+    this.store.dispatch(new LoadReadMessagesAction(this.user.uid));
+      // this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe((result:any)=>{
+      //     let allReadMsg:any = []; 
+      //     result.map((m:any)=>{
+      //      allReadMsg.push(m.payload.doc.id); 
+      //     });
+      //     if(allReadMsg.length>0){
+      //       this.newMsgSubscription = this.chatService.getNewMessages(user.uid).subscribe((result:any)=>{
+      //         if(result){
+      //           let newMsg:any = [];
+      //           result.map((m:any)=>{
+      //             let data:any = m.payload.doc.data();
+      //             console.log(data);
                   
-                  newMsg.push(data)
-                })
-                newMsg = newMsg
-                .filter((val:any) => !allReadMsg.includes(val.docId))
-                .map((item:any) => item.id).filter((value:any, index:any, self:any) => self.indexOf(value) === index);
-                console.log(newMsg);
-                this.setUnreadMsg(newMsg);    
-              }
-           })
-          }
-      })
+      //             newMsg.push(data)
+      //           })
+      //           newMsg = newMsg
+      //           .filter((val:any) => !allReadMsg.includes(val.docId))
+      //           .map((item:any) => item.id).filter((value:any, index:any, self:any) => self.indexOf(value) === index);
+      //           console.log(newMsg);
+      //           this.setUnreadMsg(newMsg);    
+      //         }
+      //      })
+      //     }
+      // })
   }
 
   setUnreadMsg(users:string[]){
@@ -72,7 +81,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   logout(){
-    this.authService.logout();
+    this.authService.logout(this.user.uid);
   }
 
   showSchedule(){
@@ -86,8 +95,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(newLocation).catch(err=>console.log(err));
   }
   ngOnDestroy(){
-    this.readMsgSubscription.unsubscribe();
-    this.newMsgSubscription.unsubscribe();
+    let user = JSON.parse(localStorage.getItem('user')!);
+    this.afs.collection('users').doc(user.uid).set({lastOnline:Date.now()});
+    // this.readMsgSubscription.unsubscribe();
+    // this.newMsgSubscription.unsubscribe();
   }
 }
 

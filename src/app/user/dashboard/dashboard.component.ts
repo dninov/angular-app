@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
   logout(){
-    this.authService.logout();
+    this.authService.logout(this.id);
   }
   showProfile(){
     this.router.navigate(['dashboard/profile']);
@@ -64,7 +64,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.navigate(['dashboard/chat']);
   }
   ngOnDestroy(): void {
-    this.adminMsg.unsubscribe();
-    this.readMsg.unsubscribe();
+    // this.adminMsg.unsubscribe();
+    // this.readMsg.unsubscribe();
   }
 }

@@ -19,3 +19,6 @@ export const getAdminState = createFeatureSelector<fromAdmin.AdminState>('admin'
 export const loadUsers = createSelector(getAdminState, fromAdmin.loadUsers);
 export const loadUsersSuccess = createSelector(getAdminState, fromAdmin.loadUsersSuccess);
 export const loadUsersFailure = createSelector(getAdminState, fromAdmin.loadUsersFailure);
+export const loadReadMessages = createSelector(getAdminState, fromAdmin.loadReadMessages);
+export const loadReadMessagesSuccess = createSelector(getAdminState, fromAdmin.loadReadMessagesSuccess);
+export const loaReadMessagesFailure = createSelector(getAdminState, fromAdmin.loadReadMessagesFailure);

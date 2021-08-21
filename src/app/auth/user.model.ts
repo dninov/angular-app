@@ -11,4 +11,5 @@ export interface User {
     nickName: string;
     phoneNumber: string;
     poker: false;
+    lastOnline: string;
 } 

@@ -26,7 +26,8 @@ export class ChatService {
       message: msg,
       timeSent: mediumDate,
       email: email,
-      id: userId
+      id: userId,
+      read: false
     }
     const newDoc:any = this.afs.collection('users').doc(id).collection('messages').doc();
     newDoc.set({
@@ -38,7 +39,7 @@ export class ChatService {
     }, {merge: true});
   }
 
-  getMessages(id:any):Observable<object>{
+  getMessages(id:any):Observable<object>{ 
     return this.afs.collection('users').doc(id).collection('messages').valueChanges();
   }
   getNewMessages(id:any):any{
@@ -61,6 +62,6 @@ export class ChatService {
   });
 }
   getReadMsg(userId:string){
-    return this.afs.collection('users').doc(userId).collection('readMsg').snapshotChanges();
+    return this.afs.collection('users').doc(userId).collection('readMsg').valueChanges();
   }
 }
