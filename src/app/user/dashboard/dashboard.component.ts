@@ -5,10 +5,11 @@ import { ChatService } from 'src/app/shared/chat.service';
 import { AuthService } from '../../auth/auth.service';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
+import { LoadUserAction } from 'src/app/auth/store/auth.actions';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   openSidenav = false;
@@ -16,7 +17,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   readMsg!: Subscription;
   adminMsg!: Subscription;
   id:any;
-  user!: Observable<any>;
+  user$!: Observable<any>;
+  userSub!: Subscription;
+  user!: object;
   constructor(
     private router: Router, 
     private authService: AuthService,
@@ -25,9 +28,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ) { }
 
-  ngOnInit(): void {
-    //this.user = this.authService.getUser();
-    console.log(this.user);
+  async ngOnInit(){
+  
   }
   ngAfterViewInit(){
 
@@ -72,6 +74,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.navigate(['dashboard/chat']);
   }
   ngOnDestroy(): void {
+    //console.log('DASHBOARD userSub unsubscribe');
+    //this.userSub.unsubscribe();
     // this.adminMsg.unsubscribe();
     // this.readMsg.unsubscribe();
   }

@@ -40,9 +40,9 @@ export class LoaderComponent  implements OnDestroy, OnInit {
     );
     this.camera.position.z = 5;
     this.scene.add(this.camera);
-    this.light = new THREE.AmbientLight(0xffffff, 0.8);
+    this.light = new THREE.AmbientLight(0xffffff, 0.5);
     this.scene.add(this.light);
-    this.lightPoint  = new THREE.DirectionalLight(0xffffff, 0.9);
+    this.lightPoint  = new THREE.DirectionalLight(0xffffff, 0.8);
     this.lightPoint.position.set(0.5, 0, 0.866);
     this.scene.add( this.lightPoint );
 

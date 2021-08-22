@@ -20,29 +20,19 @@ export class UserService {
 
   async UpdateProfile(id:string, image: any, data:any){
     
-    // if(image !== ""){
-    //   const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
-    //   const fileRef = this.afst.ref(filePath);
-    //   await this.uploadImg(image, filePath).then(async ()=>{
-    //     this.imgUrl = await fileRef.getDownloadURL().toPromise();
-    //   })
-    // }else{
-    //   this.imgUrl = "../../../assets/user-icon.jpg";
-    // }
-    
-    // this.authService.userData.updateProfile({
-    //     displayName: data.fullName,
-    //     photoURL: this.imgUrl
-    //     }).then(()=>{
-    //       user.photoURL = this.imgUrl
-    //       localStorage.setItem('user', JSON.stringify(user));
-    //       console.log(user);
-    //     })
-   
-    // data.imgUrl = this.imgUrl;
-    // delete data.imageSrc;
-    // delete data.img;
-    // this.afs.collection('users').doc(id).update(data);
+    if(image !== ""){
+      const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
+      const fileRef = this.afst.ref(filePath);
+      await this.uploadImg(image, filePath).then(async ()=>{
+        this.imgUrl = await fileRef.getDownloadURL().toPromise();
+      })
+    }else{
+      this.imgUrl = "../../../assets/user-icon.jpg";
+    }
+    data.imgUrl = this.imgUrl;
+    delete data.imageSrc;
+    delete data.img;
+    this.afs.collection('users').doc(id).update(data);
     }
 
 userInfo(){

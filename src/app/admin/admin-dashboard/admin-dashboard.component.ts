@@ -33,7 +33,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.user = this.authService.getUser();
+   // this.user = this.authService.getUser();
     console.log(this.user);
     
     //this.user = this.store.select(store=> store.auth.user);

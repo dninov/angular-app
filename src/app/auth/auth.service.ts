@@ -20,6 +20,7 @@ export class AuthService {
    user!: Observable<any>;
    userSub!: Subscription;
    authSub!: Subscription;
+   loggedOut: boolean = false;
   constructor(
     private afs: AngularFirestore,
     public afAuth: AngularFireAuth,
@@ -29,28 +30,24 @@ export class AuthService {
     ) 
     {}
 
-
     SetUser(role:string){
-      console.log('SetUser');
-
+      console.log('AUTH SERVICE SetUser');
+      if(this.authSub){
+        this.authSub.unsubscribe();
+      }
       this.authSub = this.afAuth.authState.subscribe((user:any) => {
-        if (user) {
-          console.log("afAuth Subscribe");
+        if (user || !this.loggedOut) {
           this.store.dispatch(new LoadUserAction(user.uid));
-          this.user = this.store.select(store=> store.auth.user);
-          this.userSub = this.user.subscribe((userData:any)=>{
-            console.log("user.subscribe", userData);
+          console.log("AUTH SERVICE new LoadUserAction");
             if(role === "admin"){
               this.router.navigateByUrl('/admin-dashboard');
             }else{
               this.router.navigateByUrl('/dashboard');
             }
-          })
-        }else{
-          this.authSub.unsubscribe();
         }
       })
     }
+
     SetUserData(user: any) {
       const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
       const userD: User = {
@@ -79,7 +76,7 @@ export class AuthService {
          }else{
            this.SetUser("user");
        }
-       })
+      })
     }
 
     async login(email: string, password: string) {
@@ -114,29 +111,31 @@ export class AuthService {
     } 
 
     async logout() {
-      if(this.userSub){
-        this.userSub.unsubscribe();
+      this.router.navigate(['']);
+
+      this.loggedOut = true;
+      console.log("logout begin...");
+      
+      if(this.authSub){
+        console.log('logout authSub unsubscribe');
+        this.authSub.unsubscribe();
       }
+      console.log("logout empty store");
       this.store.dispatch(new LogoutAction());
       this.afAuth.signOut().then(() => {
-      this.router.navigate(['']);
-      console.log( this.isAdmin());
-      
+        this.router.navigate(['']);
+        console.log( this.isAdmin());
       }).catch(err=>console.log(err));
     }
 
     async isAdmin(){
       return await this.afAuth.authState.pipe(first()).toPromise().then(u=> {
          return u?.getIdTokenResult();
-    }).catch(err => console.log(err));
-   }
+      }).catch(err => console.log(err));
+    }
 
     loadUser(id:any){
-      console.log("getUser", id);
+      console.log("AUTH SERVICE loadUser", id);
       return  this.afs.collection('users').doc(id).valueChanges();
-    }
-    getUser(){
-      console.log('getUser');
-      return this.user;
     }
 } 
