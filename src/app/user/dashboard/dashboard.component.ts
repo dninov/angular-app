@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ChatService } from 'src/app/shared/chat.service';
 import { AuthService } from '../../auth/auth.service';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/app.reducer';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -14,18 +16,25 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   readMsg!: Subscription;
   adminMsg!: Subscription;
   id:any;
+  user!: Observable<any>;
   constructor(
     private router: Router, 
     private authService: AuthService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private store: Store<State>,
+
   ) { }
 
   ngOnInit(): void {
-   
+    //this.user = this.authService.getUser();
+    console.log(this.user);
   }
   ngAfterViewInit(){
-    const user = JSON.parse(localStorage.getItem('user')!);
-    this.id = user.uid;
+
+   // this.user.subscribe((userData:any)=>{
+      //this.chatService.getAdminUnreadMessages(userData.uid);
+      
+    //})
     // this.readMsg = this.chatService.getReadMsg(this.id).subscribe((result:any)=>{
     //   let allReadMsg:any = [];
     //   result.map((m:any)=>{
@@ -50,12 +59,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     })
   }
-  logout(){
-    this.authService.logout(this.id);
+  logout(){    
+    this.authService.logout();
   }
   showProfile(){
     this.router.navigate(['dashboard/profile']);
-    
   }
   goSchedule(){
     this.router.navigate(['dashboard/schedule']);

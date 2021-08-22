@@ -4,7 +4,7 @@ import { AuthService } from '../../auth/auth.service';
 import { animations } from 'src/app/utils/animations';
 import { ChatService } from 'src/app/shared/chat.service';
 import { AdminService } from '../admin.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
 import { LoadUsersAction, LoadReadMessagesAction } from '../store/admin.actions';
@@ -33,9 +33,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.getItem('user')!);
-    this.chatService.getAdminUnreadMessages(this.user.uid);
-    this.store.dispatch(new LoadUsersAction());
+    this.user = this.authService.getUser();
+    console.log(this.user);
+    
+    //this.user = this.store.select(store=> store.auth.user);
+    //this.user.subscribe((userData:any)=>{
+      //this.chatService.getAdminUnreadMessages(userData.uid);
+      //this.store.dispatch(new LoadReadMessagesAction(userData.uid)); 
+   // })
+    //this.store.dispatch(new LoadUsersAction());
+   
     // this.store.dispatch(new LoadReadMessagesAction(this.user.uid)); 
       // this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe((result:any)=>{
       //     let allReadMsg:any = []; 
@@ -77,7 +84,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   logout(){
-    this.authService.logout(this.user.uid);
+    this.authService.logout();
   }
 
   showSchedule(){
@@ -98,3 +105,4 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 }
 
+ 

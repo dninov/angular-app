@@ -11,8 +11,8 @@ export class MessageComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('user')!); 
-    this.id = user.uid;
+    // const user = JSON.parse(localStorage.getItem('user')!); 
+    // this.id = user.uid;
   }
 
 }

@@ -26,7 +26,8 @@ import { StoreModule } from '@ngrx/store';
 import { reducers } from './app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-
+import { AuthEffects } from './auth/store/auth.effects';
+ 
 
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
@@ -57,7 +58,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     SharedModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot(),
+    EffectsModule.forRoot([AuthEffects]),
   ],
   providers: [AuthService, GuardService, AdminGuardService],
   bootstrap: [AppComponent]

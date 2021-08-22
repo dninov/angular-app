@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../chat.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/app.reducer';
+import { Observable } from 'rxjs';
   @Component({
   selector: 'app-chat-form',
   templateUrl: './chat-form.component.html',
@@ -12,21 +15,26 @@ export class ChatFormComponent implements OnInit {
   userId:any
   message!:string;
   email!: string;
+  user!:Observable<any>;
   constructor(
     private chat:ChatService,
     private authService: AuthService,
     private readonly route: ActivatedRoute,
+    private store: Store<State>
   ) { }
 
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    this.userId = user.uid;
-    this.email = user.email;
-    if(this.route.snapshot.paramMap.get("uid") === null){
-      this.chatId = user.uid;
-    }else{
-      this.chatId = this.route.snapshot.paramMap.get("uid");
-    }
+    this.user = this.store.select(store=> store.auth.user);
+    this.user.subscribe((userData:any)=>{
+        this.userId = userData.uid;
+        this.email = userData.email;
+        if(userData.role === "user"){
+          this.chatId = userData.uid;
+        }else{
+          this.chatId = this.route.snapshot.paramMap.get("uid");
+        }
+    })
+
   }
 
   async send(){

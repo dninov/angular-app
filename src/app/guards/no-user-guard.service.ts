@@ -13,9 +13,10 @@ export class NoUserGuardService {
     private router: Router,
     private as: AuthService) { }
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>  {           
-      return new Observable<boolean>(obs => { 
+      return new Observable<boolean>(obs => {
           this.as.isAdmin().then( t => {
               if(t === undefined || t === null){
+
                    obs.next(true)  
               }else if(!t?.claims.admin){
                   this.router.navigate(['/dashboard']);

@@ -69,7 +69,6 @@ export class SignupComponent implements OnInit {
     const data = this.form.value;    
     this.loading = true;
     this.afAuth.createUserWithEmailAndPassword(data.email, data.password).then((result)=>{
-      localStorage.setItem('user', JSON.stringify(result.user));
       delete data.rePass;
       data.uid = result.user?.uid;
       if(data.roles === "Администратор"){

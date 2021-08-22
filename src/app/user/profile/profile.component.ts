@@ -62,17 +62,17 @@ export class ProfileComponent implements OnInit {
           });
         }
       } 
-      this.userService.userInfo().then(result => {
-        const data:any = result.data();
-        this.user = data;
-        for(const key in data){
-          if((this.form.get(key)!) !== null){
-            this.form.patchValue({
-              [key] : data[key]
-            });
-          }
-        }
-      }).catch(err=>console.log(err));
+      // this.userService.userInfo().then(result => {
+      //   const data:any = result.data();
+      //   this.user = data;
+      //   for(const key in data){
+      //     if((this.form.get(key)!) !== null){
+      //       this.form.patchValue({
+      //         [key] : data[key]
+      //       });
+      //     }
+      //   }
+      // }).catch(err=>console.log(err));
     }
   
   chooseFileEvt(e: any) {
@@ -105,17 +105,17 @@ export class ProfileComponent implements OnInit {
       return;
     }
     const data = this.form.value;   
-    if(this.imgPath === undefined || this.defaultImage){
-      this.loading = true;
-      await this.userService.UpdateProfile('', data).then(()=>{
-      this.loading = false;
-      }).catch(err=>console.log(err));
-    }else{
-      this.loading = true;
-      await this.userService.UpdateProfile(this.imgPath, data).then(()=>{
-        this.loading = false;
-      }).catch(err=>{console.log(err)});
-    }
+    // if(this.imgPath === undefined || this.defaultImage){
+    //   this.loading = true;
+    //   await this.userService.UpdateProfile('', data).then(()=>{
+    //   this.loading = false;
+    //   }).catch(err=>console.log(err));
+    // }else{
+    //   this.loading = true;
+    //   await this.userService.UpdateProfile(this.imgPath, data).then(()=>{
+    //     this.loading = false;
+    //   }).catch(err=>{console.log(err)});
+    // }
   }
 
   imgFileBig() {
