@@ -20,7 +20,7 @@ export class UserService {
 
   async UpdateProfile(id:string, image: any, data:any){
     
-    if(image !== ""){
+    if(image !== "../../../assets/user-icon.jpg"){
       const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
       const fileRef = this.afst.ref(filePath);
       await this.uploadImg(image, filePath).then(async ()=>{
@@ -39,9 +39,7 @@ userInfo(){
     // const user =  (JSON.parse(localStorage.getItem('user')!));    
     // return  this.afs.collection('users').doc(user.uid!).get().toPromise(); 
   }
-async getSchedule(){
-  const user = JSON.parse(localStorage.getItem('user')!);
-  const id = user.uid;
+async getSchedule(id:any){
   return await this.afs.collection('users').doc(id).collection('schedule').doc(id).get().toPromise();
 }
 

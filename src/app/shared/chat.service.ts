@@ -39,7 +39,7 @@ export class ChatService {
     }, {merge: true});
   }
   getAdminUnreadMessages(id:any){
-    this.afs.collection('users').doc(id).collection('messages').doc("admin-timestamp").get().subscribe((r)=>{
+    this.afs.collection('users').doc(id).collection('messages').doc("admin-timestamp").get().subscribe((r)=>{ 
       console.log(r);
     })
   }

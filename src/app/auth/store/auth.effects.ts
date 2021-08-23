@@ -12,7 +12,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable()
 export class AuthEffects {
-
     loadUser$ = createEffect(
         () => this.actions$
         .pipe(
@@ -27,8 +26,6 @@ export class AuthEffects {
             ),
         )
     )
-
-
     constructor(
         private actions$: Actions, 
         private authService: AuthService,

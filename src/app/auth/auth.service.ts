@@ -44,10 +44,20 @@ export class AuthService {
             }else{
               this.router.navigateByUrl('/dashboard');
             }
+        }else{
+          console.log("AUTH SERVICE Has user or logged out");
+          
         }
       })
     }
-
+    reloadSub(){
+      if(this.authSub){
+        this.authSub.unsubscribe();
+      }
+      this.authSub = this.afAuth.authState.subscribe((user:any) => {
+          this.store.dispatch(new LoadUserAction(user.uid));
+      })
+    }
     SetUserData(user: any) {
       const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
       const userD: User = {
@@ -111,18 +121,13 @@ export class AuthService {
     } 
 
     async logout() {
-      this.router.navigate(['']);
-
-      this.loggedOut = true;
       console.log("logout begin...");
-      
-      if(this.authSub){
-        console.log('logout authSub unsubscribe');
-        this.authSub.unsubscribe();
-      }
-      console.log("logout empty store");
-      this.store.dispatch(new LogoutAction());
       this.afAuth.signOut().then(() => {
+      this.store.dispatch(new LogoutAction());
+        if(this.authSub){
+          console.log('logout authSub unsubscribe');
+          this.authSub.unsubscribe();
+        }
         this.router.navigate(['']);
         console.log( this.isAdmin());
       }).catch(err=>console.log(err));

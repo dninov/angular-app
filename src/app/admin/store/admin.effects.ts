@@ -34,7 +34,7 @@ export class AdminEffects {
                 (data:any) => this.chatService.getMessages(data.payload)
                 .pipe(
                     map(data => new LoadReadMessagesSuccessAction(data)),
-                    catchError(error => of (new LoadReadMessagesFailureAction(error)))
+                    catchError(error => of (new LoadReadMessagesFailureAction(error))) 
                 ),
             ),
         ),

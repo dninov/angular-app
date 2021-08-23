@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserService } from '../user.service';
 import { animations } from '../../utils/animations';
@@ -15,11 +15,10 @@ import { AuthService } from 'src/app/auth/auth.service';
   animations: [animations]
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  loggedout:boolean = false;
   loading:boolean = false;
   imageSrc:string = '';
   form!: FormGroup;
-  submitted = false;
+  submitted = false; 
   imgPath!: any;
   imgSize: number = 0;
   imgIsValid: boolean = true;
@@ -45,23 +44,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
         imageSrc: [''],
       },
     );
-    if(!this.loggedout){
       this.user$ = this.store.select(store=> store.auth.user);
       this.userSub = this.user$.subscribe((userData:any)=>{
         this.user = userData;
         if(Object.keys(userData).length === 0){
             console.log('Profile no User');
-            this.authService.SetUser("user")
+            this.authService.reloadSub();
         }else{
             this.loading = false;
             console.log('Profile Has user',userData);
             this.fillForm();
-        }
+        } 
         // this.chatService.getAdminUnreadMessages(userData.uid);
         // this.store.dispatch(new LoadReadMessagesAction(userData.uid)); 
       })
-    }
-    
   }
   
   get f(): { [key: string]: AbstractControl } {
@@ -70,8 +66,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   fillForm(){
     console.log("fillForm user image ", this.user.imgUrl);
-    this.defaultImage = false;
     this.imageSrc =  this.user.imgUrl;
+    if(this.imageSrc === '../../../assets/user-icon.jpg'){
+    this.defaultImage = true;
+    }else{
+    this.defaultImage = false;
+    }
     for(const key in this.user){
       if((this.form.get(key)!) !== null){
         console.log(key, "->", this.user[key]);
@@ -81,37 +81,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         });
       }
     }
-    // if( this.user){
-    //   console.log('Profile -> Fill Form -> ', this.user);
-        
-    //     if(!this.user.photoURL){
-    //       this.user.photoURL = '../../../assets/user-icon.jpg';
-    //     }
-    //     if( this.user.photoURL !== '../../../assets/user-icon.jpg'){
-    //       this.imageSrc =  this.user.photoURL;
-    //       this.defaultImage = false;
-    //       this.form.patchValue({
-    //         img: this.imageSrc
-    //       });
-    //     }
-    //     if( this.user.displayName !== undefined){
-    //       this.form.patchValue({
-    //         fullName:  this.user.displayName
-    //       });
-    //     }
-    //   } 
-      // this.userService.userInfo().then(result => {
-      //   const data:any = result.data();
-      //   this.user = data;
-      //   for(const key in data){
-      //     if((this.form.get(key)!) !== null){
-      //       this.form.patchValue({
-      //         [key] : data[key]
-      //       });
-      //     }
-      //   }
-      // }).catch(err=>console.log(err));
-    }
+  }
   
   chooseFileEvt(e: any) {
     if (e.target.files && e.target.files[0]) {
@@ -145,7 +115,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     const data = this.form.value;   
     if(this.imgPath === undefined || this.defaultImage){
       this.loading = true;
-      await this.userService.UpdateProfile(this.user.uid, '', data).then(()=>{
+      await this.userService.UpdateProfile(this.user.uid, "../../../assets/user-icon.jpg", data).then(()=>{
       this.loading = false;
       }).catch(err=>console.log(err));
     }else{
@@ -163,7 +133,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.defaultImage = true;
   }
   ngOnDestroy(){
-    this.loggedout = true;
+    // this.loggedout = true;
     this.userSub.unsubscribe();
   }
 }

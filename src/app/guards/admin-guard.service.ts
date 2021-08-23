@@ -16,6 +16,8 @@ export class AdminGuardService {
                     this.router.navigate(['']);
                      obs.next(false) 
                 }else if(!t?.claims.admin){
+                    console.log('ADMIN GUARD IS NOT ADMIN CLAIM');
+                    
                     this.router.navigate(['/dashboard']);
                     obs.next(false) 
                 }else{

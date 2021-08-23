@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { AdminService } from '../admin.service';
 import { animations } from '../../utils/animations';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/app.reducer';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -14,19 +16,28 @@ export class ChatComponent implements OnInit,  AfterViewInit{
   id:any;
   loading:boolean = true; 
   userData:any;
+
   constructor(
     private readonly route: ActivatedRoute,
     private adminService: AdminService,
     private router: Router,
+    private store: Store<State>
   ) { }
 
   ngOnInit(): void {
+    this.loading = true;
     this.scrollToBottom();
     this.id = this.route.snapshot.paramMap.get("uid");
-    this.adminService.getUser(this.id).then(result=>{
+    // this.adminService.getUser(this.id).then(result=>{
+    //   this.loading = false;
+    //   this.userData = result.data();
+    // }).catch(error=> console.log(error));
+    let allUsers = this.store.select(store=> store.admin.list);
+    allUsers.subscribe((users:any)=>{
+      this.userData = users.filter((user:any) => user.uid == this.id);
       this.loading = false;
-      this.userData = result.data();
-    }).catch(error=> console.log(error));
+      console.log(this.userData);
+    });
   }
   ngAfterViewInit(){
     this.scrollToBottom();

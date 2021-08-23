@@ -33,18 +33,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ngAfterViewInit(){
 
-   // this.user.subscribe((userData:any)=>{
-      //this.chatService.getAdminUnreadMessages(userData.uid);
-      
-    //})
-    // this.readMsg = this.chatService.getReadMsg(this.id).subscribe((result:any)=>{
-    //   let allReadMsg:any = [];
-    //   result.map((m:any)=>{
-    //    allReadMsg.push(m.payload.doc.id);
-    //   });
-    //   this.checkForUnreadMsg(allReadMsg);
-    // })
-   
   }
   checkForUnreadMsg(allReadMsg:any){
     this.adminMsg = this.chatService.getUserNewMessages(this.id ).subscribe((result)=>{

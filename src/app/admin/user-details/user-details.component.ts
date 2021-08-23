@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './user-details.component.html',

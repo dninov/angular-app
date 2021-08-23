@@ -7,10 +7,10 @@
             <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
         <div class="img-holder">
-            <img *ngIf = "this.userData?.imgUrl !== undefined" class="user-image" src={{this.userData?.imgUrl}} alt="User image">
+            <img class="user-image" src={{this.userData[0]?.imgUrl}} alt="User image">
          </div>
          <div>
-            <h1>{{this.userData?.fullName}}</h1>
+            <h1>{{this.userData[0]?.fullName}}</h1>
          </div>
     </div>
     <div>

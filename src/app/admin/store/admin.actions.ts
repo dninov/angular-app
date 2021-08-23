@@ -24,7 +24,7 @@ export class LoadUsersFailureAction implements Action {
     constructor(public payload: Error){}
 }
 export class LoadReadMessagesAction implements Action {
-    readonly type = AdminActionTypes.LOAD_READ_MESSAGES;
+    readonly type = AdminActionTypes.LOAD_READ_MESSAGES; 
     constructor(public payload: any){}
 }
 export class LoadReadMessagesSuccessAction implements Action {
