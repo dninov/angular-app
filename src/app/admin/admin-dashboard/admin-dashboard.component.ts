@@ -20,6 +20,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   openSidenav = false;
   unreadMsg:number = 0;
   msgUsers: any[] = [];
+  userSub!: Subscription;
   readMsgSubscription!: Subscription;
   newMsgSubscription!: Subscription;
   user:any;
@@ -35,8 +36,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(new LoadUsersAction());
     this.user = this.store.select(store=> store.auth.user);
-    this.user.subscribe((userData:any)=>{
-    //  this.chatService.getAdminUnreadMessages(userData.uid);
+    this.userSub = this.user.subscribe((userData:any)=>{
+    this.chatService.getAdminUnreadMessages().subscribe((result:any)=>{
+      console.log(result);
+    })
     //  this.store.dispatch(new LoadReadMessagesAction(userData.uid)); 
    })
    
@@ -95,6 +98,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(newLocation).catch(err=>console.log(err));
   }
   ngOnDestroy(){
+    this.userSub.unsubscribe();
     //let user = JSON.parse(localStorage.getItem('user')!);
     //this.afs.collection('users').doc(user.uid).set({lastOnline:Date.now()});
     // this.readMsgSubscription.unsubscribe();

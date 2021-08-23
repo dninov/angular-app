@@ -5,8 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
-import { LoadUserAction } from 'src/app/auth/store/auth.actions';
-
+import { ChatMessage } from '../chat.message.model';
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -15,7 +14,7 @@ import { LoadUserAction } from 'src/app/auth/store/auth.actions';
 export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
 
   chatId:any;
-  msgArray!:any;
+  msgArray!:Observable<any>;
   messages!: Subscription;
   user$!: Observable<any>;
   userSub!: Subscription;
@@ -35,7 +34,7 @@ export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
           console.log('Chat no User');
           this.authService.reloadSub();
       }else{
-          console.log('Chat Has user',userData);
+          console.log('Chat Has user =>',userData);
           if(this.route.snapshot.paramMap.get("uid") === null){
             this.chatId = this.user.uid;
             this.chat.setTimestampUser(this.chatId);
@@ -43,20 +42,11 @@ export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
             this.chatId = this.route.snapshot.paramMap.get("uid");
             this.chat.setTimestampAdmin(this.chatId);
           }
+          this.msgArray = this.chat.getMessages(this.chatId);
         }
     });
   }
-    // this.msgArray = this.chat.getMessages(this.chatId); 
-    // this.messages = this.msgArray.subscribe((result:any)=>{
-    //   console.log("messages");
-      
-      // let notOwnMsg = result.filter((m:any)=>{
-      //  return m.id !== this.user.uid;
-      // })
-      // notOwnMsg.forEach((m:any) => {
-      //   this.chat.updateReadMsg(this.user.uid, m.docId);
-      //  });
-    // });
+    
   ngOnChanges(){
     console.log("change ");
     if(this.route.snapshot.paramMap.get("uid") === null){
@@ -65,13 +55,12 @@ export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
     }else{
       this.chatId = this.route.snapshot.paramMap.get("uid");
       console.log("change ", this.chatId);
-      
       this.chat.setTimestampAdmin(this.chatId);
     }
-    this.msgArray = this.chat.getMessages(this.chatId);
   }
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
+    //this.messageSub.unsubscribe();
   }
 
 }

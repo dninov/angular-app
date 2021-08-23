@@ -1,18 +1,34 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ChatMessage } from '../chat.message.model';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/app.reducer';
+import { Observable, Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/auth/user.model';
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.css']
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, OnDestroy {
   @Input() chatMessage!: any;
   id:any;
-  constructor() { }
+  user$!: Observable<User>;
+  userSub!: Subscription;
+  user!: any;
+  constructor(
+    private authService: AuthService,
+    private store: Store<State>
+  ) { }
 
   ngOnInit(): void {
-    // const user = JSON.parse(localStorage.getItem('user')!); 
-    // this.id = user.uid;
+    this.user$ = this.store.select(store=> store.auth.user);
+    this.userSub = this.user$.subscribe((userData:any)=>{
+    this.user = userData;
+    this.id = this.user.uid;
+    })
   }
+  ngOnDestroy(){
 
+  }
 }

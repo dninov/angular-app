@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChatService } from '../chat.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
   @Component({
   selector: 'app-chat-form',
   templateUrl: './chat-form.component.html',
   styleUrls: ['./chat-form.component.css']
 })
-export class ChatFormComponent implements OnInit {
+export class ChatFormComponent implements OnInit, OnDestroy {
   chatId:any;
   userId:any
   message!:string;
   email!: string;
   user!:Observable<any>;
+  userSub!: Subscription;
   constructor(
     private chat:ChatService,
     private authService: AuthService,
@@ -25,7 +26,7 @@ export class ChatFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.store.select(store=> store.auth.user);
-    this.user.subscribe((userData:any)=>{
+    this.userSub = this.user.subscribe((userData:any)=>{
         this.userId = userData.uid;
         this.email = userData.email;
         if(userData.role === "user"){
@@ -47,5 +48,7 @@ export class ChatFormComponent implements OnInit {
       this.send();
     }
   }
-
+  ngOnDestroy(){
+    this.userSub.unsubscribe();
+  }
 }

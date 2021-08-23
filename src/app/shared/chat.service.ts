@@ -1,21 +1,28 @@
 import { Injectable, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
-import { Observable } from 'rxjs';
 import { ChatMessage } from './chat.message.model';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { DatePipe } from '@angular/common';
+import { forkJoin, Observable, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/app.reducer';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
+  userArr:any;
+  storeUserArr!:Observable<Array<any>>;
   user: any;
   date!: Date;
   constructor(
     private db: AngularFireDatabase,
     private afs: AngularFirestore,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private store: Store<State>
+
   ) { }
 
   sendMessage(msg:string, id:string, email:string, userId:string){
@@ -38,15 +45,27 @@ export class ChatService {
       docId: newDoc.ref.id
     }, {merge: true});
   }
-  getAdminUnreadMessages(id:any){
-    this.afs.collection('users').doc(id).collection('messages').doc("admin-timestamp").get().subscribe((r)=>{ 
-      console.log(r);
+   getAdminUnreadMessages(): Observable<any>{
+    console.log('getAdminUnreadMessages');
+    let newMsg:any = [];
+    this.store.select(store=> store.admin.list).subscribe((users)=>{
+      users.forEach(async user => {
+        let timestamp:any  = await this.afs.collection('users').doc(user.uid).collection('messages-timestamps').doc('admin-timestamp').get().toPromise();
+        let lastSeen = timestamp.data();
+        let lastMsg:any = await this.afs.collection('users').doc(user.uid).collection('messages', (ref:any) => ref.where('timeSent', '>', lastSeen.lastSeen)).valueChanges();
+        console.log(lastMsg);
+        newMsg.push(lastMsg);
+        // for(const doc of lastMsg.docs){
+        //   console.log(doc.data());
+        // }
+      });
     })
+      return forkJoin(newMsg);
   }
   getMessages(id:any):Observable<object>{ 
     return this.afs.collection('users').doc(id).collection('messages').valueChanges();
   }
-  getNewMessages(id:any):any{
+  getNewMessages(id:any):any{ 
     return this.afs.collectionGroup('messages', (ref:any) => ref.where("id", '!=', id)).snapshotChanges();
   }
   getUserNewMessages(id:any){
