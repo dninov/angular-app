@@ -5,7 +5,8 @@
             {{chatMessage.email}}
         </span>
         <span class="timestamp">
-            {{chatMessage.timeSent | date: 'medium' }}
+            <!-- {{chatMessage.timeSent | date: 'medium' }} -->
+            {{chatMessage.timeSent }}
         </span>
     </div>
     <div  [ngClass]=" chatMessage.id === id ? 'own-message': 'not-own-message'">

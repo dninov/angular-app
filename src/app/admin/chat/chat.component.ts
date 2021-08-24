@@ -1,25 +1,24 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { AdminService } from '../admin.service';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { animations } from '../../utils/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
   animations: [animations]
 })
-export class ChatComponent implements OnInit,  AfterViewInit{
+export class ChatComponent implements OnInit,  AfterViewInit, OnDestroy{
   @ViewChild('chat') private feedContainer!: ElementRef;
 
   id:any;
   loading:boolean = true; 
   userData:any;
-
+  userSub!: Subscription;
   constructor(
     private readonly route: ActivatedRoute,
-    private adminService: AdminService,
     private router: Router,
     private store: Store<State>
   ) { }
@@ -28,15 +27,10 @@ export class ChatComponent implements OnInit,  AfterViewInit{
     this.loading = true;
     this.scrollToBottom();
     this.id = this.route.snapshot.paramMap.get("uid");
-    // this.adminService.getUser(this.id).then(result=>{
-    //   this.loading = false;
-    //   this.userData = result.data();
-    // }).catch(error=> console.log(error));
     let allUsers = this.store.select(store=> store.admin.list);
-    allUsers.subscribe((users:any)=>{
+    this.userSub = allUsers.subscribe((users:any)=>{
       this.userData = users.filter((user:any) => user.uid == this.id);
       this.loading = false;
-      console.log(this.userData);
     });
   }
   ngAfterViewInit(){
@@ -48,7 +42,10 @@ export class ChatComponent implements OnInit,  AfterViewInit{
   scrollToBottom(): void{
     try {
       this.feedContainer.nativeElement.scrollTop = this.feedContainer.nativeElement.scrollHeight;
-  } catch(err) { }    
+    } catch(err) { }    
+  }
+  ngOnDestroy():void{
+    this.userSub.unsubscribe();
   }
 }
  

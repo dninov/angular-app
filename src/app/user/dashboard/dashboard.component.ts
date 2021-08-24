@@ -6,6 +6,7 @@ import { AuthService } from '../../auth/auth.service';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
 import { LoadUserAction } from 'src/app/auth/store/auth.actions';
+import { takeWhile } from 'rxjs/operators';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -19,7 +20,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   id:any;
   user$!: Observable<any>;
   userSub!: Subscription;
-  user!: object;
+  newMsgSub!: Subscription;
+  user!: any;
+  loggedIn: boolean = true;
+
   constructor(
     private router: Router, 
     private authService: AuthService,
@@ -29,27 +33,41 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   ) { }
 
   async ngOnInit(){
-  
-  }
-  ngAfterViewInit(){
-
-  }
-  checkForUnreadMsg(allReadMsg:any){
-    this.adminMsg = this.chatService.getUserNewMessages(this.id ).subscribe((result)=>{
-      let newMsg:any = [];
-      result.map((m:any)=>{
-        let data:any = m.payload.doc.data();
-        newMsg.push(data)
-      })
-      newMsg = newMsg.filter((val:any) => !allReadMsg.includes(val.docId));
-      if(newMsg.length>0){
-        this.unreadMsg = 1;
+    this.user$ = this.store.select(store=> store.auth.user);
+    this.userSub = this.user$.subscribe(async (userData:any)=>{
+      this.user = userData;
+      if(Object.keys(userData).length === 0){
+          console.log('Profile no User');
+          this.authService.reloadSub();
       }else{
-        this.unreadMsg = 0;
-      }
+          console.log('Profile Has user',userData);
+          this.newMsgSub = (await this.chatService.getUserUnreadMessages(this.user.uid)).pipe(takeWhile(val => this.loggedIn)).subscribe((result:any)=>{
+            console.log(result);
+          })
+         
+      } 
+      // this.store.dispatch(new LoadReadMessagesAction(userData.uid)); 
     })
   }
+  ngAfterViewInit(){
+  }
+  // checkForUnreadMsg(allReadMsg:any){
+  //   this.adminMsg = this.chatService.getUserNewMessages(this.id ).subscribe((result)=>{
+  //     let newMsg:any = [];
+  //     result.map((m:any)=>{
+  //       let data:any = m.payload.doc.data();
+  //       newMsg.push(data)
+  //     })
+  //     newMsg = newMsg.filter((val:any) => !allReadMsg.includes(val.docId));
+  //     if(newMsg.length>0){
+  //       this.unreadMsg = 1;
+  //     }else{
+  //       this.unreadMsg = 0;
+  //     }
+  //   })
+  // }
   logout(){    
+    this.loggedIn = false;
     this.authService.logout();
   }
   showProfile(){
@@ -62,8 +80,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.navigate(['dashboard/chat']);
   }
   ngOnDestroy(): void {
-    //console.log('DASHBOARD userSub unsubscribe');
-    //this.userSub.unsubscribe();
+    this.loggedIn = false;
+    this.userSub.unsubscribe();
+    this.newMsgSub.unsubscribe();
     // this.adminMsg.unsubscribe();
     // this.readMsg.unsubscribe();
   }

@@ -25,76 +25,52 @@ export class ChatService {
 
   ) { }
 
-  sendMessage(msg:string, id:string, email:string, userId:string){
+  sendMessage(msg:string, id:string, email:string, userId:string, role:string){
     this.date = new Date();
-
-    let mediumDate = this.datePipe.transform(this.date, 'medium');
+    //let mediumDate = this.datePipe.transform(this.date, 'medium');
     const data = {
       message: msg,
-      timeSent: mediumDate,
+      timeSent: this.date,
       email: email,
       id: userId,
       read: false
     }
-    const newDoc:any = this.afs.collection('users').doc(id).collection('messages').doc();
-    newDoc.set({
-      message: msg,
-      timeSent: mediumDate,
-      email: email,
-      id: userId,
-      docId: newDoc.ref.id
-    }, {merge: true});
+   this.afs.collection('users').doc(id).collection('messages').doc().set(data, {merge: true});
+    if(role === 'user'){
+      setTimeout(() => { this.setTimestampUser(id); }, 5000);
+    }else{
+      setTimeout(() => { this.setTimestampAdmin(id); }, 5000);
+    }
   }
-   getAdminUnreadMessages(): Observable<any>{
-    console.log('getAdminUnreadMessages');
-    let newMsg:any = [];
-    this.store.select(store=> store.admin.list).subscribe((users)=>{
-      users.forEach(async user => {
-        let timestamp:any  = await this.afs.collection('users').doc(user.uid).collection('messages-timestamps').doc('admin-timestamp').get().toPromise();
-        let lastSeen = timestamp.data();
-        let lastMsg:any = await this.afs.collection('users').doc(user.uid).collection('messages', (ref:any) => ref.where('timeSent', '>', lastSeen.lastSeen)).valueChanges();
-        console.log(lastMsg);
-        newMsg.push(lastMsg);
-        // for(const doc of lastMsg.docs){
-        //   console.log(doc.data());
-        // }
-      });
-    })
-      return forkJoin(newMsg);
+  async getAdminUnreadMessages(id:any): Promise<Observable<any>>{ 
+    let timestamp:any  = await this.afs.collection('users').doc(id).collection('messages-timestamps').doc('admin-timestamp').get().toPromise();
+    let lastSeen = timestamp.data();
+    if(lastSeen === undefined){
+      return this.afs.collection('users').doc(id).collection('messages').valueChanges();
+    }else{
+      return this.afs.collection('users').doc(id).collection('messages', (ref:any) => ref.where('timeSent', '>', lastSeen.lastSeen)).valueChanges();
+    }
+  }
+  async getUserUnreadMessages(id:any): Promise<Observable<any>>{ 
+    let timestamp:any  = await this.afs.collection('users').doc(id).collection('messages-timestamps').doc('user-timestamp').get().toPromise();
+    let lastSeen = timestamp.data();
+    if(lastSeen === undefined){
+      return this.afs.collection('users').doc(id).collection('messages', (ref:any) => ref.where('id', '!=', id)).valueChanges();
+    }else{
+      return this.afs.collection('users').doc(id).collection('messages', (ref:any) => ref.where('timeSent', '>', lastSeen.lastSeen)).valueChanges();
+    }
   }
   getMessages(id:any):Observable<object>{ 
     return this.afs.collection('users').doc(id).collection('messages').valueChanges();
   }
-  getNewMessages(id:any):any{ 
-    return this.afs.collectionGroup('messages', (ref:any) => ref.where("id", '!=', id)).snapshotChanges();
-  }
-  getUserNewMessages(id:any){
-    return this.afs.collection('users').doc(id).collection('messages', (ref:any) => ref.where("id", '!=', id)).snapshotChanges();
-  }
   setTimestampUser(id:any){
     this.date = new Date();
-    let mediumDate = this.datePipe.transform(this.date, 'medium');
-    this.afs.collection('users').doc(id).collection('messages-timestamps').doc("user-timestamp").set({lastSeen:mediumDate});
+    //let mediumDate = this.datePipe.transform(this.date, 'medium');
+    this.afs.collection('users').doc(id).collection('messages-timestamps').doc("user-timestamp").set({lastSeen:this.date});
   }
   setTimestampAdmin(id:any){
     this.date = new Date();
-    let mediumDate = this.datePipe.transform(this.date, 'medium');
-    this.afs.collection('users').doc(id).collection('messages-timestamps').doc("admin-timestamp").set({lastSeen:mediumDate});
+    //let mediumDate = this.datePipe.transform(this.date, 'medium');
+    this.afs.collection('users').doc(id).collection('messages-timestamps').doc("admin-timestamp").set({lastSeen:this.date});
   }
-//   async updateReadMsg(userId:string, msgId:any){
-//     this.afs.collection('users').doc(userId).collection('readMsg', ref => ref.where('id', "==", msgId)).snapshotChanges().subscribe(res => {
-//       if (res.length > 0)
-//       {
-//         return
-//       }
-//       else
-//       {
-//         console.log('update');
-//         this.afs.collection('users').doc(userId).collection('readMsg').doc(msgId).set({id:msgId}, {merge: true});
-//       }
-//   });
-// }
-//   getReadMsg(userId:string){
-//     return this.afs.collection('users').doc(userId).collection('readMsg').valueChanges();
-//   }
 }

@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { animations } from 'src/app/utils/animations';
 import { ChatService } from 'src/app/shared/chat.service';
 import { AdminService } from '../admin.service';
-import { Observable, Subscription } from 'rxjs';
+import { merge, Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
-import { LoadUsersAction, LoadReadMessagesAction } from '../store/admin.actions';
-import { HostListener } from '@angular/core';
+import { LoadUsersAction } from '../store/admin.actions';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { takeWhile } from 'rxjs/internal/operators';
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -17,73 +17,87 @@ import { AngularFirestore } from '@angular/fire/firestore';
   animations: [animations]
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
-  openSidenav = false;
   unreadMsg:number = 0;
   msgUsers: any[] = [];
-  userSub!: Subscription;
-  readMsgSubscription!: Subscription;
+  usersSub!: Subscription;
   newMsgSubscription!: Subscription;
-  user:any;
+  allMsgs:any = [];
+  loggedIn: boolean = true;
+  allUsers:any;
+  msgIDs: any[] = [];
+  user$!: Observable<any>;
+  userSub!: Subscription;
+  newMsgSub!: Subscription;
+  user!: any;
+
   constructor(
     private afs: AngularFirestore,
     private router: Router,
     private authService: AuthService,
     private chatService: ChatService,
     private adminService: AdminService, 
-    private store: Store<State>
-  ) { }
+    private store: Store<State>,
+    private readonly route: ActivatedRoute, 
+  ) { } 
 
   ngOnInit(): void {
+    this.user$ = this.store.select(store=> store.auth.user);
+    this.userSub = this.user$.subscribe(async (userData:any)=>{
+      if(Object.keys(userData).length === 0){
+        console.log('Profile no User');
+        this.authService.reloadSub();
+    }else{
+      this.user = userData;
+      }
+  })
+    
     this.store.dispatch(new LoadUsersAction());
-    this.user = this.store.select(store=> store.auth.user);
-    this.userSub = this.user.subscribe((userData:any)=>{
-    this.chatService.getAdminUnreadMessages().subscribe((result:any)=>{
-      console.log(result);
+    this.usersSub = this.store.select(store=> store.admin.list).subscribe((users)=>{      
+      this.allUsers = users;
+      let usersPassed = 0;
+      users.forEach(async (user:any) => {
+        usersPassed ++;
+        let newMsgs = await this.chatService.getAdminUnreadMessages(user.uid);
+        this.allMsgs.push(newMsgs);
+        if(usersPassed === users.length){
+          this.combineObservables(this.allMsgs);
+        }
+      });
     })
-    //  this.store.dispatch(new LoadReadMessagesAction(userData.uid)); 
-   })
-   
-    // this.store.dispatch(new LoadReadMessagesAction(this.user.uid)); 
-      // this.readMsgSubscription = this.chatService.getReadMsg(user.uid).subscribe((result:any)=>{
-      //     let allReadMsg:any = []; 
-      //     result.map((m:any)=>{
-      //      allReadMsg.push(m.payload.doc.id); 
-      //     });
-      //     if(allReadMsg.length>0){
-      //       this.newMsgSubscription = this.chatService.getNewMessages(user.uid).subscribe((result:any)=>{
-      //         if(result){
-      //           let newMsg:any = [];
-      //           result.map((m:any)=>{
-      //             let data:any = m.payload.doc.data();
-      //             console.log(data);
-                  
-      //             newMsg.push(data)
-      //           })
-      //           newMsg = newMsg
-      //           .filter((val:any) => !allReadMsg.includes(val.docId))
-      //           .map((item:any) => item.id).filter((value:any, index:any, self:any) => self.indexOf(value) === index);
-      //           console.log(newMsg);
-      //           this.setUnreadMsg(newMsg);    
-      //         }
-      //      })
-      //     }
-      // })
   }
 
-  setUnreadMsg(users:string[]){
-        this.msgUsers = [];
-        this.unreadMsg = users.length;
-        users.forEach(user => {
-          this.adminService.getUser(user).then((user:any)=>{
-            this.msgUsers.push(user.data());
-            this.msgUsers =  [...this.msgUsers]
-            console.log(this.msgUsers);
-            
-          }) 
-        });
+  combineObservables(arr:[Observable<any>]){
+
+    
+    
+      let allMsgObs = merge(...arr);
+      this.newMsgSubscription = allMsgObs.pipe(takeWhile(val => this.loggedIn)).subscribe((result:any)=>{
+      console.log(result[0]);
+      let id = this.router.url.slice( - 28);
+
+      if(result.length>0 ){
+        console.log(id);
+        console.log(result[0].id);
+        console.log(this.user.uid );
+        
+        if(result[0].id !== id && this.user.uid !== result[0].id){
+          if(!this.msgIDs.includes(result[0].id)){
+            this.msgIDs.push(result[0].id);
+          }
+          this.unreadMsg = this.msgIDs.length;
+          this.msgIDs.forEach(id => {
+            let currentUser = this.allUsers.filter((user:any) => user.uid === id)[0];
+            if(!this.msgUsers.includes(currentUser)){
+              this.msgUsers.push(currentUser);
+            }
+          });  
+        }
+      }
+    });
   }
 
   logout(){
+    this.loggedIn = false;
     this.authService.logout();
   }
 
@@ -93,16 +107,18 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   onSelect(user:any){
+    this.msgIDs = this.msgIDs.filter(id=>id !== user.uid);
+    this.msgUsers = this.msgUsers.filter(user=> user.uid !== user.uid);
     let newLocation = `admin-dashboard/chat/${user.uid}`;
     this.router.routeReuseStrategy.shouldReuseRoute = function () {return false;};
     this.router.navigateByUrl(newLocation).catch(err=>console.log(err));
   }
+
   ngOnDestroy(){
+    this.loggedIn = false;
+    this.usersSub.unsubscribe();
+    this.newMsgSubscription.unsubscribe();
     this.userSub.unsubscribe();
-    //let user = JSON.parse(localStorage.getItem('user')!);
-    //this.afs.collection('users').doc(user.uid).set({lastOnline:Date.now()});
-    // this.readMsgSubscription.unsubscribe();
-    // this.newMsgSubscription.unsubscribe();
   }
 }
 

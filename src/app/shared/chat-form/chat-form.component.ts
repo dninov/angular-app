@@ -15,8 +15,9 @@ export class ChatFormComponent implements OnInit, OnDestroy {
   userId:any
   message!:string;
   email!: string;
-  user!:Observable<any>;
+  user$!:Observable<any>;
   userSub!: Subscription;
+  user:any;
   constructor(
     private chat:ChatService,
     private authService: AuthService,
@@ -25,8 +26,9 @@ export class ChatFormComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.user = this.store.select(store=> store.auth.user);
-    this.userSub = this.user.subscribe((userData:any)=>{
+    this.user$ = this.store.select(store=> store.auth.user);
+    this.userSub = this.user$.subscribe((userData:any)=>{
+        this.user = userData;
         this.userId = userData.uid;
         this.email = userData.email;
         if(userData.role === "user"){
@@ -39,7 +41,11 @@ export class ChatFormComponent implements OnInit, OnDestroy {
   }
 
   async send(){
-    this.chat.sendMessage(this.message, this.chatId, this.email, this.userId);
+    if(this.user.role === 'user'){
+      this.chat.sendMessage(this.message, this.chatId, this.email, this.userId, 'user');
+    }else{
+      this.chat.sendMessage(this.message, this.chatId, this.email, this.userId, 'admin');
+    }
     this.message = '';
   }
 
