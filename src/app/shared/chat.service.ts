@@ -43,6 +43,8 @@ export class ChatService {
     }
   }
   async getAdminUnreadMessages(id:any): Promise<Observable<any>>{ 
+    console.log('getAdminUnreadMessages');
+    
     let timestamp:any  = await this.afs.collection('users').doc(id).collection('messages-timestamps').doc('admin-timestamp').get().toPromise();
     let lastSeen = timestamp.data();
     if(lastSeen === undefined){

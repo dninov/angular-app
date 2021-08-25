@@ -43,13 +43,13 @@ export class AdminService {
     await callable({ email: email }).toPromise().then(async ()=>{
       try{
         await this.afs.collection('users').doc(id).collection('schedule').doc(id).delete();
+        await this.afs.collection('users').doc(id).collection('messages').doc(id).delete();
+        await this.afs.collection('users').doc(id).collection('messages-timestamps').doc(id).delete();
         await this.afs.collection('users').doc(id).delete();
       }catch(error){
         console.log(error);
       }
-    }).then(()=>{
-      this.allArr=[];
-    })
+    });
   }
 
 }

@@ -1,10 +1,13 @@
 <mat-toolbar color="primary" class="app-toolbar">
     <div>LOGO</div>
     <div fxFlex fxLayout  fxLayoutAlign="flex-end">
-        <ul fxLayout fxLayoutGap="20px" class="navigation-items">
+        <ul fxLayout fxLayoutGap="20px" class="navigation-items"> 
             <a (click)="showProfile()" color="primary">
-                <span matTooltip="Профил">
+                <span *ngIf="this.user.imgUrl === '../../../assets/user-icon.jpg'" matTooltip="Профил">
                     <mat-icon>person</mat-icon>
+                </span>
+                <span *ngIf="this.user.imgUrl !== '../../../assets/user-icon.jpg'" matTooltip="Профил">
+                     <img [src] = "this.user?.imgUrl" alt="Avatar" class="avatar">
                 </span>
             </a>
 

@@ -7,7 +7,7 @@ import { AdminService } from '../admin.service';
 import { merge, Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
-import { LoadUsersAction } from '../store/admin.actions';
+import { ClearListAction, LoadUsersAction } from '../store/admin.actions';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { takeWhile } from 'rxjs/internal/operators';
 @Component({
@@ -43,16 +43,20 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.store.select(store=> store.auth.user);
     this.userSub = this.user$.subscribe(async (userData:any)=>{
-      if(Object.keys(userData).length === 0){
-        console.log('Profile no User');
-        this.authService.reloadSub();
-    }else{
-      this.user = userData;
+      console.log(userData);
+      if(this.loggedIn){
+        if(Object.keys(userData).length === 0){
+          console.log('Profile no User');
+          this.authService.reloadSub();
+      }else{
+        this.user = userData;
       }
+    }
   })
     
     this.store.dispatch(new LoadUsersAction());
-    this.usersSub = this.store.select(store=> store.admin.list).subscribe((users)=>{      
+    this.usersSub = this.store.select(store=> store.admin.list).pipe(takeWhile(() => this.loggedIn)).subscribe((users)=>{      
+      
       this.allUsers = users;
       let usersPassed = 0;
       users.forEach(async (user:any) => {
@@ -60,6 +64,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         let newMsgs = await this.chatService.getAdminUnreadMessages(user.uid);
         this.allMsgs.push(newMsgs);
         if(usersPassed === users.length){
+          console.log('here');
           this.combineObservables(this.allMsgs);
         }
       });
@@ -67,20 +72,12 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   combineObservables(arr:[Observable<any>]){
-
-    
-    
       let allMsgObs = merge(...arr);
-      this.newMsgSubscription = allMsgObs.pipe(takeWhile(val => this.loggedIn)).subscribe((result:any)=>{
+      this.newMsgSubscription = allMsgObs.pipe(takeWhile(() => this.loggedIn)).subscribe((result:any)=>{
       console.log(result[0]);
       let id = this.router.url.slice( - 28);
-
       if(result.length>0 ){
-        console.log(id);
-        console.log(result[0].id);
-        console.log(this.user.uid );
-        
-        if(result[0].id !== id && this.user.uid !== result[0].id){
+        if(result[0].id !== id && result[0].id !== this.user.uid){
           if(!this.msgIDs.includes(result[0].id)){
             this.msgIDs.push(result[0].id);
           }
@@ -99,6 +96,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   logout(){
     this.loggedIn = false;
     this.authService.logout();
+    this.store.dispatch(new ClearListAction());
+
   }
 
   showSchedule(){
@@ -117,7 +116,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(){
     this.loggedIn = false;
     this.usersSub.unsubscribe();
+    if(this.newMsgSubscription !== undefined){
     this.newMsgSubscription.unsubscribe();
+  }
     this.userSub.unsubscribe();
   }
 }

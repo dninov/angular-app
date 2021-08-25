@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../admin.service';
 import { animations } from '../../utils/animations';
@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -14,12 +15,13 @@ import { State } from 'src/app/app.reducer';
   styleUrls: ['./user-details.component.css'],
   animations: [animations]
 })
-export class UserDetailsComponent implements OnInit {
+export class UserDetailsComponent implements OnInit, OnDestroy {
   id:any;
   loading:boolean = true; 
   form!: FormGroup;
   userData:any;
   casinos:Array<string> = [ 'Casino1', 'Casino2', 'Casino3']; 
+  allUsersSub!: Subscription;
 
   constructor( 
     public dialog: MatDialog,
@@ -43,7 +45,7 @@ export class UserDetailsComponent implements OnInit {
       },
     );
     let allUsers = this.store.select(store=> store.admin.list);
-    allUsers.subscribe((users:any)=>{
+    this.allUsersSub = allUsers.subscribe((users:any)=>{
       this.userData = users.filter((user:any) => user.uid == this.id);
       this.loading = false;
       this.fillForm(this.userData[0]);
@@ -91,7 +93,9 @@ export class UserDetailsComponent implements OnInit {
   }
   deleteClicked(){
     this.loading = true;
-    this.adminService.deleteUser(this.userData.email, this.userData.uid).then(()=>{
+    console.log(this.userData[0].email,' ' ,this.userData[0].uid);
+    
+    this.adminService.deleteUser(this.userData[0].email, this.userData[0].uid).then(()=>{
        this.loading = false;
        this.router.navigateByUrl('/admin-dashboard');
      }).catch(error=> console.log(error));
@@ -107,7 +111,9 @@ export class UserDetailsComponent implements OnInit {
       }
     })
   }
-
+ngOnDestroy():void{
+  this.allUsersSub.unsubscribe();
+}
 
 
 }

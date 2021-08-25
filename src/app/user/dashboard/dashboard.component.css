@@ -26,3 +26,14 @@ a:active {
     top: 0; /* Sets the sticky toolbar to be on top */
     z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
 }
+.avatar {
+    margin-top: 1px;
+    position: relative;
+    overflow: hidden;
+    object-fit: cover;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #eee;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.26), 0 3px 6px rgba(0,0,0,0.23);
+}

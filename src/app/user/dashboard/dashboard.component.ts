@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   newMsgSub!: Subscription;
   user!: any;
   loggedIn: boolean = true;
+  routerSub!: Subscription;
 
   constructor(
     private router: Router, 
@@ -34,6 +35,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async ngOnInit(){
     this.user$ = this.store.select(store=> store.auth.user);
+    this.routerSub = this.router.events.subscribe((val:any)=>{
+      if(val.url === '/dashboard/chat'){
+        this.unreadMsg = 0;
+      }
+    })
     this.userSub = this.user$.subscribe(async (userData:any)=>{
       this.user = userData;
       if(Object.keys(userData).length === 0){
@@ -42,14 +48,17 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }else{
           console.log('Profile Has user',userData);
           this.newMsgSub = (await this.chatService.getUserUnreadMessages(this.user.uid)).pipe(takeWhile(val => this.loggedIn)).subscribe((result:any)=>{
-            console.log(result);
+            if(result.length>0 && this.router.url !== '/dashboard/chat'){
+              this.unreadMsg = 1;
+            }else{
+              this.unreadMsg = 0;
+            }
           })
-         
       } 
-      // this.store.dispatch(new LoadReadMessagesAction(userData.uid)); 
     })
   }
   ngAfterViewInit(){
+
   }
   // checkForUnreadMsg(allReadMsg:any){
   //   this.adminMsg = this.chatService.getUserNewMessages(this.id ).subscribe((result)=>{
@@ -83,7 +92,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loggedIn = false;
     this.userSub.unsubscribe();
     this.newMsgSub.unsubscribe();
-    // this.adminMsg.unsubscribe();
-    // this.readMsg.unsubscribe();
+    this.routerSub.unsubscribe();
   }
 }

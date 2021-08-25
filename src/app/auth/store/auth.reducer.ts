@@ -27,7 +27,10 @@ export function AuthReducer(
             return {...state, error:action.payload, loading:false};
         case AuthActionTypes.LOGOUT:
             console.log("AUTH REDUCER : LOGOUT");
-            return initialState;
+            return state = {} as AuthState;
+        case AuthActionTypes.LOGIN:
+            console.log("AUTH REDUCER : LOGIN");
+            return {...state};
         default:
             console.log("AUTH REDUCER : DEFAULT");
             return state;
@@ -39,3 +42,4 @@ export const loadUser = createSelector(getAuthState, (state: AuthState) => state
 export const loadUserSuccess = createSelector(getAuthState, (state: AuthState) => state.user);
 export const loadUserFailure = createSelector(getAuthState, (state: AuthState) => state.error);
 export const logout = createSelector(getAuthState, (state: AuthState) => initialState);
+export const login = createSelector(getAuthState, (state: AuthState)=> state);

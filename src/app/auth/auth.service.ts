@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/app.reducer';
-import { LoadUserAction, LogoutAction } from './store/auth.actions';
+import { LoadUserAction, LoginAction, LogoutAction } from './store/auth.actions';
 import { ThrowStmt } from '@angular/compiler';
 
 @Injectable()
@@ -91,7 +91,7 @@ export class AuthService {
 
     async login(email: string, password: string) {
       console.log('login');
-      
+      this.store.dispatch(new LoginAction());
       try{
         const result = await this.afAuth.signInWithEmailAndPassword(email, password);
         const token = await result.user?.getIdTokenResult();
@@ -103,7 +103,7 @@ export class AuthService {
           this.SetUser("user");
         }
       }catch(error){
-        if(error.code === 'auth/user-not-found'){
+        if(error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password'){
           this.validLogin = false;
         }else{
           console.log(error.code);

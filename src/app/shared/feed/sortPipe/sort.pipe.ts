@@ -10,8 +10,8 @@ export class SortPipe implements PipeTransform {
   transform(value: any): any{
     if(value!==null){
      return value.sort((a:any,b:any) => {
-        let date1 = new Date(a.timeSent);
-        let date2 = new Date(b.timeSent);
+        let date1 = (a.timeSent).toDate();
+        let date2 = (b.timeSent).toDate();
         return this.getTime(date1) - this.getTime(date2);
       });
     }

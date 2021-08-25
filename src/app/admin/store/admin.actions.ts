@@ -7,9 +7,10 @@ export enum AdminActionTypes{
     LOAD_READ_MESSAGES         = '[ADMIN] Load Read Messages',
     LOAD_READ_MESSAGES_SUCCESS = '[ADMIN] Load Read Messages Success',
     LOAD_READ_MESSAGES_FAILURE = '[ADMIN] Load Read Messages Failure',
-    LOAD_NEW_MESSAGES         = '[ADMIN] Load New Messages',
-    LOAD_NEW_MESSAGES_SUCCESS = '[ADMIN] Load New Messages Success',
-    LOAD_NEW_MESSAGES_FAILURE = '[ADMIN] Load New Messages Failure',
+    LOAD_NEW_MESSAGES          = '[ADMIN] Load New Messages',
+    LOAD_NEW_MESSAGES_SUCCESS  = '[ADMIN] Load New Messages Success',
+    LOAD_NEW_MESSAGES_FAILURE  = '[ADMIN] Load New Messages Failure',
+    CLEAR_LIST                 = '[ADMIN] Clear User List',
 }
 
 export class LoadUsersAction implements Action {
@@ -35,17 +36,10 @@ export class LoadReadMessagesFailureAction implements Action {
     readonly type = AdminActionTypes.LOAD_READ_MESSAGES_FAILURE;
     constructor(public payload: Error){}
 }
-export class LoadNewMessagesAction implements Action {
-    readonly type = AdminActionTypes.LOAD_NEW_MESSAGES;
+export class ClearListAction implements Action {
+    readonly type = AdminActionTypes.CLEAR_LIST;
 }
-export class LoadNewMessagesSuccessAction implements Action {
-    readonly type = AdminActionTypes.LOAD_NEW_MESSAGES_SUCCESS;
-    constructor(public payload: any){}
-}
-export class LoadNewMessagesFailureAction implements Action {
-    readonly type = AdminActionTypes.LOAD_NEW_MESSAGES_FAILURE;
-    constructor(public payload: Error){}
-}
+
 
 export type AdminAction = 
 LoadUsersAction | 
@@ -54,6 +48,4 @@ LoadUsersSuccessAction |
 LoadReadMessagesAction |
 LoadReadMessagesSuccessAction |
 LoadReadMessagesFailureAction |
-LoadNewMessagesAction |
-LoadNewMessagesSuccessAction |
-LoadNewMessagesFailureAction;
+ClearListAction
