@@ -28,6 +28,7 @@ export class ChatFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.store.select(store=> store.auth.user);
     this.userSub = this.user$.subscribe((userData:any)=>{
+      if(userData !== undefined){
         this.user = userData;
         this.userId = userData.uid;
         this.email = userData.email;
@@ -36,8 +37,8 @@ export class ChatFormComponent implements OnInit, OnDestroy {
         }else{
           this.chatId = this.route.snapshot.paramMap.get("uid");
         }
-    })
-
+      }
+    });
   }
 
   async send(){

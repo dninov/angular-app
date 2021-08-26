@@ -36,25 +36,27 @@ export class ScheduleComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.store.select(store=> store.auth.user);
     this.userSub = this.user$.subscribe((userData:any)=>{
-      this.user = userData;
-      if(Object.keys(userData).length === 0){
-          console.log('Profile no User');
-          this.authService.reloadSub();
-      }else{
-          this.loading = false;
-          this.userService.getSchedule(this.user.uid).then((result:any)=>{
-            if(result.data()){
-                let resultObj = result.data();
-                this.eventsArr = resultObj.schedule;
-                let calendarApi = this.calendarComponent.getApi();
-                this.eventsArr.forEach(event => {
-                  calendarApi.addEvent(event);
-                });
-              }else{
-                return
-              }
-            }).catch(error=>console.log(error))
-          setTimeout(()=>this.renderCalendar(), 100);
+      if(userData !== undefined){
+        this.user = userData;
+        if(Object.keys(userData).length === 0){
+            console.log('Profile no User');
+            this.authService.reloadSub();
+        }else{
+            this.loading = false;
+            this.userService.getSchedule(this.user.uid).then((result:any)=>{
+              if(result.data()){
+                  let resultObj = result.data();
+                  this.eventsArr = resultObj.schedule;
+                  let calendarApi = this.calendarComponent.getApi();
+                  this.eventsArr.forEach(event => {
+                    calendarApi.addEvent(event);
+                  });
+                }else{
+                  return
+                }
+              }).catch(error=>console.log(error))
+            setTimeout(()=>this.renderCalendar(), 100);
+        }
       }
     })
   }

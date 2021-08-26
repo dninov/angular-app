@@ -29,8 +29,10 @@ export class ChatComponent implements OnInit,  AfterViewInit, OnDestroy{
     this.id = this.route.snapshot.paramMap.get("uid");
     let allUsers = this.store.select(store=> store.admin.list);
     this.userSub = allUsers.subscribe((users:any)=>{
-      this.userData = users.filter((user:any) => user.uid == this.id);
-      this.loading = false;
+      if(users !== undefined && users !== null){
+        this.userData = users.filter((user:any) => user.uid == this.id);
+        this.loading = false;
+      }
     });
   }
   ngAfterViewInit(){

@@ -34,19 +34,21 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   ) { }
 
   async ngOnInit(){
-    this.user$ = this.store.select(store=> store.auth.user);
     this.routerSub = this.router.events.subscribe((val:any)=>{
       if(val.url === '/dashboard/chat'){
         this.unreadMsg = 0;
       }
     })
+    this.user$ = this.store.select(store=> store.auth.user);
     this.userSub = this.user$.subscribe(async (userData:any)=>{
-      this.user = userData;
-      if(Object.keys(userData).length === 0){
+    if(this.loggedIn){
+      if(userData !== undefined){
+        if(Object.keys(userData).length === 0){
           console.log('Profile no User');
           this.authService.reloadSub();
-      }else{
+        }else{
           console.log('Profile Has user',userData);
+          this.user = userData;
           this.newMsgSub = (await this.chatService.getUserUnreadMessages(this.user.uid)).pipe(takeWhile(val => this.loggedIn)).subscribe((result:any)=>{
             if(result.length>0 && this.router.url !== '/dashboard/chat'){
               this.unreadMsg = 1;
@@ -54,27 +56,15 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
               this.unreadMsg = 0;
             }
           })
-      } 
+        }
+      }
+    }
     })
   }
   ngAfterViewInit(){
 
   }
-  // checkForUnreadMsg(allReadMsg:any){
-  //   this.adminMsg = this.chatService.getUserNewMessages(this.id ).subscribe((result)=>{
-  //     let newMsg:any = [];
-  //     result.map((m:any)=>{
-  //       let data:any = m.payload.doc.data();
-  //       newMsg.push(data)
-  //     })
-  //     newMsg = newMsg.filter((val:any) => !allReadMsg.includes(val.docId));
-  //     if(newMsg.length>0){
-  //       this.unreadMsg = 1;
-  //     }else{
-  //       this.unreadMsg = 0;
-  //     }
-  //   })
-  // }
+
   logout(){    
     this.loggedIn = false;
     this.authService.logout();

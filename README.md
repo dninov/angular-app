@@ -24,6 +24,38 @@ A role based admin/user application with schedule builder and chat functionality
 - [Angular Full Calendar](https://www.npmjs.com/package/@fullcalendar/angular)
 - [ThreeJS](https://threejs.org/docs/#manual/en/buildTools/Testing-with-NPM)
 
+## Project Architecture
+- Auth Module
+  - Signup Component - Holds the sign up form and validations
+  - Login Component - Holds the login form and validations
+  - Auth Service TS - Manage Firebase auth and NgRx store user. Login and Setup user data.
+  - Store - NgRx actions/effects/reducer. Stores user data from Firestore into the app store. Checks if Login or Logout to clear app store data.
+- User Module
+  - Dashboard Component - Holds the router-outlet. Taking care of navigation and unread messages notifications.
+  - Profile Component - Holds the user details form. Upload and validation of user profile picture.
+  - Schedule Component - Loads the user working schedule from Firestore, assigned by the admin-user. Can't be edited.
+  - User-chat Compenent  - Loads the user conversation with admin. User can send and recieve messages from admin.
+  - User Service TS - Updates user details to Firestore. Loads user Schedule from Firestore.
+- Admin Module
+  - Admin Dashboard Component - Holds the router-outlet. Taking care of navigation and unread messages notifications.
+  - User List Component - Holds all users and filter form.
+  - User Details Component - Holds user information and edit form to add additional user information.
+  - User Card Component - Card component for User-List.
+  - Chat Component - Loads user-admin conversation. Holds Chat Room component
+  - Schdule Builder Component - Holds Angular Full Calendar, assign every user working schedule and uploads it to Firestore.
+  - Store - NgRx actions/effects/reducer - Loads users from Firestore into app store.
+- Shared Module
+  - Loader - ThreeJS loader
+  - Chat Room / Chat Feed / Chat Input Form / Message Model
+  - Chat Service - send and recieve messages form Firestore via Firestore queries.
+- Guards 
+  - Admin Guard - uses Auth Service to check if admin token exist
+  - Guard - uses Auth Service to check if any token exist
+  - No-User-Guard - uses Auth Service to check if any token exist
+- Utils
+  - Animations  - holds all Angular Animation
+
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.2.
 

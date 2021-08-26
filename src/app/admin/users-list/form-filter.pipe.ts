@@ -14,7 +14,7 @@ export class FormFilterPipe implements PipeTransform {
     return passing;
   }
   transform(value: any, formData:any): any{
-    if (value !== null ){
+    if (value !== null && value !== undefined){
       let nameStr = "";
       let game:Array<string> = [];   
       if(formData.gameSearch.length !== 0){

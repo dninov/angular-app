@@ -12,5 +12,6 @@
 }
 .scrollbar-hidden {
     -ms-overflow-style: none;
-    scrollbar-width: none; /* Firefox */
-  }
+    scrollbar-width: none; 
+}
+  

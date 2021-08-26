@@ -23,13 +23,15 @@ export class UserChatComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit(): void {
     this.user$ = this.store.select(store=> store.auth.user);
     this.userSub = this.user$.subscribe(async (userData:any)=>{
-      this.user = userData;
-      if(Object.keys(userData).length === 0){
-          console.log('Profile no User');
-          this.authService.reloadSub();
-      }else{
-          console.log('Profile Has user',userData);
-      } 
+      if(userData !== undefined){
+        this.user = userData;
+        if(Object.keys(userData).length === 0){
+            console.log('Profile no User');
+            this.authService.reloadSub();
+        }else{
+            console.log('Profile Has user',userData);
+        } 
+      }
     })
   }
   ngOnDestroy(): void {

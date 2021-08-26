@@ -29,12 +29,11 @@ export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
   ngOnInit(): void {
     this.user$ = this.store.select(store=> store.auth.user);
     this.userSub = this.user$.subscribe((userData:any)=>{
-      this.user = userData;
-      if(Object.keys(userData).length === 0){
-          console.log('Chat no User');
+      if(userData !== undefined){
+        if(Object.keys(userData).length === 0){
           this.authService.reloadSub();
       }else{
-          console.log('Chat Has user =>',userData);
+          this.user = userData;
           if(this.route.snapshot.paramMap.get("uid") === null){
             this.chatId = this.user.uid;
             this.chat.setTimestampUser(this.chatId);
@@ -44,6 +43,7 @@ export class FeedComponent implements  OnDestroy, OnInit, OnChanges {
           }
           this.msgArray = this.chat.getMessages(this.chatId);
         }
+      }
     });
   }
     

@@ -46,17 +46,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
       this.user$ = this.store.select(store=> store.auth.user);
       this.userSub = this.user$.subscribe((userData:any)=>{
-        this.user = userData;
-        if(Object.keys(userData).length === 0){
-            console.log('Profile no User');
-            this.authService.reloadSub();
-        }else{
-            this.loading = false;
+        console.log('Profile');
+        
+        if(userData !== undefined){
+          if(Object.keys(userData).length === 0){
+              console.log('Profile no User');
+              this.authService.reloadSub();
+          }else{
             console.log('Profile Has user',userData);
-            this.fillForm();
-        } 
-        // this.chatService.getAdminUnreadMessages(userData.uid);
-        // this.store.dispatch(new LoadReadMessagesAction(userData.uid)); 
+              this.user = userData;
+              this.loading = false;
+              this.fillForm();
+          }
+        }
       })
   }
   
@@ -65,17 +67,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   fillForm(){
-    console.log("fillForm user image ", this.user.imgUrl);
     this.imageSrc =  this.user.imgUrl;
     if(this.imageSrc === '../../../assets/user-icon.jpg'){
-    this.defaultImage = true;
+      this.defaultImage = true;
     }else{
-    this.defaultImage = false;
+      this.defaultImage = false;
     }
     for(const key in this.user){
       if((this.form.get(key)!) !== null){
-        console.log(key, "->", this.user[key]);
-        
         this.form.patchValue({
           [key] : this.user[key]
         });
@@ -113,9 +112,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
     const data = this.form.value;   
-    if(this.imgPath === undefined || this.defaultImage){
+    if(this.imgPath === undefined){
       this.loading = true;
-      await this.userService.UpdateProfile(this.user.uid, "../../../assets/user-icon.jpg", data).then(()=>{
+      await this.userService.UpdateProfile(this.user.uid, this.imageSrc, data).then(()=>{
       this.loading = false;
       }).catch(err=>console.log(err));
     }else{
@@ -131,6 +130,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
   changeImgDefault(){
     this.defaultImage = true;
+    this.imageSrc =  '../../../assets/user-icon.jpg';
   }
   ngOnDestroy(){
     // this.loggedout = true;

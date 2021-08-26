@@ -37,6 +37,7 @@ export class AuthService {
       }
       this.authSub = this.afAuth.authState.subscribe((user:any) => {
         if (user || !this.loggedOut) {
+          this.store.dispatch(new LoginAction());
           this.store.dispatch(new LoadUserAction(user.uid));
           console.log("AUTH SERVICE new LoadUserAction");
             if(role === "admin"){
@@ -123,13 +124,12 @@ export class AuthService {
     async logout() {
       console.log("logout begin...");
       this.afAuth.signOut().then(() => {
-      this.store.dispatch(new LogoutAction());
         if(this.authSub){
           console.log('logout authSub unsubscribe');
           this.authSub.unsubscribe();
         }
         this.router.navigate(['']);
-        console.log( this.isAdmin());
+        this.store.dispatch(new LogoutAction());
       }).catch(err=>console.log(err));
     }
 

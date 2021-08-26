@@ -2,8 +2,8 @@
   <app-loader></app-loader>
 </div>
 <div  *ngIf="!loading" fxLayout= "column" fxLayoutAlign= "center center" style="margin-top: 40px;" >
-  <h1 class="mat-display-1" >{{this.userData?.fullName}}</h1>
-  <p style="margin-top: -40px;"  class="mat-h4">Телефон: {{this.userData?.phoneNumber}}</p>
+  <h1 class="mat-display-1" >{{this.userData[0]?.fullName}}</h1>
+  <p style="margin-top: -40px;"  class="mat-h4">Телефон: {{this.userData[0]?.phoneNumber}}</p>
 </div>
 <div fxLayout= "row wrap"   fxLayoutGap="40px grid" *ngIf="!loading">
   <div  fxFlex ="50%" fxFlex.xs="100%" fxLayoutAlign="center end"  fxLayoutAlign.xs="center start" fxLayout= "column" fxLayoutGap="10px" >

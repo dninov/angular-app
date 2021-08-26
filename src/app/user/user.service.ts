@@ -19,15 +19,14 @@ export class UserService {
   }
 
   async UpdateProfile(id:string, image: any, data:any){
-    
-    if(image !== "../../../assets/user-icon.jpg"){
+    if(typeof image !== 'string'){
       const filePath = 'users/' + id +'/profileImg' +(image.name.substr(image.name.length - 4));
       const fileRef = this.afst.ref(filePath);
       await this.uploadImg(image, filePath).then(async ()=>{
         this.imgUrl = await fileRef.getDownloadURL().toPromise();
       })
     }else{
-      this.imgUrl = "../../../assets/user-icon.jpg";
+      this.imgUrl = image;
     }
     data.imgUrl = this.imgUrl;
     delete data.imageSrc;

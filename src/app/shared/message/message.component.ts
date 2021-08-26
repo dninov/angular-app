@@ -24,8 +24,10 @@ export class MessageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.store.select(store=> store.auth.user);
     this.userSub = this.user$.subscribe((userData:any)=>{
-    this.user = userData;
-    this.id = this.user.uid;
+      if(userData !== undefined){
+        this.user = userData;
+        this.id = this.user.uid;
+      }
     })
   }
   ngOnDestroy(){
