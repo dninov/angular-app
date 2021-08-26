@@ -22,6 +22,7 @@ A role based admin/user application with schedule builder and chat functionality
 - [Angular Material](https://www.npmjs.com/package/@angular/material)
 - [Flex-Layout](https://www.npmjs.com/package/@angular/flex-layout)
 - [Angular Full Calendar](https://www.npmjs.com/package/@fullcalendar/angular)
+- [NgRx](https://ngrx.io/guide/store/install)
 - [ThreeJS](https://threejs.org/docs/#manual/en/buildTools/Testing-with-NPM)
 
 ## Project Architecture
