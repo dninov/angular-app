@@ -74,8 +74,11 @@
           <button type="submit" mat-raised-button color="primary" [disabled] = "!form.valid">Запази</button>
         </div>
       </div>
-        
-        
+      
+      
     </form>
+  </div>
+  <div *ngIf="!loading" fxLayout ="row" style="width: 100%;" fxLayoutAlign="center center">
+    <button (click)="openDialog()"  mat-raised-button color="warn" >Изтрий Акаунта</button>
   </div>
 

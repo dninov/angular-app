@@ -7,7 +7,10 @@ import { State } from 'src/app/app.reducer';
 import { LoadUserAction } from 'src/app/auth/store/auth.actions';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-
+import { MatDialog } from '@angular/material/dialog';
+import { AdminService } from 'src/app/admin/admin.service';
+import { Router } from '@angular/router';
+import { UserDeleteComponent } from './user-delete/user-delete.component';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -29,8 +32,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor( 
     private formBuilder: FormBuilder, 
     private authService: AuthService,
+    private adminService: AdminService,
     private userService: UserService,
     private store: Store<State>,
+    public dialog: MatDialog,
+    private router: Router,
     ) { }
 
   ngOnInit(): void {
@@ -135,5 +141,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnDestroy(){
     // this.loggedout = true;
     this.userSub.unsubscribe();
+  }
+  openDialog(){
+    let dialogRef = this.dialog.open(UserDeleteComponent);
+    dialogRef.afterClosed().subscribe(result =>{
+      if(result === "yes"){
+        this.deleteClicked();
+      }else{
+        return 
+      }
+    })
+  }
+  deleteClicked(){
+    this.loading = true;
+    console.log(this.user.email,' ' ,this.user.uid);
+    this.userService.deleteUser(this.user.email, this.user.uid).catch(error=> {
+      this.loading = false;
+      console.log(error)});
   }
 }

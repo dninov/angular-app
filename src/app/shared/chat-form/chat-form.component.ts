@@ -44,8 +44,10 @@ export class ChatFormComponent implements OnInit, OnDestroy {
   async send(){
     if(this.user.role === 'user'){
       this.chat.sendMessage(this.message, this.chatId, this.email, this.userId, 'user');
+      this.chat.setTimestampUser(this.userId);
     }else{
       this.chat.sendMessage(this.message, this.chatId, this.email, this.userId, 'admin');
+      this.chat.setTimestampAdmin(this.userId);
     }
     this.message = '';
   }

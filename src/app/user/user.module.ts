@@ -11,7 +11,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid'; 
 import interactionPlugin from '@fullcalendar/interaction';
 import { UserChatComponent } from './user-chat/user-chat.component'; 
-import { SharedModule } from '../shared/shared.module'
+import { SharedModule } from '../shared/shared.module';
+import { UserDeleteComponent } from './profile/user-delete/user-delete.component'
 FullCalendarModule.registerPlugins([ 
   dayGridPlugin,
   interactionPlugin
@@ -23,6 +24,7 @@ FullCalendarModule.registerPlugins([
     ProfileComponent,
     ScheduleComponent,
     UserChatComponent,
+    UserDeleteComponent,
   ],
   imports: [
     CommonModule,
